@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Force projects to target .NET Framework 4.7.2 if they don't declare it -->
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+  </PropertyGroup>
+</Project>
