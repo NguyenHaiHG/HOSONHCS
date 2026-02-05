@@ -91,6 +91,8 @@ namespace HOSONHCS
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.txtthon = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -142,6 +144,7 @@ namespace HOSONHCS
             // cbdt1
             // 
             this.cbdt1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbdt1, "cbdt1");
             this.cbdt1.FormattingEnabled = true;
             this.cbdt1.Items.AddRange(new object[] {
             resources.GetString("cbdt1.Items"),
@@ -151,7 +154,6 @@ namespace HOSONHCS
             resources.GetString("cbdt1.Items4"),
             resources.GetString("cbdt1.Items5"),
             resources.GetString("cbdt1.Items6")});
-            resources.ApplyResources(this.cbdt1, "cbdt1");
             this.cbdt1.Name = "cbdt1";
             // 
             // label7
@@ -217,6 +219,7 @@ namespace HOSONHCS
             // 
             // cbtien1
             // 
+            resources.ApplyResources(this.cbtien1, "cbtien1");
             this.cbtien1.FormattingEnabled = true;
             this.cbtien1.Items.AddRange(new object[] {
             resources.GetString("cbtien1.Items"),
@@ -229,11 +232,11 @@ namespace HOSONHCS
             resources.GetString("cbtien1.Items7"),
             resources.GetString("cbtien1.Items8"),
             resources.GetString("cbtien1.Items9")});
-            resources.ApplyResources(this.cbtien1, "cbtien1");
             this.cbtien1.Name = "cbtien1";
             // 
             // cbtien3
             // 
+            resources.ApplyResources(this.cbtien3, "cbtien3");
             this.cbtien3.FormattingEnabled = true;
             this.cbtien3.Items.AddRange(new object[] {
             resources.GetString("cbtien3.Items"),
@@ -246,11 +249,11 @@ namespace HOSONHCS
             resources.GetString("cbtien3.Items7"),
             resources.GetString("cbtien3.Items8"),
             resources.GetString("cbtien3.Items9")});
-            resources.ApplyResources(this.cbtien3, "cbtien3");
             this.cbtien3.Name = "cbtien3";
             // 
             // cbtien2
             // 
+            resources.ApplyResources(this.cbtien2, "cbtien2");
             this.cbtien2.FormattingEnabled = true;
             this.cbtien2.Items.AddRange(new object[] {
             resources.GetString("cbtien2.Items"),
@@ -263,11 +266,11 @@ namespace HOSONHCS
             resources.GetString("cbtien2.Items7"),
             resources.GetString("cbtien2.Items8"),
             resources.GetString("cbtien2.Items9")});
-            resources.ApplyResources(this.cbtien2, "cbtien2");
             this.cbtien2.Name = "cbtien2";
             // 
             // cbtien4
             // 
+            resources.ApplyResources(this.cbtien4, "cbtien4");
             this.cbtien4.FormattingEnabled = true;
             this.cbtien4.Items.AddRange(new object[] {
             resources.GetString("cbtien4.Items"),
@@ -280,11 +283,11 @@ namespace HOSONHCS
             resources.GetString("cbtien4.Items7"),
             resources.GetString("cbtien4.Items8"),
             resources.GetString("cbtien4.Items9")});
-            resources.ApplyResources(this.cbtien4, "cbtien4");
             this.cbtien4.Name = "cbtien4";
             // 
             // cbtien5
             // 
+            resources.ApplyResources(this.cbtien5, "cbtien5");
             this.cbtien5.FormattingEnabled = true;
             this.cbtien5.Items.AddRange(new object[] {
             resources.GetString("cbtien5.Items"),
@@ -297,7 +300,6 @@ namespace HOSONHCS
             resources.GetString("cbtien5.Items7"),
             resources.GetString("cbtien5.Items8"),
             resources.GetString("cbtien5.Items9")});
-            resources.ApplyResources(this.cbtien5, "cbtien5");
             this.cbtien5.Name = "cbtien5";
             // 
             // label13
@@ -350,7 +352,7 @@ namespace HOSONHCS
             // 
             // cbctr
             // 
-            this.cbctr.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbctr, "cbctr");
             this.cbctr.FormattingEnabled = true;
             this.cbctr.Items.AddRange(new object[] {
             resources.GetString("cbctr.Items"),
@@ -359,7 +361,6 @@ namespace HOSONHCS
             resources.GetString("cbctr.Items3"),
             resources.GetString("cbctr.Items4"),
             resources.GetString("cbctr.Items5")});
-            resources.ApplyResources(this.cbctr, "cbctr");
             this.cbctr.Name = "cbctr";
             // 
             // label19
@@ -377,6 +378,7 @@ namespace HOSONHCS
             // cbtime1
             // 
             this.cbtime1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbtime1, "cbtime1");
             this.cbtime1.FormattingEnabled = true;
             this.cbtime1.Items.AddRange(new object[] {
             resources.GetString("cbtime1.Items"),
@@ -385,12 +387,12 @@ namespace HOSONHCS
             resources.GetString("cbtime1.Items3"),
             resources.GetString("cbtime1.Items4"),
             resources.GetString("cbtime1.Items5")});
-            resources.ApplyResources(this.cbtime1, "cbtime1");
             this.cbtime1.Name = "cbtime1";
             // 
             // cbtime2
             // 
             this.cbtime2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbtime2, "cbtime2");
             this.cbtime2.FormattingEnabled = true;
             this.cbtime2.Items.AddRange(new object[] {
             resources.GetString("cbtime2.Items"),
@@ -399,7 +401,6 @@ namespace HOSONHCS
             resources.GetString("cbtime2.Items3"),
             resources.GetString("cbtime2.Items4"),
             resources.GetString("cbtime2.Items5")});
-            resources.ApplyResources(this.cbtime2, "cbtime2");
             this.cbtime2.Name = "cbtime2";
             // 
             // label21
@@ -411,6 +412,7 @@ namespace HOSONHCS
             // cbtime3
             // 
             this.cbtime3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbtime3, "cbtime3");
             this.cbtime3.FormattingEnabled = true;
             this.cbtime3.Items.AddRange(new object[] {
             resources.GetString("cbtime3.Items"),
@@ -419,7 +421,6 @@ namespace HOSONHCS
             resources.GetString("cbtime3.Items3"),
             resources.GetString("cbtime3.Items4"),
             resources.GetString("cbtime3.Items5")});
-            resources.ApplyResources(this.cbtime3, "cbtime3");
             this.cbtime3.Name = "cbtime3";
             // 
             // label22
@@ -431,6 +432,7 @@ namespace HOSONHCS
             // cbtime4
             // 
             this.cbtime4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbtime4, "cbtime4");
             this.cbtime4.FormattingEnabled = true;
             this.cbtime4.Items.AddRange(new object[] {
             resources.GetString("cbtime4.Items"),
@@ -439,7 +441,6 @@ namespace HOSONHCS
             resources.GetString("cbtime4.Items3"),
             resources.GetString("cbtime4.Items4"),
             resources.GetString("cbtime4.Items5")});
-            resources.ApplyResources(this.cbtime4, "cbtime4");
             this.cbtime4.Name = "cbtime4";
             // 
             // label23
@@ -451,6 +452,7 @@ namespace HOSONHCS
             // cbtime5
             // 
             this.cbtime5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbtime5, "cbtime5");
             this.cbtime5.FormattingEnabled = true;
             this.cbtime5.Items.AddRange(new object[] {
             resources.GetString("cbtime5.Items"),
@@ -459,7 +461,6 @@ namespace HOSONHCS
             resources.GetString("cbtime5.Items3"),
             resources.GetString("cbtime5.Items4"),
             resources.GetString("cbtime5.Items5")});
-            resources.ApplyResources(this.cbtime5, "cbtime5");
             this.cbtime5.Name = "cbtime5";
             // 
             // label24
@@ -514,6 +515,7 @@ namespace HOSONHCS
             // cbdt2
             // 
             this.cbdt2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbdt2, "cbdt2");
             this.cbdt2.FormattingEnabled = true;
             this.cbdt2.Items.AddRange(new object[] {
             resources.GetString("cbdt2.Items"),
@@ -523,12 +525,12 @@ namespace HOSONHCS
             resources.GetString("cbdt2.Items4"),
             resources.GetString("cbdt2.Items5"),
             resources.GetString("cbdt2.Items6")});
-            resources.ApplyResources(this.cbdt2, "cbdt2");
             this.cbdt2.Name = "cbdt2";
             // 
             // cbdt3
             // 
             this.cbdt3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbdt3, "cbdt3");
             this.cbdt3.FormattingEnabled = true;
             this.cbdt3.Items.AddRange(new object[] {
             resources.GetString("cbdt3.Items"),
@@ -538,12 +540,12 @@ namespace HOSONHCS
             resources.GetString("cbdt3.Items4"),
             resources.GetString("cbdt3.Items5"),
             resources.GetString("cbdt3.Items6")});
-            resources.ApplyResources(this.cbdt3, "cbdt3");
             this.cbdt3.Name = "cbdt3";
             // 
             // cbdt4
             // 
             this.cbdt4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbdt4, "cbdt4");
             this.cbdt4.FormattingEnabled = true;
             this.cbdt4.Items.AddRange(new object[] {
             resources.GetString("cbdt4.Items"),
@@ -553,12 +555,12 @@ namespace HOSONHCS
             resources.GetString("cbdt4.Items4"),
             resources.GetString("cbdt4.Items5"),
             resources.GetString("cbdt4.Items6")});
-            resources.ApplyResources(this.cbdt4, "cbdt4");
             this.cbdt4.Name = "cbdt4";
             // 
             // cbdt5
             // 
             this.cbdt5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            resources.ApplyResources(this.cbdt5, "cbdt5");
             this.cbdt5.FormattingEnabled = true;
             this.cbdt5.Items.AddRange(new object[] {
             resources.GetString("cbdt5.Items"),
@@ -568,7 +570,6 @@ namespace HOSONHCS
             resources.GetString("cbdt5.Items4"),
             resources.GetString("cbdt5.Items5"),
             resources.GetString("cbdt5.Items6")});
-            resources.ApplyResources(this.cbdt5, "cbdt5");
             this.cbdt5.Name = "cbdt5";
             // 
             // label25
@@ -595,11 +596,24 @@ namespace HOSONHCS
             this.label28.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label28.Name = "label28";
             // 
+            // label29
+            // 
+            resources.ApplyResources(this.label29, "label29");
+            this.label29.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label29.Name = "label29";
+            // 
+            // txtthon
+            // 
+            resources.ApplyResources(this.txtthon, "txtthon");
+            this.txtthon.Name = "txtthon";
+            // 
             // Form2
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Controls.Add(this.txtthon);
+            this.Controls.Add(this.label29);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.label26);
@@ -731,5 +745,7 @@ namespace HOSONHCS
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label28;
+        private Label label29;
+        private TextBox txtthon;
     }
 }

@@ -240,6 +240,21 @@ namespace HOSONHCS
         {
             try
             {
+                // Commit any pending edits in the DataGridView before saving
+                try
+                {
+                    if (dgv != null)
+                    {
+                        dgv.EndEdit();
+                        dgv.CurrentCell = null; // Force commit of the current cell edit
+                    }
+                    if (source != null)
+                    {
+                        source.EndEdit();
+                    }
+                }
+                catch { }
+
                 // rebuild model from table
                 var newModel = new XinManModel();
                 newModel.pgd = model?.pgd ?? "";
@@ -359,6 +374,31 @@ namespace HOSONHCS
                 dgv.BackgroundColor = enabled ? System.Drawing.SystemColors.Window : System.Drawing.SystemColors.Control;
             }
             catch { }
+        }
+
+        // Logout method to disable editing and clear credentials
+        public void Logout()
+        {
+            try
+            {
+                // Disable editing
+                SetEditable(false);
+
+                // Clear username and password fields
+                try { if (txtUsername != null) txtUsername.Text = ""; } catch { }
+                try { if (txtPassword != null) txtPassword.Text = ""; } catch { }
+
+                // Clear search
+                try { if (txtSearch != null) txtSearch.Text = ""; } catch { }
+
+                // Reload model to discard any unsaved changes and restore original state
+                LoadModel();
+                PopulateGridFromModel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi đăng xuất: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadModel()

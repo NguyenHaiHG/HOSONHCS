@@ -117,27 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="richTextBox2.Text" xml:space="preserve">
-    <value>Đây là phần mềm được viết bởi anh em cán bộ PGD NHCSXH Xín Mần, phần mềm được dùng để
-làm sáng kiến kinh nghiệm năm 2026 cho PGD NHCSXH Xín Mần
-
-Developer: Nguyễn Xuân Hải
-Thiết kế dữ liệu: Nguyễn Văn Đức</value>
-  </data>
   <data name="richTextBox1.Text" xml:space="preserve">
-    <value>Hướng dẫn sử dụng:
+    <value>Hướng dẫn:
 
 1, Các chức năng trong phần mềm quý vị điền thông tin phù hợp của khách hàng;
 
-2, Để lưu thông tin thì khi bấm xuất 03 phần mềm sẽ tự động lưu thông tin khách hàng để truy xuất lại lần sau;
+2, Chức năng tạo khách hàng: Sau khi gọi khách hàng cũ ra để sửa thành 1 khách hàng mới thì bấm nút Tạo khách hàng để lưu thông tin khách hàng mới,
+tính năng này dùng để tạo 1 khách hàng khác cùng thôn, tổ, tránh việc phải tạo lại từ đầu tất cả khá mất thời gian.
 
-3, Đối với mẫu 03 theo nhóm, để tạo được thì phải tạo khách hàng trước, tick chọn từ 02 người trở lên để có thông tin, phần mềm sẽ lọc nếu khách đó cùng tổ cùng chương trình
-mới cho tạo 03 nhóm, còn không sẽ từ chối;
+3, Dữ liệu sau khi tạo sẽ nằm ở Folder ngoài Desktop, sau khi tạo nên coppy vào nơi khác phân vùng ổ C trên máy để tránh mất dữ liệu đã tạo về sau;
 
-4, Dữ liệu sau khi tạo sẽ nằm ở Folder ngoài Desktop, sau khi tạo nên coppy vào nơi khác phân vùng ổ C trên máy để tránh mất dữ liệu đã tạo về sau;
+4, Tính năng tại tab chỉnh sửa dùng để sửa lại thông tin Phòng giao dịch khi có sự thay đổi của Hội - Thôn - Tổ,
+đối với tính năng này sau khi đăng nhập sẽ cho phép chỉnh sửa và lưu thông tin vào phần mềm.
 
-5, Tính năng tại tab chỉnh sửa dùng để sửa lại thông tin Phòng giao dịch khi có sự thay đổi của Hội - Thôn - Tổ. </value>
+5, Tính năng tạo 03 theo nhóm đã sử dụng được, tuy nhiên tác giả đang tiếp tục hoàn thiện ở phiên bản sau;
+
+6, Đối với 1 số ô ngày tháng năm có dấu tick ở đằng trước, nếu không sử dụng, bỏ tick, nếu sử dụng thì tick vào phần mềm sẽ tự động hiển thị điền vào mẫu.</value>
   </data>
+  <metadata name="marqueeTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

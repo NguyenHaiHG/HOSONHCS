@@ -24,6 +24,7 @@ namespace HOSONHCS
         public string Vtc { get; set; }
         public string Phuongan { get; set; }
         public DateTime Ngaydenhan { get; set; }
+        public DateTime Thoihancccd { get; set; }
         public string Thoihanvay { get; set; }
         public string Sotien { get; set; }
         public string Sotien1 { get; set; }
@@ -62,6 +63,7 @@ namespace HOSONHCS
             Ngaysinh = DateTime.MinValue;
             Ngaylaphs = DateTime.MinValue;
             Ngaydenhan = DateTime.MinValue;
+            Thoihancccd = DateTime.MinValue;
         }
     }
 
