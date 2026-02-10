@@ -466,19 +466,9 @@ namespace HOSONHCS
         /// <param name="chuongtrinh">Tên chương trình</param>
         private void ExportWord(Dictionary<string, string> map, string[] hoten, string[] sotien, string totruong, string xa, string chuongtrinh)
         {
-            // -------- XÁC ĐỊNH TÊN FILE MẪU DỰA TRÊN CHƯƠNG TRÌNH --------
-            string templateName;
-            if (!string.IsNullOrEmpty(chuongtrinh) && 
-                chuongtrinh.IndexOf("Giải quyết việc làm duy trì và mở rộng việc làm", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                // Nếu là chương trình GQVL thì dùng mẫu "01 GQVL.docx"
-                templateName = "01 GQVL.docx";
-            }
-            else
-            {
-                // Nếu là chương trình khác thì dùng mẫu "03 DS GROUP.docx"
-                templateName = "03 DS GROUP.docx";
-            }
+            // -------- XÁC ĐỊNH TÊN FILE MẪU --------
+            // Form2 LUÔN dùng mẫu "03 DS GROUP.docx" cho xuất nhóm
+            string templateName = "03 DS GROUP.docx";
 
             // -------- TÌM FILE MẪU TRONG THƯ MỤC TEMPLATES --------
             // Thử tìm trong thư mục Templates bên dưới thư mục chạy của ứng dụng

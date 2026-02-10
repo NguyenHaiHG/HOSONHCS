@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 
 namespace HOSONHCS
 {
-    // Helper class to provide xinman.json editing UI logic without modifying Form1 heavily
+    // Lớp hỗ trợ cung cấp giao diện chỉnh sửa xinman.json mà không làm thay đổi nhiều vào Form1
     public class XinManEditor
     {
         private DataGridView dgv;
         private TextBox txtUsername;
         private TextBox txtPassword;
         private Button btnLogin;
-        private Button btnSave; // created if not provided (disabled now)
+        private Button btnSave; // Được tạo nếu không được cung cấp (hiện đã vô hiệu hóa)
         private TextBox txtSearch;
         private Button btnNextSearch;
         private Button btnPrevSearch;
@@ -25,11 +25,11 @@ namespace HOSONHCS
         private XinManModel model;
         private string xinmanPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xinman.json");
 
-        // simple hardcoded credential (per user request)
+        // Thông tin đăng nhập đơn giản được hard-code (theo yêu cầu người dùng)
         private const string validUser = "haihg";
         private const string validPass = "Haihg23";
 
-        // search state
+        // Trạng thái tìm kiếm
         private List<int> searchMatches = new List<int>();
         private int currentMatchIndex = -1;
 
@@ -45,7 +45,7 @@ namespace HOSONHCS
             if (this.btnLogin != null) this.btnLogin.Click += BtnLogin_Click;
             if (this.txtSearch != null) this.txtSearch.TextChanged += TxtSearch_TextChanged;
 
-            // REMOVE suspicious runtime-created save button if present in same parent
+            // XÓA nút lưu đáng ngờ được tạo runtime nếu có trong cùng parent
             try
             {
                 if (this.btnLogin != null && this.btnLogin.Parent != null)
@@ -60,12 +60,12 @@ namespace HOSONHCS
             }
             catch { }
 
-            // Detect if form already contains user-provided Next/Prev buttons (common names)
+            // Phát hiện xem form đã chứa nút Next/Prev do người dùng cung cấp chưa (các tên phổ biến)
             Control form = dgv?.FindForm() ?? btnLogin?.FindForm();
             Button userNext = null, userPrev = null;
             if (form != null)
             {
-                // check common name variants
+                // Kiểm tra các biến thể tên phổ biến
                 userNext = form.Controls.Find("btnNext", true).FirstOrDefault() as Button
                            ?? form.Controls.Find("btnNextSearch", true).FirstOrDefault() as Button
                            ?? form.Controls.Find("btnNextBtn", true).FirstOrDefault() as Button
@@ -77,7 +77,7 @@ namespace HOSONHCS
                            ?? form.Controls.Find("btnPreSave", true).FirstOrDefault() as Button;
             }
 
-            // If user created Next/Prev buttons, wire them; we'll not create duplicates
+            // Nếu người dùng đã tạo nút Next/Prev, gắn sự kiện cho chúng; không tạo trùng lặp
             try
             {
                 if (userNext != null)
@@ -95,20 +95,20 @@ namespace HOSONHCS
             }
             catch { }
 
-            // Create dynamic next/prev search buttons near txtSearch only if the form does not already provide them
+            // Tạo nút tìm kiếm next/prev động gần txtSearch chỉ khi form chưa cung cấp sẵn
             try
             {
                 if (this.txtSearch != null && this.txtSearch.Parent != null && (btnNextSearch == null || btnPrevSearch == null))
                 {
                     var parent = this.txtSearch.Parent;
-                    // try find existing dynamic buttons placed previously in same parent
+                    // Thử tìm các nút động đã được đặt trước đó trong cùng parent
                     var existingPrev = parent.Controls.OfType<Button>().FirstOrDefault(b => b != null && b.Tag != null && b.Tag.ToString() == "XinManPrev");
                     var existingNext = parent.Controls.OfType<Button>().FirstOrDefault(b => b != null && b.Tag != null && b.Tag.ToString() == "XinManNext");
 
                     if (btnPrevSearch == null && existingPrev != null) btnPrevSearch = existingPrev;
                     if (btnNextSearch == null && existingNext != null) btnNextSearch = existingNext;
 
-                    // only create missing ones and only if user buttons not present
+                    // Chỉ tạo các nút còn thiếu và chỉ khi người dùng chưa có nút
                     if (btnPrevSearch == null)
                     {
                         btnPrevSearch = new Button() { Width = 24, Height = this.txtSearch.Height, Text = "<", Tag = "XinManPrev" };
@@ -130,9 +130,9 @@ namespace HOSONHCS
             }
             catch { }
 
-            if (this.btnSave != null) this.btnSave.Click += BtnSave_Click; // if designer provided, keep it
+            if (this.btnSave != null) this.btnSave.Click += BtnSave_Click; // Nếu designer cung cấp, giữ lại
 
-            // initial state: load model and populate grid, but keep read-only until login
+            // Trạng thái ban đầu: load model và điền dữ liệu vào grid, nhưng giữ read-only cho đến khi login
             LoadModel();
             PopulateGridFromModel();
             SetEditable(false);
@@ -191,14 +191,14 @@ namespace HOSONHCS
                 searchMatches.Clear(); currentMatchIndex = -1;
                 if (string.IsNullOrEmpty(q))
                 {
-                    // clear selection
+                    // Xóa lựa chọn
                     try { if (dgv != null) { if (dgv.InvokeRequired) dgv.Invoke((Action)(() => dgv.ClearSelection())); else dgv.ClearSelection(); } } catch { }
                     return;
                 }
 
                 q = q.ToLowerInvariant();
 
-                // find all matching row indices
+                // Tìm tất cả chỉ số dòng khớp
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     var row = table.Rows[i];
@@ -240,13 +240,13 @@ namespace HOSONHCS
         {
             try
             {
-                // Commit any pending edits in the DataGridView before saving
+                // Commit bất kỳ chỉnh sửa đang chờ nào trong DataGridView trước khi lưu
                 try
                 {
                     if (dgv != null)
                     {
                         dgv.EndEdit();
-                        dgv.CurrentCell = null; // Force commit of the current cell edit
+                        dgv.CurrentCell = null; // Buộc commit chỉnh sửa ô hiện tại
                     }
                     if (source != null)
                     {
@@ -255,7 +255,7 @@ namespace HOSONHCS
                 }
                 catch { }
 
-                // rebuild model from table
+                // Xây dựng lại model từ bảng dữ liệu
                 var newModel = new XinManModel();
                 newModel.pgd = model?.pgd ?? "";
 
@@ -294,7 +294,7 @@ namespace HOSONHCS
                                 assocObj.villages.Add(villageObj);
                             }
 
-                            // parse groups by ; or ,
+                            // Phân tích chuỗi groups bằng dấu ; hoặc ,
                             var groups = SplitGroups(groupsRaw);
                             foreach (var g in groups)
                                 if (!villageObj.groups.Contains(g, StringComparer.OrdinalIgnoreCase)) villageObj.groups.Add(g);
@@ -302,7 +302,7 @@ namespace HOSONHCS
                     }
                     else
                     {
-                        // no association: treat as commune-level village
+                        // Không có hội: xử lý như thôn cấp xã
                         if (!string.IsNullOrEmpty(village))
                         {
                             var villageObj = comObj.villages.FirstOrDefault(v => string.Equals(v.name, village, StringComparison.OrdinalIgnoreCase));
@@ -320,12 +320,12 @@ namespace HOSONHCS
 
                 newModel.communes = communes.Values.ToList();
 
-                // write backup and atomic save
+                // Ghi backup và lưu atomic
                 var json = JsonConvert.SerializeObject(newModel, Formatting.Indented);
                 var temp = xinmanPath + ".tmp";
                 File.WriteAllText(temp, json, Encoding.UTF8);
 
-                // backup
+                // Sao lưu
                 try
                 {
                     if (File.Exists(xinmanPath))
@@ -336,13 +336,13 @@ namespace HOSONHCS
                 }
                 catch { }
 
-                // replace
+                // Thay thế
                 File.Copy(temp, xinmanPath, true);
                 try { File.Delete(temp); } catch { }
 
                 MessageBox.Show("Lưu xinman.json thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // reload model to ensure UI reflects any normalization
+                // Tải lại model để đảm bảo UI phản ánh bất kỳ chuẩn hóa nào
                 LoadModel();
                 PopulateGridFromModel();
             }
@@ -370,28 +370,28 @@ namespace HOSONHCS
                 if (dgv == null) return;
                 dgv.ReadOnly = !enabled;
                 if (btnSave != null) btnSave.Enabled = enabled;
-                // visual cue
+                // Gợi ý trực quan
                 dgv.BackgroundColor = enabled ? System.Drawing.SystemColors.Window : System.Drawing.SystemColors.Control;
             }
             catch { }
         }
 
-        // Logout method to disable editing and clear credentials
+        // Phương thức đăng xuất để vô hiệu hóa chỉnh sửa và xóa thông tin đăng nhập
         public void Logout()
         {
             try
             {
-                // Disable editing
+                // Vô hiệu hóa chỉnh sửa
                 SetEditable(false);
 
-                // Clear username and password fields
+                // Xóa trường tên đăng nhập và mật khẩu
                 try { if (txtUsername != null) txtUsername.Text = ""; } catch { }
                 try { if (txtPassword != null) txtPassword.Text = ""; } catch { }
 
-                // Clear search
+                // Xóa tìm kiếm
                 try { if (txtSearch != null) txtSearch.Text = ""; } catch { }
 
-                // Reload model to discard any unsaved changes and restore original state
+                // Tải lại model để hủy bỏ mọi thay đổi chưa lưu và khôi phục trạng thái ban đầu
                 LoadModel();
                 PopulateGridFromModel();
             }

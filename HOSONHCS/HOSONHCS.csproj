@@ -135,6 +135,7 @@
     <EmbeddedResource Include="01 GQVL.docx" />
     <EmbeddedResource Include="03 DS GROUP.docx" />
     <None Include="CHANGELOG_FORM2.md" />
+    <None Include="CODE_ANALYSIS_REPORT.md" />
     <None Include="DUAL_MARQUEE.md" />
     <None Include="HOSONHCS_TemporaryKey.pfx" />
     <None Include="MARQUEE_FIX.md" />
@@ -155,6 +156,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="UI_BORDERLESS_UPDATE.md" />
+    <None Include="VIET_HOA_COMPLETE.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

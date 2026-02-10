@@ -101,8 +101,8 @@ namespace HOSONHCS
             try { txtcccd3.KeyPress += TxtDigitsOnly_KeyPress; txtcccd3.TextChanged += TxtCccd_TextChanged; txtcccd3.Leave += TxtCccd_Leave; txtcccd3.MaxLength = 12; } catch { }
 
             // ========== SỐ ĐIỆN THOẠI ==========
-            // txtSdt: chỉ cho phép nhập số, tối đa 10 chữ số
-            try { txtSdt.KeyPress += TxtDigitsOnly_KeyPress; txtSdt.MaxLength = 10; } catch { }
+            // txtSdt: chỉ cho phép nhập số, phải đúng 10 chữ số (không ít hơn, không nhiều hơn)
+            try { txtSdt.KeyPress += TxtDigitsOnly_KeyPress; txtSdt.TextChanged += TxtSdt_TextChanged; txtSdt.Leave += TxtSdt_Leave; txtSdt.MaxLength = 10; } catch { }
 
             // ========== TỰ ĐỘNG CHỌN NỠI CẤP CCCD ==========
             // dateNgaycapCCCD: tự động chọn cbNoicap dựa trên ngày cấp (trước/sau 01/07/2024)
@@ -316,13 +316,13 @@ namespace HOSONHCS
                 dgv.DataSource = null;
                 dgv.DataSource = customers;
 
-                // make all generated columns readonly; selection is by row(s)
+                // Đặt tất cả cột tự động tạo thành readonly; chọn theo dòng
                 foreach (DataGridViewColumn col in dgv.Columns)
                 {
                     col.ReadOnly = true;
                 }
 
-                // optionally show only columns you want. Ensure Hoten visible first
+                // Tùy chọn chỉ hiển thị các cột bạn muốn. Đảm bảo Họ tên hiển thị đầu tiên
                 if (dgv.Columns["Hoten"] != null)
                 {
                     dgv.Columns["Hoten"].DisplayIndex = 1;
@@ -464,25 +464,25 @@ namespace HOSONHCS
             var dateSuffix = DateTime.Now.ToString("MM-yyyy");
             var folder = Path.Combine(root, safeName + "_" + dateSuffix);
 
-            // If folder already exists, use it (for same customer in same month)
-            // Only add numeric suffix if there are MULTIPLE customers with same name in same month
+            // Nếu folder đã tồn tại, sử dụng nó (cho cùng khách hàng trong cùng tháng)
+            // Chỉ thêm hậu tố số nếu có NHIỀU khách hàng cùng tên trong cùng tháng
             if (!Directory.Exists(folder))
             {
-                // Folder doesn't exist yet, create it
+                // Folder chưa tồn tại, tạo mới
                 return folder;
             }
             else
             {
-                // Folder exists - check if it belongs to this customer by comparing _fileName
-                // If customer has _fileName and a matching folder exists, use that folder
+                // Folder tồn tại - kiểm tra xem nó có thuộc về khách hàng này không bằng cách so sánh _fileName
+                // Nếu khách hàng có _fileName và folder khớp tồn tại, dùng folder đó
                 if (!string.IsNullOrEmpty(c._fileName))
                 {
-                    // Customer already exists in database - use existing folder
+                    // Khách hàng đã tồn tại trong database - dùng folder hiện có
                     return folder;
                 }
                 else
                 {
-                    // New customer with same name - need to add suffix
+                    // Khách hàng mới cùng tên - cần thêm hậu tố
                     var baseFolder = folder;
                     int i = 1;
                     while (Directory.Exists(folder))
@@ -542,7 +542,7 @@ namespace HOSONHCS
                         continue;
                     }
 
-                    // OpenXML-only replacement
+                    // Thay thế chỉ bằng OpenXML
                     ReplacePlaceholdersInWord(destDoc, c);
                 }
             }
@@ -555,9 +555,9 @@ namespace HOSONHCS
         private void ReplacePlaceholdersInWord(string docPath, Customer c)
         {
 
-            // ensure Sotienchu is filled from numeric value for template 01
+            // Đảm bảo Sotienchu được điền từ giá trị số cho mẫu 01
             try { EnsureSotienchuFromNumeric(c, docPath); } catch { }
-             // Use OpenXML replacement helper
+             // Sử dụng helper thay thế OpenXML
              var replacements = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
              {
                 { "{{hoten}}", c.Hoten },
@@ -587,7 +587,7 @@ namespace HOSONHCS
                 { "{{sotienchu}}", c.Sotienchu },
                 { "{{soluong1}}", c.Soluong1 ?? "" },
                 { "{{soluong2}}", string.IsNullOrWhiteSpace(c.Soluong2) ? "" : c.Soluong2 },
-                // Prefer free-text Mucdich fields; if empty, use Doituong (combo) as fallback
+                // Ưu tiên trường Mucdich nhập tự do; nếu trống, dùng Doituong (combo) làm dự phòng
                 { "{{mucdich1}}", !string.IsNullOrWhiteSpace(c.Mucdich1) ? c.Mucdich1 : (c.Doituong1 ?? "") },
                 { "{{mucdich2}}", !string.IsNullOrWhiteSpace(c.Mucdich2) ? c.Mucdich2 : (c.Doituong2 ?? "") },
                 { "{{doituong1}}", c.Doituong1 ?? "" },
@@ -618,19 +618,19 @@ namespace HOSONHCS
                 { "{{namsinh}}", ShouldShowFullNamsinh(docPath) ? (c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.ToString("dd/MM/yyyy")) : (c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.Year.ToString()) },
              };
 
-            // For 03 DS template ensure specific placeholders use the values from the current customer (read from controls)
+            // Đối với mẫu 03 DS đảm bảo các placeholder cụ thể sử dụng giá trị từ khách hàng hiện tại
             try
             {
                 if (Is03DS(docPath))
                 {
-                    // Map exactly as specified: txtHoten -> {{hoten}}, cbDoituong -> {{doituong}}, txtPhuongan -> {{phuongan}}, cbThoihanvay -> {{thoihanvay}}
+                    // Ánh xạ chính xác như đã chỉ định: txtHoten -> {{hoten}}, cbDoituong -> {{doituong}}, txtPhuongan -> {{phuongan}}, cbThoihanvay -> {{thoihanvay}}
                     replacements["{{hoten}}"] = c.Hoten ?? "";
-                    replacements["{{doituong}}"] = c.Doituong1 ?? "";   // from cbDoituong
-                    replacements["{{phuongan}}"] = c.Phuongan ?? "";     // from txtPhuongan
+                    replacements["{{doituong}}"] = c.Doituong1 ?? "";   // từ cbDoituong
+                    replacements["{{phuongan}}"] = c.Phuongan ?? "";     // từ txtPhuongan
                     replacements["{{sotien}}"] = c.Sotien ?? "";
                     replacements["{{thoihanvay}}"] = c.Thoihanvay ?? "";
 
-                    // Additional variants for 03 DS placeholders
+                    // Biến thể bổ sung cho các placeholder 03 DS
                     replacements["{{mucdich}}"] = c.Phuongan ?? "";  // Mục đích có thể dùng tên này
                     replacements["{{mucdichsudungvon}}"] = c.Phuongan ?? "";  // Mục đích sử dụng vốn
                     replacements["{{mucdich1}}"] = c.Phuongan ?? "";
@@ -638,7 +638,7 @@ namespace HOSONHCS
                     replacements["{{thuhuong}}"] = c.Doituong1 ?? "";
                     replacements["{{thoihan}}"] = c.Thoihanvay ?? "";  // Thời hạn (không có "vay")
 
-                    // Also map numbered placeholders (for templates that use {{hoten1}}, {{sotien1}}, etc.)
+                    // Cũng ánh xạ các placeholder có số (cho các mẫu dùng {{hoten1}}, {{sotien1}}, v.v.)
                     replacements["{{hoten1}}"] = c.Hoten ?? "";
                     replacements["{{doituong1}}"] = c.Doituong1 ?? "";
                     replacements["{{phuongan1}}"] = c.Phuongan ?? "";
@@ -646,7 +646,7 @@ namespace HOSONHCS
                     replacements["{{thoihanvay1}}"] = c.Thoihanvay ?? "";
                     replacements["{{mucdich1}}"] = c.Phuongan ?? "";
 
-                    // Also map index 0 placeholders (for templates that start from 0)
+                    // Cũng ánh xạ placeholder index 0 (cho các mẫu bắt đầu từ 0)
                     replacements["{{hoten0}}"] = c.Hoten ?? "";
                     replacements["{{doituong0}}"] = c.Doituong1 ?? "";
                     replacements["{{phuongan0}}"] = c.Phuongan ?? "";
@@ -664,13 +664,13 @@ namespace HOSONHCS
             catch (Exception ex) { MessageBox.Show("Error replacing placeholders (OpenXML): " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
          }
 
-        // Try to compute `Sotienchu` from the numeric `Sotien` (or `Sotientong`) when producing templates
+        // Thử tính toán `Sotienchu` từ giá trị số `Sotien` (hoặc `Sotientong`) khi tạo mẫu
         private void EnsureSotienchuFromNumeric(Customer c, string docPath)
         {
             try
             {
                 if (c == null) return;
-                // only apply for template 01 (embedded or file names that contain '01')
+                // Chỉ áp dụng cho mẫu 01 (embedded hoặc tên file chứa '01')
                 var name = Path.GetFileName(docPath) ?? "";
                 if (name.IndexOf("01", StringComparison.OrdinalIgnoreCase) < 0 && !string.Equals(name, EmbeddedTemplateFileName, StringComparison.OrdinalIgnoreCase))
                     return;
@@ -687,7 +687,7 @@ namespace HOSONHCS
             catch { }
         }
 
-        // Parse fully numeric string with dots/commas removed already in caller; wrapper left for clarity
+        // Phân tích chuỗi số thuần túy với dấu chấm/phẩy đã bị xóa trong caller; wrapper giữ lại cho rõ ràng
         private long ParseMoneyStringToLong(string s)
         {
             if (string.IsNullOrWhiteSpace(s)) return 0;
@@ -700,7 +700,7 @@ namespace HOSONHCS
             return 0;
         }
 
-        // Convert integer number to Vietnamese words (supports up to trillion-range reasonably)
+        // Chuyển đổi số nguyên thành chữ tiếng Việt (hỗ trợ đến tập tỷ một cách hợp lý)
         private string NumberToVietnameseWords(long number)
         {
             if (number == 0) return "không";
@@ -722,7 +722,7 @@ namespace HOSONHCS
                 var g = groups[i];
                 if (g == 0)
                 {
-                    // still need to append unit when inner groups exist (to keep place) only if some lower non-zero exists
+                    // Vẫn cần thêm đơn vị khi có các nhóm bên trong (giữ vị trí) chỉ nếu có nhóm thấp hơn khác 0
                     bool lowerNonZero = groups.Take(i).Any(x => x != 0);
                     if (lowerNonZero && i > 0) parts.Add(unitNames[i]);
                     continue;
@@ -739,7 +739,7 @@ namespace HOSONHCS
                 }
                 else
                 {
-                    // if hundreds == 0 and there is tens/units, when this group is not the highest, we may need 'không trăm'
+                    // Nếu hàng trăm == 0 và có chục/đơn vị, khi nhóm này không phải cao nhất, có thể cần 'không trăm'
                     if ((tens > 0 || units > 0) && i != groups.Count - 1) seg.Add("không trăm");
                 }
 
@@ -774,9 +774,9 @@ namespace HOSONHCS
             }
 
             var result = string.Join(" ", parts).Trim();
-            // Cleanup multiple spaces
+            // Dọc dẹp nhiều khoảng trắng
             result = Regex.Replace(result, @"\s+", " ").Trim();
-            // lowercase
+            // Viết thường
             return result;
         }
 
@@ -806,7 +806,7 @@ namespace HOSONHCS
             catch (Exception ex) { MessageBox.Show("Error replacing placeholders for group (OpenXML): " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
-        // Merge adjacent text runs within the same paragraph to prevent placeholder splitting
+        // Gộp các text run kề nhau trong cùng paragraph để ngăn phân tách placeholder
         private void MergeAdjacentTextRuns(OpenXmlPart part)
         {
             try
@@ -824,13 +824,13 @@ namespace HOSONHCS
 
                         if (currentText != null && nextText != null)
                         {
-                            // Merge next text into current text
+                            // Gộp text tiếp theo vào text hiện tại
                             currentText.Text += nextText.Text;
 
-                            // Remove the next run
+                            // Xóa run tiếp theo
                             nextRun.Remove();
                             runs.RemoveAt(i + 1);
-                            i--; // Re-check current position
+                            i--; // Kiểm tra lại vị trí hiện tại
                         }
                     }
                 }
@@ -842,7 +842,7 @@ namespace HOSONHCS
             }
         }
 
-        // Simple replacement for table cells - replace text in each text node individually without merging
+        // Thay thế đơn giản cho các ô trong bảng - thay thế text trong từng text node riêng lẻ không gộp
         private void ReplaceInTableCells(OpenXmlPart part, Dictionary<string, string> replacements)
         {
             try
@@ -858,19 +858,19 @@ namespace HOSONHCS
                         int cellIndex = 0;
                         foreach (var cell in row.Descendants<TableCell>())
                         {
-                            // Get all text in this cell for logging only
+                            // Lấy tất cả text trong ô này chỉ để ghi log
                             var textNodes = cell.Descendants<Text>().ToList();
                             if (textNodes.Count == 0) { cellIndex++; continue; }
 
                             var cellText = string.Concat(textNodes.Select(t => t.Text ?? ""));
 
-                            // Log every non-empty cell to see what's in the template
+                            // Ghi log mọi ô không rỗng để xem có gì trong mẫu
                             if (!string.IsNullOrWhiteSpace(cellText))
                             {
                                 System.Diagnostics.Debug.WriteLine($"[Row {rowIndex}, Cell {cellIndex}]: '{cellText}'");
                             }
 
-                            // Replace in each text node individually (DO NOT merge or clear)
+                            // Thay thế trong từng text node riêng lẻ (KHÔNG gộp hoặc xóa)
                             foreach (var textNode in textNodes)
                             {
                                 if (string.IsNullOrEmpty(textNode.Text)) continue;
@@ -878,7 +878,7 @@ namespace HOSONHCS
                                 string originalText = textNode.Text;
                                 string newText = originalText;
 
-                                // Replace all placeholders
+                                // Thay thế tất cả các placeholder
                                 foreach (var kv in replacements)
                                 {
                                     if (newText.IndexOf(kv.Key, StringComparison.OrdinalIgnoreCase) >= 0)
@@ -888,7 +888,7 @@ namespace HOSONHCS
                                     }
                                 }
 
-                                // Only update if changed
+                                // Chỉ cập nhật nếu có thay đổi
                                 if (newText != originalText)
                                 {
                                     System.Diagnostics.Debug.WriteLine($"  ➡ Text node changed: '{originalText}' → '{newText}'");
@@ -909,7 +909,7 @@ namespace HOSONHCS
             }
         }
 
-        // Simple replacement for paragraphs - replace in each text node individually
+        // Thay thế đơn giản cho các paragraph - thay thế trong từng text node riêng lẻ
         private void ReplaceInParagraphs(OpenXmlPart part, Dictionary<string, string> replacements)
         {
             try
@@ -919,7 +919,7 @@ namespace HOSONHCS
                     var textNodes = para.Descendants<Text>().ToList();
                     if (textNodes.Count == 0) continue;
 
-                    // Replace in each text node individually (DO NOT merge)
+                    // Thay thế trong từng text node riêng lẻ (KHÔNG gộp)
                     foreach (var textNode in textNodes)
                     {
                         if (string.IsNullOrEmpty(textNode.Text)) continue;
@@ -962,17 +962,17 @@ namespace HOSONHCS
                 var mainPart = wordDoc.MainDocumentPart;
                 if (mainPart == null) return;
 
-                // For 03 DS template, do NOT remove any rows, just replace placeholders
-                // The template will be filled as-is without modifying table structure
+                // Đối với mẫu 03 DS, KHÔNG xóa bất kỳ dòng nào, chỉ thay thế placeholder
+                // Mẫu sẽ được điền nguyên trạng mà không thay đổi cấu trúc bảng
 
                 try
                 {
                     if (ShouldShowFullNamsinh(docPath) && c != null)
                     {
-                        // For GUQ template: Fill address placeholders ({{thon}}, {{xa}}, {{hoi}}) EVERYWHERE
-                        // Keep them in the replacements dictionary so they get filled globally
+                        // Đối với mẫu GUQ: Điền các placeholder địa chỉ ({{thon}}, {{xa}}, {{hoi}}) Ở MỌI NƠI
+                        // Giữ chúng trong dictionary replacements để chúng được điền toàn cục
 
-                        // Process rows with NTK placeholders - fill address only if NTK has data
+                        // Xử lý các dòng với placeholder NTK - chỉ điền địa chỉ nếu NTK có dữ liệu
                         var addressPlaceholders = new[] { "{{thon}}", "{{xa}}", "{{hoi}}" };
 
                         foreach (var table in mainPart.Document.Descendants<Table>())
@@ -983,17 +983,17 @@ namespace HOSONHCS
                                 {
                                     var rowText = string.Concat(row.Descendants<Text>().Select(t => t.Text ?? ""));
 
-                                    // Check if this row contains any NTK placeholder
+                                    // Kiểm tra xem dòng này có chứa placeholder NTK nào không
                                     bool hasNtk1 = rowText.IndexOf("{{ntk1}}", StringComparison.OrdinalIgnoreCase) >= 0;
                                     bool hasNtk2 = rowText.IndexOf("{{ntk2}}", StringComparison.OrdinalIgnoreCase) >= 0;
                                     bool hasNtk3 = rowText.IndexOf("{{ntk3}}", StringComparison.OrdinalIgnoreCase) >= 0;
 
-                                    // If row has NTK placeholder but no data, clear address placeholders in THIS ROW ONLY
+                                    // Nếu dòng có placeholder NTK nhưng không có dữ liệu, xóa các placeholder địa chỉ chỉ TRONG DÒNG NÀY
                                     if ((hasNtk1 && string.IsNullOrWhiteSpace(c.Ntk1)) ||
                                         (hasNtk2 && string.IsNullOrWhiteSpace(c.Ntk2)) ||
                                         (hasNtk3 && string.IsNullOrWhiteSpace(c.Ntk3)))
                                     {
-                                        // Clear address in this empty NTK row
+                                        // Xóa địa chỉ trong dòng NTK rỗng này
                                         foreach (var text in row.Descendants<Text>())
                                         {
                                             if (text.Text == null) continue;
@@ -1015,7 +1015,7 @@ namespace HOSONHCS
                 }
                 catch { }
 
-                // For 01 SXKD template: unmerge cells containing mucdich/soluong/sotien placeholders
+                // Đối với mẫu 01 SXKD: tách gộp các ô chứa placeholder mucdich/soluong/sotien
                 try
                 {
                     if (Is01SXKD(docPath))
@@ -1027,7 +1027,7 @@ namespace HOSONHCS
                                 var rows = table.Elements<TableRow>().ToList();
                                 bool foundHeaderRow = false;
 
-                                // Find the header row containing "Đối tượng" and "Thành tiền"
+                                // Tìm dòng tiêu đề chứa "Đối tượng" và "Thành tiền"
                                 for (int i = 0; i < rows.Count; i++)
                                 {
                                     var rowText = string.Concat(rows[i].Descendants<Text>().Select(t => t.Text ?? ""));
@@ -1039,7 +1039,7 @@ namespace HOSONHCS
                                     {
                                         foundHeaderRow = true;
 
-                                        // Unmerge all cells from this row and the next 5 rows (to cover all data rows)
+                                        // Tách gộp tất cả các ô từ dòng này và 5 dòng tiếp theo (để bao gồm tất cả các dòng dữ liệu)
                                         for (int j = i; j < Math.Min(i + 6, rows.Count); j++)
                                         {
                                             foreach (var cell in rows[j].Elements<TableCell>())
@@ -1047,14 +1047,14 @@ namespace HOSONHCS
                                                 var tcPr = cell.GetFirstChild<TableCellProperties>();
                                                 if (tcPr != null)
                                                 {
-                                                    // Remove vertical merge
+                                                    // Xóa gộp dọc
                                                     var vMerge = tcPr.GetFirstChild<VerticalMerge>();
                                                     if (vMerge != null)
                                                     {
                                                         vMerge.Remove();
                                                     }
 
-                                                    // Remove grid span
+                                                    // Xóa grid span
                                                     var gridSpan = tcPr.GetFirstChild<GridSpan>();
                                                     if (gridSpan != null)
                                                     {
@@ -1067,7 +1067,7 @@ namespace HOSONHCS
                                     }
                                 }
 
-                                // If no header found, try to find rows with placeholders and unmerge them
+                                // Nếu không tìm thấy header, thử tìm các dòng có placeholder và tách gộp chúng
                                 if (!foundHeaderRow)
                                 {
                                     foreach (var row in rows)
@@ -1100,7 +1100,7 @@ namespace HOSONHCS
                 }
                 catch { }
 
-                // Parts to process: main, headers, footers, footnotes, endnotes, comments
+                // Các phần cần xử lý: main, headers, footers, footnotes, endnotes, comments
                 var parts = new List<OpenXmlPart>();
                 parts.Add(mainPart);
                 parts.AddRange(mainPart.HeaderParts);
@@ -1115,14 +1115,14 @@ namespace HOSONHCS
                     {
                         System.Diagnostics.Debug.WriteLine($"Processing part: {part.GetType().Name}");
 
-                        // First approach: simple table cell replacement (no merging)
+                        // Cách tiếp cận thứ nhất: thay thế ô bảng đơn giản (không gộp)
                         ReplaceInTableCells(part, replacements);
 
-                        // Second approach: simple paragraph replacement (no merging)
+                        // Cách tiếp cận thứ hai: thay thế paragraph đơn giản (không gộp)
                         ReplaceInParagraphs(part, replacements);
 
-                        // Third approach: try across-runs replacement (for split placeholders)
-                        // Note: This may still cause spacing issues, so we do it last
+                        // Cách tiếp cận thứ ba: thử thay thế across-runs (cho các placeholder bị tách)
+                        // Lưu ý: Vẫn có thể gây vấn đề khoảng trắng, nên làm cuối cùng
                         TryReplacePlaceholdersAcrossRuns(part, replacements);
 
                         var texts = part.RootElement.Descendants<Text>();
@@ -1146,7 +1146,7 @@ namespace HOSONHCS
                     catch { }
                 }
 
-                // For 03 DS: Fix concatenation between STT cell (digits) and next cell starting with letters
+                // Cho mẫu 03 DS: Sửa lỗi nối chuỗi giữa ô STT (số) và ô tiếp theo bắt đầu bằng chữ
                 try
                 {
                     if (Is03DS(docPath))
@@ -1171,7 +1171,7 @@ namespace HOSONHCS
                                                 var firstChar = right[0];
                                                 if (char.IsDigit(lastChar) && char.IsLetter(firstChar) && !char.IsWhiteSpace(firstChar))
                                                 {
-                                                    // prepend a space to the first text node of the right cell
+                                                    // Thêm khoảng trắng vào đầu text node đầu tiên của ô bên phải
                                                     rightFirstNode.Text = " " + rightFirstNode.Text;
                                                 }
                                             }
@@ -1187,12 +1187,12 @@ namespace HOSONHCS
                 }
                 catch { }
 
-                // Save main document
+                // Lưu tài liệu chính
                 mainPart.Document.Save();
             }
         }
 
-        // Attempt to find and replace placeholders that are split across multiple Text nodes (runs)
+        // Thử tìm và thay thế các placeholder bị tách qua nhiều Text node (runs)
         private void TryReplacePlaceholdersAcrossRuns(OpenXmlPart part, Dictionary<string, string> replacements)
         {
             if (part == null || replacements == null || replacements.Count == 0) return;
@@ -1207,13 +1207,13 @@ namespace HOSONHCS
                     var replacement = kv.Value ?? string.Empty;
                     if (string.IsNullOrEmpty(rawKey)) continue;
 
-                    // normalize key token: if key is like "{{name}}" extract inner token "name"
+                    // Chuẩn hóa token key: nếu key giống như "{{name}}" thì trích xuất token bên trong "name"
                     string token = rawKey;
                     var m = Regex.Match(rawKey, "^\\s*\\{\\{\\s*(.*?)\\s*\\}\\}\\s*$");
                     if (m.Success && m.Groups.Count > 1) token = m.Groups[1].Value;
                     if (string.IsNullOrEmpty(token)) continue;
 
-                    // build regex to find placeholder allowing optional spaces inside braces
+                    // Xây dựng regex để tìm placeholder cho phép khoảng trắng tùy chọn bên trong dấu ngoặc nhọn
                     var pattern = "\\{\\{\\s*" + Regex.Escape(token) + "\\s*\\}\\}";
 
                     int i = 0;
@@ -1221,7 +1221,7 @@ namespace HOSONHCS
                     {
                         var sb = new StringBuilder();
                         int j = i;
-                        // build up to a reasonable window
+                        // Xây dựng lên đến một cửa sổ hợp lý
                         while (j < texts.Count && sb.Length < token.Length + 1024 && (j - i) < 200)
                         {
                             sb.Append(texts[j].Text ?? string.Empty);
@@ -1278,13 +1278,13 @@ namespace HOSONHCS
                             var prefix = startText.Substring(0, startOffset);
                             var suffix = endText.Substring(endOffset);
 
-                            // Ensure we don't accidentally concatenate neighboring content without a space.
-                            // If prefix ends with non-whitespace and replacement starts with non-whitespace, add a space.
+                            // Đảm bảo không vô tình nối nội dung lân cận mà không có khoảng trắng.
+                            // Nếu prefix kết thúc bằng không-khoảng-trắng và replacement bắt đầu bằng không-khoảng-trắng, thêm khoảng trắng.
                             var finalReplacement = replacement ?? string.Empty;
                             if (!string.IsNullOrEmpty(prefix) && !char.IsWhiteSpace(prefix[prefix.Length - 1]) && finalReplacement.Length > 0 && !char.IsWhiteSpace(finalReplacement[0]))
                                 finalReplacement = " " + finalReplacement;
 
-                            // If replacement ends with non-whitespace and suffix starts with non-whitespace, insert a space after replacement
+                            // Nếu replacement kết thúc bằng không-khoảng-trắng và suffix bắt đầu bằng không-khoảng-trắng, chèn khoảng trắng sau replacement
                             if (finalReplacement.Length > 0 && !char.IsWhiteSpace(finalReplacement[finalReplacement.Length - 1]) && !string.IsNullOrEmpty(suffix) && !char.IsWhiteSpace(suffix[0]))
                                 finalReplacement = finalReplacement + " ";
 
@@ -1295,7 +1295,7 @@ namespace HOSONHCS
                                 texts[k].Text = string.Empty;
                             }
 
-                            // refresh texts collection and continue after replaced node
+                            // Làm mới collection texts và tiếp tục sau node đã thay thế
                             texts = part.RootElement.Descendants<Text>().ToList();
                             i = Math.Min(texts.Count, startNode + 1);
                         }
@@ -1321,7 +1321,7 @@ namespace HOSONHCS
         {
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(oldValue)) return input;
             try { 
-                // If oldValue is a double-brace placeholder like {{name}}, allow optional spaces inside braces in the document
+                // Nếu oldValue là placeholder ngoặc nhọn kép như {{name}}, cho phép khoảng trắng tùy chọn bên trong ngoặc nhọn trong tài liệu
                 var m = Regex.Match(oldValue, "^\\s*\\{\\{\\s*(.*?)\\s*\\}\\}\\s*$");
                 if (m.Success && m.Groups.Count > 1)
                 {
@@ -1335,13 +1335,13 @@ namespace HOSONHCS
             catch { return input.Replace(oldValue, newValue ?? ""); }
         }
 
-        // Designer expects this exact-cased handler name in several places
+        // Designer mong đợi tên handler viết hoa chính xác này ở nhiều nơi
         private void cbPGD_SelectedIndexChanged(object sender, EventArgs e)
         {
             CbPGD_SelectedIndexChanged(sender, e);
         }
 
-        // Designer stubs referenced in Designer.cs
+        // Các stub của Designer được tham chiếu trong Designer.cs
         private void richTextBox1_TextChanged(object sender, EventArgs e) { }
         private void Form1_Load(object sender, EventArgs e) { }
 
@@ -1351,7 +1351,7 @@ namespace HOSONHCS
 
          private void Dgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
          {
-             // no-op: checkbox column removed; handler kept to avoid designer errors
+             // Không làm gì: cột checkbox đã bị xóa; giữ handler để tránh lỗi designer
          }
 
          private bool IsSelectionCompatibleWithChecked(int rowIndex)
@@ -1597,7 +1597,7 @@ namespace HOSONHCS
              }
          }
 
-         // Upsert customer into the list: update if editing, add if new
+         // Upsert khách hàng vào danh sách: cập nhật nếu đang sửa, thêm nếu mới
          private void UpsertCustomerInList(Customer customer)
          {
              if (customer == null) return;
@@ -1606,17 +1606,17 @@ namespace HOSONHCS
              {
                  if (editingIndex >= 0 && editingIndex < customers.Count)
                  {
-                     // Update existing customer
-                     customer._fileName = customers[editingIndex]._fileName; // preserve filename
+                     // Cập nhật khách hàng hiện có
+                     customer._fileName = customers[editingIndex]._fileName; // Giữ lại tên file
                      customers[editingIndex] = customer;
                  }
                  else
                  {
-                     // Add new customer
+                     // Thêm khách hàng mới
                      customers.Add(customer);
                  }
 
-                 // Reset editing index after upsert
+                 // Reset chỉ số editing sau khi upsert
                  editingIndex = -1;
              }
              catch (Exception ex)
@@ -1677,7 +1677,7 @@ namespace HOSONHCS
              try { if (cbqh2 != null) qh2 = cbqh2.Text.Trim(); } catch { }
              try { if (cbqh3 != null) qh3 = cbqh3.Text.Trim(); } catch { }
 
-             // Validate dates are not in the future
+             // Xác thực các ngày không được trong tương lai
              DateTime ngaycap = dateNgaycapCCCD.Value.Date;
              if (ngaycap > DateTime.Today) ngaycap = DateTime.Today;
 
@@ -1752,7 +1752,7 @@ namespace HOSONHCS
          {
              if (c == null) return;
 
-             // Basic info
+             // Thông tin cơ bản
              txtHoten.Text = c.Hoten ?? "";
              txtSocccd.Text = c.Socccd ?? "";
              cbNhandang.Text = c.Nhandang ?? "";
@@ -1771,12 +1771,12 @@ namespace HOSONHCS
              } catch { }
              cbNoicap.Text = c.Noicap ?? "";
 
-             // Additional personal info
+             // Thông tin cá nhân bổ sung
              try { if (cbGioitinh != null) cbGioitinh.Text = c.GioiTinh ?? ""; } catch { }
              try { if (cbDantoc != null) cbDantoc.Text = c.Dantoc ?? ""; } catch { }
              try { if (txtSdt != null) txtSdt.Text = c.Sdt ?? ""; } catch { }
 
-             // Location info (with suppress to avoid cascading events)
+             // Thông tin vị trí (đã bật suppress để tránh các sự kiện cascading)
              suppressComboChanged = true;
              try
              {
@@ -1794,26 +1794,26 @@ namespace HOSONHCS
              }
              finally { suppressComboChanged = false; }
 
-             // Program and loan info
+             // Thông tin chương trình và khoản vay
              cbChuongtrinh.Text = c.Chuongtrinh ?? "";
              try { if (cbVtc != null) cbVtc.Text = c.Vtc ?? ""; } catch { }
              try { if (txtPhuongan != null) txtPhuongan.Text = c.Phuongan ?? ""; } catch { }
              cbThoihanvay.Text = c.Thoihanvay ?? "";
              try { if (cbPhanky != null) cbPhanky.Text = c.Phanky ?? ""; } catch { }
 
-             // Money info
+             // Thông tin số tiền
              cbSotien.Text = c.Sotien ?? "";
              cbSotien1.Text = c.Sotien1 ?? "";
              cbSotien2.Text = c.Sotien2 ?? "";
 
-             // Mucdich and Doituong
+             // Mục đích và Đối tượng
              try { if (txtMucdich1 != null) txtMucdich1.Text = c.Mucdich1 ?? ""; } catch { }
              try { if (txtMucdich2 != null) txtMucdich2.Text = c.Mucdich2 ?? ""; } catch { }
              try { if (cbDoituong != null) cbDoituong.Text = c.Doituong1 ?? ""; } catch { }
              try { if (txtDoituong1 != null) txtDoituong1.Text = c.Soluong1 ?? ""; } catch { }
              try { if (txtDoituong2 != null) txtDoituong2.Text = c.Soluong2 ?? ""; } catch { }
 
-             // Dates - ensure no future dates
+             // Các ngày - đảm bảo không có ngày tương lai
              var ngaylaphs = c.Ngaylaphs == DateTime.MinValue ? DateTime.Today : c.Ngaylaphs;
              if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
              dateLaphs.Value = ngaylaphs;
@@ -1959,14 +1959,14 @@ namespace HOSONHCS
              try { txtMucdich1.Clear(); txtMucdich2.Clear(); } catch { }
              try { dateLaphs.Value = DateTime.Today; cbPGD.Text = ""; editingIndex = -1; ResetVisibilityToDefault(); } catch { }
 
-             // Clear date fields by unchecking them (controls remain visible)
+             // Xóa các trường ngày bằng cách bỏ tích chọn (các control vẫn hiển thị)
              try { if (dateDH != null) dateDH.Checked = false; } catch { }
              try { if (datendhcccd != null) datendhcccd.Checked = false; } catch { }
              try { if (datentk1 != null) datentk1.Checked = false; } catch { }
              try { if (datentk2 != null) datentk2.Checked = false; } catch { }
              try { if (datentk3 != null) datentk3.Checked = false; } catch { }
 
-             // Clear NTK fields
+             // Xóa các trường NTK
              try { if (txtntk1 != null) txtntk1.Text = ""; } catch { }
              try { if (txtntk2 != null) txtntk2.Text = ""; } catch { }
              try { if (txtntk3 != null) txtntk3.Text = ""; } catch { }
@@ -2184,7 +2184,7 @@ namespace HOSONHCS
             }
         }
 
-        // Auto Title Case for name textboxes (capitalize first letter of each word)
+        // Tự động viết hoa chữ cái đầu (Title Case) cho các textbox tên (viết hoa chữ cái đầu của mỗi từ)
         private void TxtName_TextChanged(object sender, EventArgs e)
         {
             if (suppressNameChanged) return;
@@ -2204,7 +2204,7 @@ namespace HOSONHCS
                 {
                     suppressNameChanged = true;
                     tb.Text = capitalizedText;
-                    // Restore cursor position
+                    // Khôi phục vị trí con trỏ
                     tb.SelectionStart = Math.Min(originalSelection, tb.Text.Length);
                     suppressNameChanged = false;
                 }
@@ -2212,7 +2212,7 @@ namespace HOSONHCS
             catch { }
         }
 
-        // Apply Title Case when leaving name textbox (final cleanup)
+        // Áp dụng Title Case khi rời khỏi textbox tên (dọc dẹp cuối cùng)
         private void TxtName_Leave(object sender, EventArgs e)
         {
             try
@@ -2235,7 +2235,7 @@ namespace HOSONHCS
             catch { }
         }
 
-        // Capitalize first letter of each word during typing
+        // Viết hoa chữ cái đầu của mỗi từ trong khi gõ
         private string CapitalizeWords(string input)
         {
             if (string.IsNullOrEmpty(input)) return input;
@@ -2286,7 +2286,7 @@ namespace HOSONHCS
         private bool Is03DS(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return (name.IndexOf("03", StringComparison.OrdinalIgnoreCase) >= 0 && name.IndexOf("DS", StringComparison.OrdinalIgnoreCase) >= 0) || name.IndexOf("03 DS", StringComparison.OrdinalIgnoreCase) >= 0; }
         private bool Is01SXKD(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("01", StringComparison.OrdinalIgnoreCase) >= 0 && name.IndexOf("SXKD", StringComparison.OrdinalIgnoreCase) >= 0; }
 
-        // Resolve template path by checking several locations and embedded resources; caches results
+        // Giải quyết đường dẫn mẫu bằng cách kiểm tra nhiều vị trí và embedded resources; cache kết quả
         private string ResolveTemplatePath(string templateFileName)
         {
             if (string.IsNullOrWhiteSpace(templateFileName)) throw new FileNotFoundException("Template name is empty.");
@@ -2296,7 +2296,7 @@ namespace HOSONHCS
                     return cached;
             }
 
-            // 1) Check Templates folder next to exe
+            // 1) Kiểm tra thư mục Templates bên cạnh exe
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             var candidate = Path.Combine(baseDir, TemplatesFolder, templateFileName);
             if (File.Exists(candidate))
@@ -2305,11 +2305,11 @@ namespace HOSONHCS
                 return candidate;
             }
 
-            // 2) Check baseDir root
+            // 2) Kiểm tra thư mục gốc baseDir
             candidate = Path.Combine(baseDir, templateFileName);
             if (File.Exists(candidate)) { lock (templatePathCache) { templatePathCache[templateFileName] = candidate; } return candidate; }
 
-            // 3) Recursive search under baseDir
+            // 3) Tìm kiếm đệ quy dưới baseDir
             try
             {
                 var found = Directory.EnumerateFiles(baseDir, templateFileName, SearchOption.AllDirectories).FirstOrDefault();
@@ -2317,7 +2317,7 @@ namespace HOSONHCS
             }
             catch { }
 
-            // 4) Embedded resource extraction
+            // 4) Trích xuất embedded resource
             try
             {
                 var asm = Assembly.GetExecutingAssembly();
@@ -2344,17 +2344,17 @@ namespace HOSONHCS
             throw new FileNotFoundException("Template not found: " + templateFileName);
         }
 
-        // Very small validation: check file exists and is a .docx; try opening with OpenXML if possible
+        // Xác thực rất nhỏ: kiểm tra file tồn tại và là .docx; thử mở bằng OpenXML nếu có thể
         private bool IsDocxFile(string path)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return false;
                 if (!string.Equals(Path.GetExtension(path), ".docx", StringComparison.OrdinalIgnoreCase)) return false;
-                // Try opening as WordprocessingDocument to ensure it's a valid package
+                // Thử mở như WordprocessingDocument để đảm bảo nó là package hợp lệ
                 try
                 {
-                    using (var w = WordprocessingDocument.Open(path, false)) { /* success */ }
+                    using (var w = WordprocessingDocument.Open(path, false)) { /* thành công */ }
                     return true;
                 }
                 catch { return false; }
@@ -2362,9 +2362,9 @@ namespace HOSONHCS
             catch { return false; }
         }
 
-        // --- Added missing handlers and helpers ---
+        // --- Đã thêm các handler và helper thiếu ---
 
-        // Designer referenced empty handlers
+        // Các handler rỗng được tham chiếu bởi Designer
         private void tabPage1_Click(object sender, EventArgs e) { }
         private void groupBox2_Enter(object sender, EventArgs e) { }
         private void datentk2_TextChanged(object sender, EventArgs e) { TxtNamsinh_TextChanged(sender, e); }
@@ -2463,15 +2463,15 @@ namespace HOSONHCS
             catch { }
         }
 
-        // ================= MACBOOK THEME STYLING =================
+        // ================= TẠO STYLE THEME MACBOOK =================
         private void ApplyMacBookTheme()
         {
             try
             {
-                // Form background
+                // Nền form
                 this.BackColor = AppTheme.MacBackground;
 
-                // All tab pages
+                // Tất cả các tab page
                 if (tabPage1 != null)
                 {
                     tabPage1.BackColor = AppTheme.MacBackground;
@@ -2485,13 +2485,13 @@ namespace HOSONHCS
                     tabPage3.BackColor = AppTheme.MacBackground;
                 }
 
-                // TabControl styling
+                // Tạo style cho TabControl
                 if (tabControl1 != null)
                 {
                     tabControl1.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
                 }
 
-                // GroupBoxes - card style (off-white instead of pure white)
+                // Các GroupBox - kiểu thẻ (off-white thay vì trắng tinh khiết)
                 if (groupBox1 != null)
                 {
                     groupBox1.BackColor = AppTheme.MacCardBackground;
@@ -2536,7 +2536,7 @@ namespace HOSONHCS
                     label14.BackColor = System.Drawing.Color.Transparent;
                 }
 
-                // Style buttons with Mac colors
+                // Tạo style các nút với màu Mac
                 StyleMacButton(btn01, AppTheme.MacGreen);      // Lưu - Green
                 StyleMacButton(btn03, AppTheme.MacBlue);       // Export 03 - Blue
                 StyleMacButton(btnGUQ, AppTheme.MacBlue);      // Export GUQ - Blue
@@ -2544,27 +2544,27 @@ namespace HOSONHCS
                 StyleMacButton(btntaokh, AppTheme.MacOrange);  // Tạo mới - Orange
                 StyleMacButton(btn03Group, AppTheme.MacBlue);  // Nhóm - Blue
 
-                // Tab2 buttons (if exist)
+                // Các nút Tab2 (nếu tồn tại)
                 StyleMacButton(btnPre, AppTheme.MacBlue);      // Previous
                 StyleMacButton(btnNext, AppTheme.MacBlue);     // Next
 
-                // Tab3 buttons
+                // Các nút Tab3
                 StyleMacButton(btnLogin, AppTheme.MacTeal);    // Login - Teal
                 StyleMacButton(btnSave, AppTheme.MacGreen);    // Save - Green
                 StyleMacButton(btnexit, AppTheme.MacRed);      // Exit - Red
 
-                // Style all DataGridViews
+                // Tạo style cho tất cả các DataGridView
                 StyleMacDataGridView();
                 StyleAllDataGridViews();
 
-                // Apply fonts to all labels
+                // Áp dụng font cho tất cả các label
                 ApplyMacFontsToLabels();
 
-                // Style textboxes and comboboxes
+                // Tạo style cho textbox và combobox
                 ApplyMacStyleToTextBoxes();
                 ApplyMacStyleToComboBoxes();
 
-                // Style RichTextBoxes
+                // Tạo style cho RichTextBox
                 ApplyMacStyleToRichTextBoxes();
             }
             catch { }
@@ -2782,14 +2782,14 @@ namespace HOSONHCS
             }
         }
 
-        // CCCD helpers
+        // Các helper cho CCCD
         private void TxtDigitsOnly_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar)) e.Handled = true;
         }
         private void TxtCccd_TextChanged(object sender, EventArgs e)
         {
-            // optional: enforce length limits or formatting; keep simple
+            // Tùy chọn: áp dụng giới hạn độ dài hoặc format; giữ đơn giản
             try
             {
                 var tb = sender as TextBox;
@@ -2801,14 +2801,14 @@ namespace HOSONHCS
         }
         private void TxtCccd_Leave(object sender, EventArgs e)
         {
-            // Validate CCCD must be exactly 12 digits
+            // Xác thực CCCD phải đúng 12 chữ số
             try
             {
                 var tb = sender as TextBox;
                 if (tb == null) return;
 
                 var text = tb.Text ?? "";
-                if (string.IsNullOrWhiteSpace(text)) return; // Allow empty (optional field)
+                if (string.IsNullOrWhiteSpace(text)) return; // Cho phép rỗng (trường tùy chọn)
 
                 var digits = new string(text.Where(char.IsDigit).ToArray());
                 if (digits.Length > 0 && digits.Length != 12)
@@ -2824,12 +2824,63 @@ namespace HOSONHCS
             catch { }
         }
 
-        private void DateNgaycapCCCD_ValueChanged(object sender, EventArgs e)
+        // ========== VALIDATION SỐ ĐIỆN THOẠI ==========
+        // Tự động xóa các ký tự không phải số
+        private void TxtSdt_TextChanged(object sender, EventArgs e)
         {
-            // optional behavior: adjust Noicap based on a cutoff date (01/07/2024). Keep minimal: no-op
+            try
+            {
+                var tb = sender as TextBox;
+                if (tb == null) return;
+
+                // Chỉ giữ lại các chữ số
+                var digits = new string((tb.Text ?? "").Where(char.IsDigit).ToArray());
+                if (tb.Text != digits) 
+                { 
+                    var sel = tb.SelectionStart; 
+                    tb.Text = digits; 
+                    tb.SelectionStart = Math.Min(sel, tb.Text.Length); 
+                }
+            }
+            catch { }
         }
 
-        // Validate all DateTimePicker controls to prevent future dates
+        // Validate số điện thoại phải đúng 10 số khi rời khỏi textbox
+        private void TxtSdt_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                var tb = sender as TextBox;
+                if (tb == null) return;
+
+                var text = tb.Text ?? "";
+                if (string.IsNullOrWhiteSpace(text)) return; // Cho phép rỗng (trường tùy chọn)
+
+                var digits = new string(text.Where(char.IsDigit).ToArray());
+
+                // Kiểm tra phải đúng 10 số - không ít hơn, không nhiều hơn
+                if (digits.Length > 0 && digits.Length != 10)
+                {
+                    MessageBox.Show(
+                        $"Số điện thoại phải có đúng 10 chữ số (hiện tại: {digits.Length} chữ số)\n" +
+                        "Ví dụ hợp lệ: 0987654321", 
+                        "Lỗi nhập liệu", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Warning
+                    );
+                    tb.Focus();
+                    tb.SelectAll();
+                }
+            }
+            catch { }
+        }
+
+        private void DateNgaycapCCCD_ValueChanged(object sender, EventArgs e)
+        {
+            // Hành vi tùy chọn: điều chỉnh Noicap dựa trên ngày cắt (01/07/2024). Giữ tối thiểu: không làm gì
+        }
+
+        // Xác thực tất cả các DateTimePicker để ngăn ngày tương lai
         private void DatePicker_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -2837,7 +2888,7 @@ namespace HOSONHCS
                 var picker = sender as DateTimePicker;
                 if (picker == null) return;
 
-                // If date is in the future, reset to today
+                // Nếu ngày trong tương lai, reset về hôm nay
                 if (picker.Value.Date > DateTime.Today)
                 {
                     picker.Value = DateTime.Today;
@@ -2847,7 +2898,7 @@ namespace HOSONHCS
             catch { }
         }
 
-        // Money formatting
+        // Format số tiền
         private void CbMoney_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != ',') e.Handled = true;
@@ -2876,13 +2927,13 @@ namespace HOSONHCS
             catch { }
         }
 
-        // Compute Sotientong and Sotienchu if possible
+        // Tính toán Sotientong và Sotienchu nếu có thể
         private void UpdateComputedFields(Customer c)
         {
             if (c == null) return;
             try
             {
-                // Compute total as Vốn tự có (Vtc) + Vốn vay (Sotien)
+                // Tính tổng là Vốn tự có (Vtc) + Vốn vay (Sotien)
                 if (string.IsNullOrWhiteSpace(c.Sotientong))
                 {
                     long loan = ParseMoneyStringToLong(c.Sotien);
@@ -2890,13 +2941,13 @@ namespace HOSONHCS
                     long total = loan + own;
                     if (total > 0)
                     {
-                        // format with thousands separator using '.' as thousands separator
+                        // format với dấu phân cách hàng nghìn dùng '.' làm dấu phân cách nghìn
                         var formatted = string.Format(CultureInfo.InvariantCulture, "{0:N0}", total).Replace(",", ".");
                         c.Sotientong = formatted;
                     }
                 }
 
-                // generate Sotienchu if missing and have numeric value in Sotientong
+                // Tạo Sotienchu nếu thiếu và có giá trị số trong Sotientong
                 if (string.IsNullOrWhiteSpace(c.Sotienchu) && !string.IsNullOrWhiteSpace(c.Sotientong))
                 {
                     var digits = new string((c.Sotientong ?? "").Where(char.IsDigit).ToArray());
@@ -2913,7 +2964,7 @@ namespace HOSONHCS
         private IEnumerable<string> GetTemplateNamesForCustomer(Customer c, bool include03)
         {
             var list = new List<string>();
-            // If the selected program indicates "sản xuất kinh doanh" (SXKD) use the specific 01 SXKD template
+            // Nếu chương trình được chọn cho thấy "sản xuất kinh doanh" (SXKD) thì dùng mẫu 01 SXKD cụ thể
             try
             {
                 var ct = (c?.Chuongtrinh ?? "").Trim();
@@ -2923,7 +2974,7 @@ namespace HOSONHCS
                 }
                 else if (!string.IsNullOrEmpty(ct) && IsGqvlChuongtrinh(ct))
                 {
-                    // Use GQVL variant when program indicates GQVL
+                    // Dùng biến thể GQVL khi chương trình chỉ ra GQVL
                     list.Add("01 GQVL.docx");
                 }
                 else
@@ -2936,11 +2987,11 @@ namespace HOSONHCS
                 list.Add("01 HN.docx");
             }
             if (include03) list.Add("03 DS.docx");
-            // Note: GUQ should only be exported when the user explicitly clicks btnGUQ
+            // Lưu ý: GUQ chỉ nên được xuất khi người dùng bấm btnGUQ rõ ràng
             return list;
          }
 
-        // Detect common variants indicating GQVL program
+        // Phát hiện các biến thể phổ biến chỉ ra chương trình GQVL
         private bool IsGqvlChuongtrinh(string chuongtrinh)
         {
             if (string.IsNullOrWhiteSpace(chuongtrinh)) return false;
@@ -2960,12 +3011,12 @@ namespace HOSONHCS
                 }
 
                 var n = Normalize(chuongtrinh);
-                // check for common shorthand/variants for GQVL
+                // Kiểm tra các từ viết tắt/biến thể phổ biến cho GQVL
                 if (n.Contains("gqvl") || n.Contains("gq vl") || n.Contains("gq-vl") || n.Contains("gq_vl"))
                     return true;
 
-                // Check for full phrase "Giải quyết việc làm duy trì và mở rộng việc làm"
-                if (n.Contains("giai quyet viec lam duy tri") || 
+                // Kiểm tra cụm từ đầy đủ "Giải quyết việc làm duy trì và mở rộng việc làm"
+                if (n.Contains("giai quyet viec lam duy tri") ||
                     n.Contains("giai quyet viec lam") && n.Contains("duy tri") && n.Contains("mo rong"))
                     return true;
             }
@@ -2973,7 +3024,7 @@ namespace HOSONHCS
             return false;
         }
 
-        // Detect common variants indicating "Sản xuất kinh doanh" (SXKD)
+        // Phát hiện các biến thể phổ biến chỉ ra "Sản xuất kinh doanh" (SXKD)
         private bool IsSxkdChuongtrinh(string chuongtrinh)
         {
             if (string.IsNullOrWhiteSpace(chuongtrinh)) return false;
@@ -2994,15 +3045,15 @@ namespace HOSONHCS
 
                 var n = Normalize(chuongtrinh);
 
-                // Check for exact phrase "Hộ gia đình Sản xuất kinh doanh tại vùng khó khăn"
+                // Kiểm tra cụm từ chính xác "Hộ gia đình Sản xuất kinh doanh tại vùng khó khăn"
                 if (n.Contains("ho gia dinh") && n.Contains("san xuat kinh doanh") && n.Contains("vung kho khan"))
                     return true;
 
-                // Check for common shorthand/variants
+                // Kiểm tra các từ viết tắt/biến thể phổ biến
                 if (n.Contains("sxkd"))
                     return true;
 
-                // Check for general SXKD keywords
+                // Kiểm tra từ khóa chung SXKD
                 if (n.Contains("san xuat kinh doanh"))
                     return true;
             }

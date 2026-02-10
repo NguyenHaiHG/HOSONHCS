@@ -9,7 +9,8 @@ namespace HOSONHCS
     internal static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Điểm khởi đầu chính của ứng dụng.
+        /// Khởi tạo Form1 và chạy ứng dụng Windows Forms.
         /// </summary>
         [STAThread]
         static void Main()
