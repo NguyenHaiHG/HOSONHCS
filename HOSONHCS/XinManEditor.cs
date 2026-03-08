@@ -401,6 +401,51 @@ namespace HOSONHCS
             }
         }
 
+        // Method public để load file JSON khác (vixuyen.json, hsp.json, dongvan.json) và hiển thị lên dgv1
+        public void LoadJsonFile(string jsonFileName)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(jsonFileName))
+                {
+                    jsonFileName = "xinman.json";
+                }
+
+                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
+
+                if (!File.Exists(filePath))
+                {
+                    MessageBox.Show($"File {jsonFileName} không tồn tại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Load model từ file JSON chỉ định
+                model = null;
+                try
+                {
+                    var json = File.ReadAllText(filePath, Encoding.UTF8);
+                    model = JsonConvert.DeserializeObject<XinManModel>(json);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi đọc file {jsonFileName}:\n{ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    model = null;
+                }
+
+                if (model == null) 
+                {
+                    model = new XinManModel { pgd = "", communes = new List<Commune>() };
+                }
+
+                // Hiển thị dữ liệu lên DataGridView
+                PopulateGridFromModel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải file JSON:\n{ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void LoadModel()
         {
             model = null;

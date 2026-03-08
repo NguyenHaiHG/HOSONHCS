@@ -132,10 +132,17 @@ tính năng này dùng để tạo 1 khách hàng khác cùng thôn, tổ, trán
 
 5, Tính năng tạo 03 theo nhóm đã sử dụng được, tuy nhiên tác giả đang tiếp tục hoàn thiện ở phiên bản sau;
 
-6, Đối với 1 số ô ngày tháng năm có dấu tick ở đằng trước, nếu không sử dụng, bỏ tick, nếu sử dụng thì tick vào phần mềm sẽ tự động hiển thị điền vào mẫu.</value>
+6, Đối với 1 số ô ngày tháng năm có dấu tick ở đằng trước, nếu không sử dụng, bỏ tick, nếu sử dụng thì tick vào phần mềm sẽ tự động hiển thị điền vào mẫu.
+
+7, Tính năng Cập nhật sẽ có ở phiên bản 6.0.0
+
+8, Tính năng tạo 01/TGTV sẽ có ở phiên bản 6.0.0</value>
   </data>
   <metadata name="marqueeTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>25</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

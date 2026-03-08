@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnall = new System.Windows.Forms.Button();
+            this.btn01TGTV = new System.Windows.Forms.Button();
             this.btntaokh = new System.Windows.Forms.Button();
             this.label51 = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
@@ -130,6 +132,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cbPGD = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnupdate = new System.Windows.Forms.Button();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label52 = new System.Windows.Forms.Label();
@@ -174,12 +177,14 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1026, 689);
+            this.tabControl1.Size = new System.Drawing.Size(1040, 689);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Teal;
+            this.tabPage1.Controls.Add(this.btnall);
+            this.tabPage1.Controls.Add(this.btn01TGTV);
             this.tabPage1.Controls.Add(this.btntaokh);
             this.tabPage1.Controls.Add(this.label51);
             this.tabPage1.Controls.Add(this.label45);
@@ -236,19 +241,37 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(1018, 663);
+            this.tabPage1.Size = new System.Drawing.Size(1032, 663);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Bảng nhập liệu";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // btnall
+            // 
+            this.btnall.Location = new System.Drawing.Point(908, 509);
+            this.btnall.Name = "btnall";
+            this.btnall.Size = new System.Drawing.Size(116, 48);
+            this.btnall.TabIndex = 100;
+            this.btnall.Text = "Tạo toàn bộ hồ sơ";
+            this.btnall.UseVisualStyleBackColor = true;
+            // 
+            // btn01TGTV
+            // 
+            this.btn01TGTV.Location = new System.Drawing.Point(787, 507);
+            this.btn01TGTV.Name = "btn01TGTV";
+            this.btn01TGTV.Size = new System.Drawing.Size(118, 48);
+            this.btn01TGTV.TabIndex = 99;
+            this.btn01TGTV.Text = "Tạo 01/TGTV";
+            this.btn01TGTV.UseVisualStyleBackColor = true;
             // 
             // btntaokh
             // 
             this.btntaokh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.btntaokh.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btntaokh.Location = new System.Drawing.Point(680, 568);
+            this.btntaokh.Location = new System.Drawing.Point(680, 589);
             this.btntaokh.Margin = new System.Windows.Forms.Padding(2);
             this.btntaokh.Name = "btntaokh";
-            this.btntaokh.Size = new System.Drawing.Size(111, 38);
+            this.btntaokh.Size = new System.Drawing.Size(163, 36);
             this.btntaokh.TabIndex = 98;
             this.btntaokh.Text = "Tạo khách hàng";
             this.btntaokh.UseVisualStyleBackColor = false;
@@ -275,15 +298,15 @@
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(69, 13);
             this.label45.TabIndex = 95;
-            this.label45.Text = "Version 5.0.1";
+            this.label45.Text = "Version 5.1.0";
             // 
             // btn03Group
             // 
             this.btn03Group.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btn03Group.Location = new System.Drawing.Point(916, 459);
+            this.btn03Group.Location = new System.Drawing.Point(909, 455);
             this.btn03Group.Margin = new System.Windows.Forms.Padding(2);
             this.btn03Group.Name = "btn03Group";
-            this.btn03Group.Size = new System.Drawing.Size(94, 32);
+            this.btn03Group.Size = new System.Drawing.Size(116, 48);
             this.btn03Group.TabIndex = 94;
             this.btn03Group.Text = "Tạo 03 tổ";
             this.btn03Group.UseVisualStyleBackColor = false;
@@ -292,10 +315,10 @@
             // 
             this.btnGUQ.BackColor = System.Drawing.Color.Blue;
             this.btnGUQ.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnGUQ.Location = new System.Drawing.Point(785, 460);
+            this.btnGUQ.Location = new System.Drawing.Point(787, 455);
             this.btnGUQ.Margin = new System.Windows.Forms.Padding(2);
             this.btnGUQ.Name = "btnGUQ";
-            this.btnGUQ.Size = new System.Drawing.Size(118, 32);
+            this.btnGUQ.Size = new System.Drawing.Size(118, 48);
             this.btnGUQ.TabIndex = 93;
             this.btnGUQ.Text = "Tạo Giấy uỷ quyền";
             this.btnGUQ.UseVisualStyleBackColor = false;
@@ -871,7 +894,7 @@
             this.cbNoicap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbNoicap.FormattingEnabled = true;
             this.cbNoicap.Items.AddRange(new object[] {
-            "Bộ Công An",
+            "Bộ Công an",
             "Cục CSQLHC về TTXH"});
             this.cbNoicap.Location = new System.Drawing.Point(160, 175);
             this.cbNoicap.Margin = new System.Windows.Forms.Padding(2);
@@ -971,12 +994,12 @@
             // btn03
             // 
             this.btn03.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.btn03.Location = new System.Drawing.Point(680, 460);
+            this.btn03.Location = new System.Drawing.Point(680, 455);
             this.btn03.Margin = new System.Windows.Forms.Padding(2);
             this.btn03.Name = "btn03";
-            this.btn03.Size = new System.Drawing.Size(94, 32);
+            this.btn03.Size = new System.Drawing.Size(103, 48);
             this.btn03.TabIndex = 68;
-            this.btn03.Text = "Tạo 03/TD";
+            this.btn03.Text = "DS đề nghị 03/TD";
             this.btn03.UseVisualStyleBackColor = false;
             // 
             // cbPhanky
@@ -987,12 +1010,12 @@
             this.cbPhanky.Items.AddRange(new object[] {
             "6",
             "12",
-            "36",
-            "48"});
+            "24",
+            "36"});
             this.cbPhanky.Location = new System.Drawing.Point(138, 181);
             this.cbPhanky.Margin = new System.Windows.Forms.Padding(2);
             this.cbPhanky.Name = "cbPhanky";
-            this.cbPhanky.Size = new System.Drawing.Size(115, 23);
+            this.cbPhanky.Size = new System.Drawing.Size(152, 23);
             this.cbPhanky.TabIndex = 59;
             // 
             // label28
@@ -1047,7 +1070,7 @@
             this.cbVtc.Location = new System.Drawing.Point(138, 314);
             this.cbVtc.Margin = new System.Windows.Forms.Padding(2);
             this.cbVtc.Name = "cbVtc";
-            this.cbVtc.Size = new System.Drawing.Size(114, 23);
+            this.cbVtc.Size = new System.Drawing.Size(152, 23);
             this.cbVtc.TabIndex = 55;
             // 
             // label26
@@ -1105,7 +1128,7 @@
             this.cbSotien2.Location = new System.Drawing.Point(138, 368);
             this.cbSotien2.Margin = new System.Windows.Forms.Padding(2);
             this.cbSotien2.Name = "cbSotien2";
-            this.cbSotien2.Size = new System.Drawing.Size(115, 23);
+            this.cbSotien2.Size = new System.Drawing.Size(152, 23);
             this.cbSotien2.TabIndex = 47;
             // 
             // label22
@@ -1138,7 +1161,7 @@
             this.cbSotien1.Location = new System.Drawing.Point(138, 341);
             this.cbSotien1.Margin = new System.Windows.Forms.Padding(2);
             this.cbSotien1.Name = "cbSotien1";
-            this.cbSotien1.Size = new System.Drawing.Size(115, 23);
+            this.cbSotien1.Size = new System.Drawing.Size(152, 23);
             this.cbSotien1.TabIndex = 45;
             // 
             // cbSotien
@@ -1159,7 +1182,7 @@
             this.cbSotien.Location = new System.Drawing.Point(138, 287);
             this.cbSotien.Margin = new System.Windows.Forms.Padding(2);
             this.cbSotien.Name = "cbSotien";
-            this.cbSotien.Size = new System.Drawing.Size(114, 23);
+            this.cbSotien.Size = new System.Drawing.Size(152, 23);
             this.cbSotien.TabIndex = 44;
             // 
             // label21
@@ -1316,7 +1339,7 @@
             this.dgv.Name = "dgv";
             this.dgv.RowHeadersWidth = 51;
             this.dgv.RowTemplate.Height = 24;
-            this.dgv.Size = new System.Drawing.Size(330, 398);
+            this.dgv.Size = new System.Drawing.Size(345, 398);
             this.dgv.TabIndex = 29;
             // 
             // btn01
@@ -1324,22 +1347,22 @@
             this.btn01.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.btn01.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn01.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btn01.Location = new System.Drawing.Point(680, 503);
+            this.btn01.Location = new System.Drawing.Point(680, 507);
             this.btn01.Margin = new System.Windows.Forms.Padding(2);
             this.btn01.Name = "btn01";
-            this.btn01.Size = new System.Drawing.Size(94, 33);
+            this.btn01.Size = new System.Drawing.Size(103, 50);
             this.btn01.TabIndex = 28;
-            this.btn01.Text = "Tạo 01/TD";
+            this.btn01.Text = "Đơn vay vốn 01/TD";
             this.btn01.UseVisualStyleBackColor = false;
             // 
             // btnDelete
             // 
             this.btnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.btnDelete.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnDelete.Location = new System.Drawing.Point(899, 568);
+            this.btnDelete.Location = new System.Drawing.Point(847, 589);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(111, 38);
+            this.btnDelete.Size = new System.Drawing.Size(163, 36);
             this.btnDelete.TabIndex = 27;
             this.btnDelete.Text = "Xoá khách hàng";
             this.btnDelete.UseVisualStyleBackColor = false;
@@ -1352,7 +1375,7 @@
             this.cbTo.Location = new System.Drawing.Point(138, 154);
             this.cbTo.Margin = new System.Windows.Forms.Padding(2);
             this.cbTo.Name = "cbTo";
-            this.cbTo.Size = new System.Drawing.Size(114, 23);
+            this.cbTo.Size = new System.Drawing.Size(152, 23);
             this.cbTo.TabIndex = 24;
             // 
             // label12
@@ -1395,12 +1418,13 @@
             "36 tháng",
             "48 tháng",
             "60 tháng",
+            "72 tháng",
             "84 tháng",
             "120 tháng"});
             this.cbThoihanvay.Location = new System.Drawing.Point(138, 208);
             this.cbThoihanvay.Margin = new System.Windows.Forms.Padding(2);
             this.cbThoihanvay.Name = "cbThoihanvay";
-            this.cbThoihanvay.Size = new System.Drawing.Size(114, 23);
+            this.cbThoihanvay.Size = new System.Drawing.Size(152, 23);
             this.cbThoihanvay.TabIndex = 21;
             // 
             // txtMucdich1
@@ -1420,7 +1444,7 @@
             this.cbHoi.Location = new System.Drawing.Point(138, 127);
             this.cbHoi.Margin = new System.Windows.Forms.Padding(2);
             this.cbHoi.Name = "cbHoi";
-            this.cbHoi.Size = new System.Drawing.Size(115, 23);
+            this.cbHoi.Size = new System.Drawing.Size(152, 23);
             this.cbHoi.TabIndex = 96;
             // 
             // cbThon
@@ -1431,7 +1455,7 @@
             this.cbThon.Location = new System.Drawing.Point(138, 100);
             this.cbThon.Margin = new System.Windows.Forms.Padding(2);
             this.cbThon.Name = "cbThon";
-            this.cbThon.Size = new System.Drawing.Size(115, 23);
+            this.cbThon.Size = new System.Drawing.Size(152, 23);
             this.cbThon.TabIndex = 18;
             // 
             // cbXa
@@ -1442,7 +1466,7 @@
             this.cbXa.Location = new System.Drawing.Point(138, 73);
             this.cbXa.Margin = new System.Windows.Forms.Padding(2);
             this.cbXa.Name = "cbXa";
-            this.cbXa.Size = new System.Drawing.Size(115, 23);
+            this.cbXa.Size = new System.Drawing.Size(152, 23);
             this.cbXa.TabIndex = 17;
             this.cbXa.SelectedIndexChanged += new System.EventHandler(this.cbXa_SelectedIndexChanged_1);
             // 
@@ -1546,12 +1570,13 @@
             this.cbPGD.Location = new System.Drawing.Point(138, 48);
             this.cbPGD.Margin = new System.Windows.Forms.Padding(2);
             this.cbPGD.Name = "cbPGD";
-            this.cbPGD.Size = new System.Drawing.Size(114, 21);
+            this.cbPGD.Size = new System.Drawing.Size(152, 21);
             this.cbPGD.TabIndex = 41;
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Teal;
+            this.tabPage2.Controls.Add(this.btnupdate);
             this.tabPage2.Controls.Add(this.richTextBox2);
             this.tabPage2.Controls.Add(this.richTextBox1);
             this.tabPage2.Controls.Add(this.label52);
@@ -1563,6 +1588,15 @@
             this.tabPage2.Size = new System.Drawing.Size(1018, 663);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Thông tin phần mềm";
+            // 
+            // btnupdate
+            // 
+            this.btnupdate.Location = new System.Drawing.Point(8, 612);
+            this.btnupdate.Name = "btnupdate";
+            this.btnupdate.Size = new System.Drawing.Size(85, 32);
+            this.btnupdate.TabIndex = 14;
+            this.btnupdate.Text = "Cập nhật";
+            this.btnupdate.UseVisualStyleBackColor = true;
             // 
             // richTextBox2
             // 
@@ -1582,7 +1616,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(159, 132);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(707, 369);
+            this.richTextBox1.Size = new System.Drawing.Size(707, 512);
             this.richTextBox1.TabIndex = 12;
             this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
@@ -1847,7 +1881,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1026, 689);
+            this.ClientSize = new System.Drawing.Size(1040, 689);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -2002,6 +2036,9 @@
         private System.Windows.Forms.Button btntaokh;
         private System.Windows.Forms.Button btnexit;
         private System.Windows.Forms.Timer marqueeTimer;
+        private System.Windows.Forms.Button btnupdate;
+        private System.Windows.Forms.Button btn01TGTV;
+        private System.Windows.Forms.Button btnall;
     }
 }
 

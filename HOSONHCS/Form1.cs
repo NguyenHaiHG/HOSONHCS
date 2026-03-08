@@ -78,10 +78,15 @@ namespace HOSONHCS
             try { btn03.Click += Btn03_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btn03Group.Click += Btn03Group_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btnGUQ.Click += BtnGUQ_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
+            try { btn01TGTV.Click += Btn01tgtv_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
+            try { btnall.Click += Btnall_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
 
             // Các nút tạo khách hàng mới và đăng xuất
             try { btntaokh.Click += BtnTaokh_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btnexit.Click += BtnExit_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
+
+            // ComboBox Fix PGD - cho phép chọn nhanh và reload dữ liệu PGD
+            try { cbpgdfix.SelectedIndexChanged += CbPgdFix_SelectedIndexChanged; } catch { /* bỏ qua nếu control không tồn tại */ }
 
             // ========== TỰ ĐỘNG VIẾT HOA CHỮ CÁI ĐẦU CHO Ô NHẬP TÊN ==========
             // Các ô nhập tên (txtHoten, txtntk1/2/3): tự động viết hoa chữ cái đầu mỗi từ (Title Case)
@@ -101,12 +106,21 @@ namespace HOSONHCS
             try { txtcccd3.KeyPress += TxtDigitsOnly_KeyPress; txtcccd3.TextChanged += TxtCccd_TextChanged; txtcccd3.Leave += TxtCccd_Leave; txtcccd3.MaxLength = 12; } catch { }
 
             // ========== SỐ ĐIỆN THOẠI ==========
-            // txtSdt: chỉ cho phép nhập số, phải đúng 10 chữ số (không ít hơn, không nhiều hơn)
-            try { txtSdt.KeyPress += TxtDigitsOnly_KeyPress; txtSdt.TextChanged += TxtSdt_TextChanged; txtSdt.Leave += TxtSdt_Leave; txtSdt.MaxLength = 10; } catch { }
+            // txtSdt: chỉ cho phép nhập số, tự động format với dấu chấm (0812.801.886)
+            try { txtSdt.KeyPress += TxtSdt_KeyPress; txtSdt.TextChanged += TxtSdt_TextChanged; txtSdt.Leave += TxtSdt_Leave; txtSdt.MaxLength = 12; } catch { }  // MaxLength=12 để chứa dấu chấm
 
             // ========== TỰ ĐỘNG CHỌN NỠI CẤP CCCD ==========
-            // dateNgaycapCCCD: tự động chọn cbNoicap dựa trên ngày cấp (trước/sau 01/07/2024)
-            try { dateNgaycapCCCD.ValueChanged += DateNgaycapCCCD_ValueChanged; } catch { }
+            // dateNgaycapCCCD: tự động điền cbNoicap dựa trên ngày cấp (trước/sau 01/07/2024)
+            // cbNoicap: khóa không cho chọn, chỉ tự động điền
+            try 
+            { 
+                if (cbNoicap != null) 
+                {
+                    cbNoicap.DropDownStyle = ComboBoxStyle.DropDownList;  // Khóa không cho gõ
+                    cbNoicap.Enabled = false;  // Disable hoàn toàn
+                }
+                dateNgaycapCCCD.ValueChanged += DateNgaycapCCCD_ValueChanged; 
+            } catch { }
 
             // ========== NGĂN CHỌN NGÀY TRONG TƯƠNG LAI ==========
             // Set MaxDate = hôm nay cho tất cả DateTimePicker để không cho chọn ngày tương lai
@@ -129,13 +143,15 @@ namespace HOSONHCS
                 }
                 if (dateDH != null) 
                 { 
-                    dateDH.MaxDate = DateTime.Today;
-                    dateDH.ValueChanged += DatePicker_ValueChanged;
+                    // Ngày đến hạn KHÔNG giới hạn MaxDate - cho phép nhập ngày tương lai
+                    dateDH.MaxDate = DateTime.MaxValue;
+                    // KHÔNG gắn sự kiện DatePicker_ValueChanged để không validate ngày tương lai
                 }
                 if (datendhcccd != null) 
                 { 
-                    datendhcccd.MaxDate = DateTime.Today;
-                    datendhcccd.ValueChanged += DatePicker_ValueChanged;
+                    // Thời hạn CCCD: cho phép nhập tương lai nhưng validate định dạng
+                    datendhcccd.MaxDate = DateTime.MaxValue;
+                    datendhcccd.ValueChanged += DateThoihanCCCD_ValueChanged;
                 }
                 // ========== DATEPICKER NGÀY SINH NTK: CẦN SET MAXDATE ==========
                 // datentk1/2/3 là DateTimePicker, cũng cần set MaxDate để tránh chọn ngày tương lai
@@ -162,6 +178,9 @@ namespace HOSONHCS
             try { cbXa.SelectedIndexChanged += CbXa_SelectedIndexChanged; } catch { }
             try { cbThon.SelectedIndexChanged += CbThon_SelectedIndexChanged; } catch { }
             try { cbHoi.SelectedIndexChanged += CbHoi_SelectedIndexChanged; } catch { }
+
+            // ========== TỰ ĐỘNG ĐIỀN CBDOITUONG DỰA TRÊN CBCHUONGTRINH ==========
+            try { cbChuongtrinh.SelectedIndexChanged += CbChuongtrinh_SelectedIndexChanged; } catch { }
 
             // ========== FORMAT SỐ TIỀN TỰ ĐỘNG ==========
             // cbSotien: chỉ cho nhập số, tự động format với dấu '.' ngăn cách hàng nghìn
@@ -216,7 +235,7 @@ namespace HOSONHCS
             catch { }
 
             // ========== LOAD DỮ LIỆU BAN ĐẦU ==========
-            // Load xinman.json (dữ liệu PGD/Xã/Thôn/Hội/Tổ)
+            // Load xinman.json (dữ liệu PGD/Xã/Thôn/Hội/Tổ) - cbPGD items đã được cấu hình trong Designer
             LoadXinManData();
             // Load danh sách khách hàng từ folder Customers/*.json
             LoadCustomersFromFiles();
@@ -236,10 +255,6 @@ namespace HOSONHCS
             // Khởi tạo hiệu ứng chạy chữ cho thanh tiêu đề Form (title bar)
             // Text "PHẦN MỀM TẠO HỒ SƠ VAY VỐN" sẽ chạy từ phải sang trái
             try { InitializeMarquee(); } catch { }
-
-            // ========== ÁP DỤNG THEME MACBOOK ==========
-            // Áp dụng theme hiện đại theo phong cách MacOS
-            try { ApplyMacBookTheme(); } catch { }
         }
 
         // ========================================================================
@@ -495,8 +510,9 @@ namespace HOSONHCS
             }
         }
 
-        private void CreateProfileFromTemplate(Customer c, bool include03)
+        private List<string> CreateProfileFromTemplate(Customer c, bool include03)
         {
+            var createdFiles = new List<string>();
             var destFolder = GetProfileFolderPath(c);
             Directory.CreateDirectory(destFolder);
 
@@ -544,12 +560,17 @@ namespace HOSONHCS
 
                     // Thay thế chỉ bằng OpenXML
                     ReplacePlaceholdersInWord(destDoc, c);
+
+                    // Thêm vào danh sách file đã tạo
+                    createdFiles.Add(destDoc);
                 }
             }
             finally
             {
                 foreach (var f in tempFilesToDelete) { try { if (File.Exists(f)) File.Delete(f); } catch { } }
             }
+
+            return createdFiles;
         }
 
         private void ReplacePlaceholdersInWord(string docPath, Customer c)
@@ -563,6 +584,7 @@ namespace HOSONHCS
                 { "{{hoten}}", c.Hoten },
                 { "{{socccd}}", c.Socccd },
                 { "{{cccd}}", c.Socccd },
+                { "{{cccd12}}", SplitCCCDInto12Boxes(c.Socccd) },
                 { "{{gioitinh}}", c.GioiTinh },
                 { "{{dantoc}}", c.Dantoc },
                 { "{{sdt}}", c.Sdt ?? "" },
@@ -685,6 +707,239 @@ namespace HOSONHCS
                 if (!string.IsNullOrWhiteSpace(words)) c.Sotienchu = words + " đồng";
             }
             catch { }
+        }
+
+        private string SplitCCCDInto12Boxes(string cccd)
+        {
+            if (string.IsNullOrWhiteSpace(cccd)) return "";
+
+            var digits = new string(cccd.Where(char.IsDigit).ToArray());
+
+            if (digits.Length < 12)
+            {
+                digits = digits.PadRight(12, ' ');
+            }
+            else if (digits.Length > 12)
+            {
+                digits = digits.Substring(0, 12);
+            }
+
+            var separated = string.Join(" ", digits.ToCharArray());
+            return separated;
+        }
+
+        private void ProcessCCCD12Placeholder(MainDocumentPart mainPart, string cccd)
+        {
+            if (mainPart == null || string.IsNullOrWhiteSpace(cccd)) return;
+
+            try
+            {
+                var digits = new string(cccd.Where(char.IsDigit).ToArray());
+                if (digits.Length < 12)
+                {
+                    digits = digits.PadRight(12, '0');
+                }
+                else if (digits.Length > 12)
+                {
+                    digits = digits.Substring(0, 12);
+                }
+
+                bool replacedInTable = false;
+
+                foreach (var table in mainPart.Document.Descendants<Table>())
+                {
+                    foreach (var row in table.Elements<TableRow>())
+                    {
+                        var cells = row.Elements<TableCell>().ToList();
+
+                        for (int cellIdx = 0; cellIdx < cells.Count; cellIdx++)
+                        {
+                            var cell = cells[cellIdx];
+                            var cellText = string.Concat(cell.Descendants<Text>().Select(t => t.Text ?? ""));
+
+                            if (cellText.IndexOf("{{cccd12}}", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                // Ô chứa {{cccd12}} sẽ là ô đầu tiên chứa chữ số đầu tiên
+                                // 11 ô tiếp theo (bên phải) sẽ chứa 11 chữ số còn lại
+                                if (cells.Count - cellIdx >= 12)  // Cần đủ 12 ô
+                                {
+                                    // Điền 12 chữ số vào 12 ô (bắt đầu từ ô hiện tại)
+                                    for (int i = 0; i < 12; i++)
+                                    {
+                                        var targetCell = cells[cellIdx + i];
+
+                                        // Xóa hết nội dung cũ (bao gồm "Số:", {{cccd12}}, v.v.) và điền số mới
+                                        foreach (var para in targetCell.Elements<Paragraph>())
+                                        {
+                                            para.RemoveAllChildren();
+                                            var run = new Run();
+                                            var text = new Text(digits[i].ToString());
+                                            run.Append(text);
+                                            para.Append(run);
+                                        }
+
+                                        if (!targetCell.Elements<Paragraph>().Any())
+                                        {
+                                            var paragraph = new Paragraph();
+                                            var run = new Run();
+                                            var text = new Text(digits[i].ToString());
+                                            run.Append(text);
+                                            paragraph.Append(run);
+                                            targetCell.Append(paragraph);
+                                        }
+                                    }
+                                    replacedInTable = true;
+                                    mainPart.Document.Save();
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!replacedInTable)
+                {
+                    foreach (var para in mainPart.Document.Descendants<Paragraph>())
+                    {
+                        var paraText = string.Concat(para.Descendants<Text>().Select(t => t.Text ?? ""));
+
+                        if (paraText.IndexOf("{{cccd12}}", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            // Xóa toàn bộ paragraph cũ (bao gồm "Số: {{cccd12}}")
+                            // Thay thế bằng table 13 cột (cột đầu: "Số:", 12 cột sau: số CCCD)
+                            var table = CreateCCCD12Table(digits);
+                            para.Parent.InsertAfter(table, para);
+                            para.Remove();  // Xóa paragraph cũ
+
+                            mainPart.Document.Save();
+                            return;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in ProcessCCCD12Placeholder: {ex.Message}");
+            }
+        }
+
+        private Table CreateCCCD12Table(string digits)
+        {
+            var table = new Table();
+
+            var tblPr = new TableProperties();
+            var tblStyle = new TableStyle() { Val = "TableGrid" };
+            // Chỉ 12 cột số CCCD: 150 DXA x 12 = 1800 DXA
+            var tblWidth = new TableWidth() { Width = "1800", Type = TableWidthUnitValues.Dxa };
+            var tblJc = new TableJustification() { Val = TableRowAlignmentValues.Left };
+
+            var tblBorders = new TableBorders(
+                new TopBorder() { Val = BorderValues.Single, Size = 4 },
+                new BottomBorder() { Val = BorderValues.Single, Size = 4 },
+                new LeftBorder() { Val = BorderValues.Single, Size = 4 },
+                new RightBorder() { Val = BorderValues.Single, Size = 4 },
+                new InsideHorizontalBorder() { Val = BorderValues.Single, Size = 4 },
+                new InsideVerticalBorder() { Val = BorderValues.Single, Size = 4 }
+            );
+
+            tblPr.Append(tblStyle);
+            tblPr.Append(tblWidth);
+            tblPr.Append(tblJc);
+            tblPr.Append(tblBorders);
+            table.AppendChild(tblPr);
+
+            var tableGrid = new TableGrid();
+            // 12 cột chứa số CCCD
+            for (int i = 0; i < 12; i++)
+            {
+                tableGrid.Append(new GridColumn() { Width = "150" });
+            }
+            table.Append(tableGrid);
+
+            var tr = new TableRow();
+            var trPr = new TableRowProperties();
+            var trHeight = new TableRowHeight() { Val = 120 };
+            trPr.Append(trHeight);
+            tr.Append(trPr);
+
+            // 12 ô chứa số CCCD - KHÔNG có ô "Số:"
+            for (int i = 0; i < 12; i++)
+            {
+                var tc = new TableCell();
+                var tcPr = new TableCellProperties();
+                var tcWidth = new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "150" };
+                var tcBorders = new TableCellBorders(
+                    new TopBorder() { Val = BorderValues.Single, Size = 4 },
+                    new BottomBorder() { Val = BorderValues.Single, Size = 4 },
+                    new LeftBorder() { Val = BorderValues.Single, Size = 4 },
+                    new RightBorder() { Val = BorderValues.Single, Size = 4 }
+                );
+                var shading = new Shading() { Fill = "FFFFFF" };
+                tcPr.Append(tcWidth);
+                tcPr.Append(tcBorders);
+                tcPr.Append(shading);
+                tc.Append(tcPr);
+
+                var paragraph = new Paragraph();
+                var pPr = new ParagraphProperties();
+                var justification = new Justification() { Val = JustificationValues.Center };
+                pPr.Append(justification);
+                paragraph.Append(pPr);
+
+                var run = new Run();
+                var runProperties = new RunProperties();
+                var fontSize = new FontSize() { Val = "20" };
+                var bold = new Bold();
+                runProperties.Append(fontSize);
+                runProperties.Append(bold);
+                run.Append(runProperties);
+
+                var text = new Text(digits[i].ToString());
+                run.Append(text);
+                paragraph.Append(run);
+
+                tc.Append(paragraph);
+                tr.Append(tc);
+            }
+
+            table.Append(tr);
+
+            return table;
+        }
+
+        private string ExportSpecificTemplate(Customer c, string templateFileName)
+        {
+            try
+            {
+                var destFolder = GetProfileFolderPath(c);
+                Directory.CreateDirectory(destFolder);
+
+                string templatePath = ResolveTemplatePath(templateFileName);
+
+                if (!IsDocxFile(templatePath))
+                {
+                    throw new Exception($"Template \"{templateFileName}\" không hợp lệ hoặc bị hỏng.");
+                }
+
+                var shortName = Path.GetFileNameWithoutExtension(templateFileName).Replace(" ", "_");
+                var ts = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + "_" + ts + ".docx");
+
+                File.Copy(templatePath, destDoc, false);
+
+                if (!IsDocxFile(destDoc))
+                {
+                    throw new Exception($"Không thể tạo file từ template \"{templateFileName}\".");
+                }
+
+                ReplacePlaceholdersInWord(destDoc, c);
+
+                return destDoc;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi khi xuất template {templateFileName}: {ex.Message}", ex);
+            }
         }
 
         // Phân tích chuỗi số thuần túy với dấu chấm/phẩy đã bị xóa trong caller; wrapper giữ lại cho rõ ràng
@@ -961,6 +1216,11 @@ namespace HOSONHCS
             {
                 var mainPart = wordDoc.MainDocumentPart;
                 if (mainPart == null) return;
+
+                if (c != null && !string.IsNullOrEmpty(c.Socccd))
+                {
+                    ProcessCCCD12Placeholder(mainPart, c.Socccd);
+                }
 
                 // Đối với mẫu 03 DS, KHÔNG xóa bất kỳ dòng nào, chỉ thay thế placeholder
                 // Mẫu sẽ được điền nguyên trạng mà không thay đổi cấu trúc bảng
@@ -1463,7 +1723,7 @@ namespace HOSONHCS
 
                  SaveCustomerToFile(customer);
                  // btn01 should export only template 01 (no 03, no GUQ)
-                 await Task.Run(() => CreateProfileFromTemplate(customer, include03: false));
+                 var createdFiles = await Task.Run(() => CreateProfileFromTemplate(customer, include03: false));
 
                  UpsertCustomerInList(customer);
 
@@ -1480,6 +1740,9 @@ namespace HOSONHCS
                      MessageBoxButtons.OK,
                      MessageBoxIcon.Information
                  );
+
+                 // Mở file vừa tạo
+                 OpenCreatedFiles(createdFiles);
              }
              catch (Exception ex)
              {
@@ -1515,15 +1778,19 @@ namespace HOSONHCS
                  SaveCustomerToFile(customer);
                  UpsertCustomerInList(customer);
 
-                 await Task.Run(() =>
+                 var createdFile = await Task.Run(() =>
                  {
                      // Btn03 should export only 03 DS template
-                     ExportSpecificTemplate(customer, "03 DS.docx");
+                     return ExportSpecificTemplate(customer, "03 DS.docx");
                  });
 
                  BindGrid();
                  ClearForm();
                  MessageBox.Show("Export (03 DS) thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                 // Mở file vừa tạo
+                 if (!string.IsNullOrEmpty(createdFile))
+                     OpenFile(createdFile);
              }
              catch (Exception ex)
              {
@@ -1553,19 +1820,65 @@ namespace HOSONHCS
                  SaveCustomerToFile(customer);
                  UpsertCustomerInList(customer);
 
-                 await Task.Run(() =>
+                 var createdFile = await Task.Run(() =>
                  {
                      // BtnGUQ should export only GUQ template
-                     ExportSpecificTemplate(customer, "GUQ.docx");
+                     return ExportSpecificTemplate(customer, "GUQ.docx");
                  });
 
                  BindGrid();
                  ClearForm();
                  MessageBox.Show("Export GUQ thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                 // Mở file vừa tạo
+                 if (!string.IsNullOrEmpty(createdFile))
+                     OpenFile(createdFile);
              }
              catch (Exception ex)
              {
                  MessageBox.Show("Lỗi khi export GUQ: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+             }
+         }
+
+         private async void Btn01tgtv_Click(object sender, EventArgs e)
+         {
+             var customer = ReadForm();
+             if (string.IsNullOrWhiteSpace(customer.Hoten))
+             {
+                 MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                 return;
+             }
+
+             try
+             {
+                 string existingFile = null;
+                 if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
+                 {
+                     try { existingFile = customers[editingIndex]._fileName; } catch { existingFile = null; }
+                 }
+
+                 if (!string.IsNullOrEmpty(existingFile)) customer._fileName = existingFile;
+
+                 SaveCustomerToFile(customer);
+                 UpsertCustomerInList(customer);
+
+                 var createdFile = await Task.Run(() =>
+                 {
+                     // Btn01tgtv exports 01TGTV template
+                     return ExportSpecificTemplate(customer, "01TGTV.docx");
+                 });
+
+                 BindGrid();
+                 ClearForm();
+                 MessageBox.Show("✅ Xuất mẫu 01TGTV thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                 // Mở file vừa tạo
+                 if (!string.IsNullOrEmpty(createdFile))
+                     OpenFile(createdFile);
+             }
+             catch (Exception ex)
+             {
+                 MessageBox.Show("❌ Lỗi khi xuất mẫu 01TGTV: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
              }
          }
 
@@ -1581,7 +1894,7 @@ namespace HOSONHCS
              if (idx < 0 || customers == null || idx >= customers.Count) return;
 
              var c = customers[idx];
-             var r = MessageBox.Show($"Xoá khách \"{c.Hoten}\"? (file JSON và folder hồ sơ sẽ bị xoá)", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+             var r = MessageBox.Show($"Bạn có muốn xóa khách hàng \"{c.Hoten}\" không?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
              if (r != DialogResult.Yes) return;
 
              try
@@ -1692,17 +2005,17 @@ namespace HOSONHCS
              if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
 
              DateTime ngaydenhan = DateTime.MinValue;
-             if (dateDH != null && dateDH.Format != DateTimePickerFormat.Custom)
+             if (dateDH != null && dateDH.Checked && dateDH.Format != DateTimePickerFormat.Custom)
              {
+                 // Ngày đến hạn KHÔNG validate ngày tương lai - cho phép nhập bất kỳ ngày nào
                  ngaydenhan = dateDH.Value.Date;
-                 if (ngaydenhan > DateTime.Today) ngaydenhan = DateTime.Today;
              }
 
              DateTime thoihancccd = DateTime.MinValue;
-             if (datendhcccd != null && datendhcccd.Format != DateTimePickerFormat.Custom)
+             if (datendhcccd != null && datendhcccd.Checked)
              {
+                 // Thời hạn CCCD: cho phép ngày tương lai, KHÔNG validate
                  thoihancccd = datendhcccd.Value.Date;
-                 if (thoihancccd > DateTime.Today) thoihancccd = DateTime.Today;
              }
 
              return new Customer
@@ -1740,7 +2053,7 @@ namespace HOSONHCS
                  Ngaydenhan = ngaydenhan,
                  Thoihancccd = thoihancccd,
                  Dantoc = (cbDantoc != null ? cbDantoc.Text : ""),
-                 Sdt = (txtSdt != null ? txtSdt.Text : ""),
+                 Sdt = (txtSdt != null ? txtSdt.Text : ""),  // Lưu với format có dấu chấm (0812.801.886)
                  Ntk1 = ToTitleCase(ntk1), Ntk2 = ToTitleCase(ntk2), Ntk3 = ToTitleCase(ntk3),
                  CccdNtk1 = cccdntk1, CccdNtk2 = cccdntk2, CccdNtk3 = cccdntk3,
                  Namsinh1 = namsinh1, Namsinh2 = namsinh2, Namsinh3 = namsinh3,
@@ -1781,7 +2094,11 @@ namespace HOSONHCS
              try
              {
                  cbPGD.Text = c.PGD ?? ""; 
-                 LoadXinManData();
+
+                 // Lấy tên file JSON từ PGD của customer
+                 string jsonFileName = GetJsonFileNameFromPGD(c.PGD ?? "");
+
+                 LoadXinManData(jsonFileName);
                  if (cbXa.Items.Count == 0 && xinmanModel != null) 
                      foreach (var com in xinmanModel.communes) 
                          if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name)) 
@@ -1848,8 +2165,8 @@ namespace HOSONHCS
                      }
                      else
                      {
+                         // Thời hạn CCCD: KHÔNG validate ngày tương lai - cho phép bất kỳ ngày nào
                          var thoihancccd = c.Thoihancccd;
-                         if (thoihancccd > DateTime.Today) thoihancccd = DateTime.Today;
                          datendhcccd.Format = DateTimePickerFormat.Custom;
                          datendhcccd.CustomFormat = "dd/MM/yyyy";
                          datendhcccd.Checked = true;
@@ -1959,6 +2276,9 @@ namespace HOSONHCS
              try { txtMucdich1.Clear(); txtMucdich2.Clear(); } catch { }
              try { dateLaphs.Value = DateTime.Today; cbPGD.Text = ""; editingIndex = -1; ResetVisibilityToDefault(); } catch { }
 
+             // Reset cbDoituong về trạng thái enabled
+             try { if (cbDoituong != null) cbDoituong.Enabled = true; cbDoituong.Text = ""; } catch { }
+
              // Xóa các trường ngày bằng cách bỏ tích chọn (các control vẫn hiển thị)
              try { if (dateDH != null) dateDH.Checked = false; } catch { }
              try { if (datendhcccd != null) datendhcccd.Checked = false; } catch { }
@@ -1978,11 +2298,11 @@ namespace HOSONHCS
              try { if (cbqh3 != null) cbqh3.Text = ""; } catch { }
          }
 
-         private void LoadXinManData()
+         private void LoadXinManData(string jsonFileName = "xinman.json")
          {
              xinmanModel = null;
 
-             var candidate = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xinman.json");
+             var candidate = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
              if (File.Exists(candidate))
                  try { var json = File.ReadAllText(candidate, Encoding.UTF8); xinmanModel = TryDeserializeXinman(json); }
                  catch { xinmanModel = null; }
@@ -1992,10 +2312,82 @@ namespace HOSONHCS
                  try
                  {
                      var asm = Assembly.GetExecutingAssembly();
-                     var resName = asm.GetManifestResourceNames().FirstOrDefault(n => n.EndsWith("xinman.json", StringComparison.OrdinalIgnoreCase));
+                     var resName = asm.GetManifestResourceNames().FirstOrDefault(n => n.EndsWith(jsonFileName, StringComparison.OrdinalIgnoreCase));
                      if (resName != null) using (var s = asm.GetManifestResourceStream(resName)) using (var sr = new StreamReader(s, Encoding.UTF8)) { var json = sr.ReadToEnd(); xinmanModel = TryDeserializeXinman(json); }
                  }
                  catch { xinmanModel = null; }
+             }
+         }
+
+         // Lấy tên file JSON từ tên PGD
+         private string GetJsonFileNameFromPGD(string pgdName)
+         {
+             if (string.IsNullOrWhiteSpace(pgdName)) return "xinman.json";
+
+             // Normalize chuỗi để loại bỏ dấu (so sánh dễ hơn)
+             string normalized = RemoveVietnameseTones(pgdName.Trim().ToLowerInvariant());
+
+             if (normalized.Contains("vi xuyen") || normalized.Contains("vixuyen"))
+                 return "vixuyen.json";
+             else if (normalized.Contains("dong van") || normalized.Contains("dongvan"))
+                 return "dongvan.json";
+             else if (normalized.Contains("hoang su phi") || normalized.Contains("hoangSuphi") || normalized.Contains("hsp"))
+                 return "hsp.json";
+             else if (normalized.Contains("xin man") || normalized.Contains("xinman"))
+                 return "xinman.json";
+
+             // Fallback: thử khớp với tên có dấu
+             if (pgdName.IndexOf("Vị Xuyên", StringComparison.OrdinalIgnoreCase) >= 0)
+                 return "vixuyen.json";
+             else if (pgdName.IndexOf("Đồng Văn", StringComparison.OrdinalIgnoreCase) >= 0)
+                 return "dongvan.json";
+             else if (pgdName.IndexOf("Hoàng Su Phì", StringComparison.OrdinalIgnoreCase) >= 0)
+                 return "hsp.json";
+             else if (pgdName.IndexOf("Xín Mần", StringComparison.OrdinalIgnoreCase) >= 0)
+                 return "xinman.json";
+
+             return "xinman.json"; // default
+         }
+
+         // Loại bỏ dấu tiếng Việt để dễ so sánh
+         private string RemoveVietnameseTones(string text)
+         {
+             if (string.IsNullOrWhiteSpace(text)) return text;
+
+             try
+             {
+                 string[] vietnameseSigns = new string[]
+                 {
+                     "aAeEoOuUiIdDyY",
+                     "áàạảãâấầậẩẫăắằặẳẵ",
+                     "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
+                     "éèẹẻẽêếềệểễ",
+                     "ÉÈẸẺẼÊẾỀỆỂỄ",
+                     "óòọỏõôốồộổỗơớờợởỡ",
+                     "ÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠ",
+                     "úùụủũưứừựửữ",
+                     "ÚÙỤỦŨƯỨỪỰỬỮ",
+                     "íìịỉĩ",
+                     "ÍÌỊỈĨ",
+                     "đ",
+                     "Đ",
+                     "ýỳỵỷỹ",
+                     "ÝỲỴỶỸ"
+                 };
+
+                 for (int i = 1; i < vietnameseSigns.Length; i++)
+                 {
+                     for (int j = 0; j < vietnameseSigns[i].Length; j++)
+                     {
+                         text = text.Replace(vietnameseSigns[i][j], vietnameseSigns[0][i - 1]);
+                     }
+                 }
+
+                 return text;
+             }
+             catch
+             {
+                 return text;
              }
          }
 
@@ -2027,19 +2419,57 @@ namespace HOSONHCS
             {
                 var selected = (cbPGD.SelectedItem ?? cbPGD.Text)?.ToString() ?? "";
                 if (string.IsNullOrWhiteSpace(selected)) { ClearPgdDependentCombos(); return; }
-                LoadXinManData(); if (xinmanModel == null) { ClearPgdDependentCombos(); return; }
-                var modelPgd = xinmanModel.pgd ?? "";
-                bool matches = string.Equals(selected, modelPgd, StringComparison.OrdinalIgnoreCase)
-                                || selected.IndexOf(modelPgd, StringComparison.OrdinalIgnoreCase) >= 0
-                                || modelPgd.IndexOf(selected, StringComparison.OrdinalIgnoreCase) >= 0;
-                if (!matches) { ClearPgdDependentCombos(); return; }
+
+                // Lấy tên file JSON từ PGD đã chọn
+                string jsonFileName = GetJsonFileNameFromPGD(selected);
+
+                // Debug: hiển thị file nào đang được load
+                System.Diagnostics.Debug.WriteLine($"PGD selected: '{selected}' -> Loading: '{jsonFileName}'");
+
+                LoadXinManData(jsonFileName); 
+
+                if (xinmanModel == null) 
+                { 
+                    // Chỉ hiển thị lỗi nếu file không tồn tại
+                    var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
+                    if (!File.Exists(filePath))
+                    {
+                        MessageBox.Show($"Không tìm thấy file {jsonFileName} trong thư mục chương trình.\n\nĐường dẫn: {filePath}", 
+                                        "Thiếu file dữ liệu", 
+                                        MessageBoxButtons.OK, 
+                                        MessageBoxIcon.Warning);
+                    }
+                    ClearPgdDependentCombos(); 
+                    return; 
+                }
+
+                // Debug: hiển thị PGD từ model
+                System.Diagnostics.Debug.WriteLine($"Model loaded. PGD in model: '{xinmanModel.pgd}', Communes count: {xinmanModel.communes?.Count ?? 0}");
+
+                // Bỏ qua kiểm tra matching - chấp nhận mọi dữ liệu từ file JSON
+                // (vì đã chọn đúng file rồi thông qua GetJsonFileNameFromPGD)
 
                 cbXa.Items.Clear(); cbThon.Items.Clear(); cbHoi.Items.Clear(); cbTo.Items.Clear();
-                foreach (var com in xinmanModel.communes) if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name)) cbXa.Items.Add(com.name);
+
+                // Thêm các xã
+                foreach (var com in xinmanModel.communes) 
+                    if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name)) 
+                        cbXa.Items.Add(com.name);
+
+                System.Diagnostics.Debug.WriteLine($"Added {cbXa.Items.Count} communes to cbXa");
+
+                // Thêm các hội
                 var associations = xinmanModel.communes.Where(c => c.associations != null).SelectMany(c => c.associations).Where(a => !string.IsNullOrWhiteSpace(a.name)).Select(a => a.name).Distinct(StringComparer.OrdinalIgnoreCase);
                 foreach (var a in associations) cbHoi.Items.Add(a);
+
+                System.Diagnostics.Debug.WriteLine($"Added {cbHoi.Items.Count} associations to cbHoi");
+
+                // Thêm các thôn từ commune level
                 var communeLevelVillages = xinmanModel.communes.Where(c => c.villages != null).SelectMany(c => c.villages).Where(v => !string.IsNullOrWhiteSpace(v.name)).Select(v => v.name).Distinct(StringComparer.OrdinalIgnoreCase);
                 foreach (var v in communeLevelVillages) if (!cbThon.Items.Contains(v)) cbThon.Items.Add(v);
+
+                System.Diagnostics.Debug.WriteLine($"Added {cbThon.Items.Count} villages to cbThon");
+
                 ResetVisibilityToDefault();
             }
             finally { suppressComboChanged = false; }
@@ -2066,6 +2496,102 @@ namespace HOSONHCS
             finally { suppressComboChanged = false; }
         }
 
+        // Tự động điền cbDoituong dựa trên cbChuongtrinh được chọn
+        private void CbChuongtrinh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cbDoituong == null || cbChuongtrinh == null) return;
+
+                var chuongtrinh = (cbChuongtrinh.Text ?? "").Trim();
+                if (string.IsNullOrWhiteSpace(chuongtrinh)) return;
+
+                // Chuẩn hóa để so sánh (loại bỏ dấu)
+                string Normalize(string s)
+                {
+                    if (string.IsNullOrWhiteSpace(s)) return "";
+                    var formD = s.Normalize(System.Text.NormalizationForm.FormD);
+                    var sb = new System.Text.StringBuilder();
+                    foreach (var ch in formD)
+                    {
+                        var uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(ch);
+                        if (uc != System.Globalization.UnicodeCategory.NonSpacingMark)
+                            sb.Append(ch);
+                    }
+                    return sb.ToString().Normalize(System.Text.NormalizationForm.FormC).ToLowerInvariant();
+                }
+
+                var normalized = Normalize(chuongtrinh);
+
+                // ========== QUY TẮC TỰ ĐỘNG ĐIỀN ==========
+
+                // 1. Hộ nghèo → Hộ nghèo
+                if (normalized.Contains("ho nghe") && !normalized.Contains("can") && !normalized.Contains("moi thoat"))
+                {
+                    cbDoituong.Enabled = false;
+                    cbDoituong.Text = "Hộ nghèo";
+                    return;
+                }
+
+                // 2. Hộ cận nghèo → Hộ cận nghèo
+                if (normalized.Contains("ho can nghe"))
+                {
+                    cbDoituong.Enabled = false;
+                    cbDoituong.Text = "Hộ cận nghèo";
+                    return;
+                }
+
+                // 3. Hộ mới thoát nghèo → Hộ mới thoát nghèo
+                if (normalized.Contains("ho moi thoat nghe"))
+                {
+                    cbDoituong.Enabled = false;
+                    cbDoituong.Text = "Hộ mới thoát nghèo";
+                    return;
+                }
+
+                // 4. Hộ gia đình Sản xuất kinh doanh tại vùng khó khăn → Hộ GĐ SXKD VKK
+                if ((normalized.Contains("ho gia dinh") && normalized.Contains("san xuat kinh doanh") && normalized.Contains("vung kho khan")) ||
+                    normalized.Contains("sxkd"))
+                {
+                    cbDoituong.Enabled = false;
+                    cbDoituong.Text = "Hộ GĐ SXKD VKK";
+                    return;
+                }
+
+                // 5. Giải quyết việc làm duy trì và mở rộng việc làm → Cho phép chọn 2 loại
+                if (normalized.Contains("giai quyet viec lam") ||
+                    normalized.Contains("gqvl") ||
+                    (normalized.Contains("duy tri") && normalized.Contains("mo rong") && normalized.Contains("viec lam")))
+                {
+                    cbDoituong.Enabled = true;  // MỞ KHÓA để cho phép chọn
+                    // Đảm bảo có 2 option trong list
+                    if (!cbDoituong.Items.Contains("Người lao động"))
+                        cbDoituong.Items.Add("Người lao động");
+                    if (!cbDoituong.Items.Contains("NLĐ là người DTTS"))
+                        cbDoituong.Items.Add("NLĐ là người DTTS");
+
+                    // Nếu chưa chọn, mặc định chọn option đầu tiên
+                    if (string.IsNullOrWhiteSpace(cbDoituong.Text))
+                        cbDoituong.Text = "Người lao động";
+                    return;
+                }
+
+                // 6. Cấp nước sạch và vệ sinh môi trường nông thôn → Hộ GĐ vùng NT
+                if (normalized.Contains("cap nuoc sach") ||
+                    normalized.Contains("ve sinh moi truong") ||
+                    (normalized.Contains("nuoc sach") && normalized.Contains("nong thon")))
+                {
+                    cbDoituong.Enabled = false;
+                    cbDoituong.Text = "Hộ GĐ vùng NT";
+                    return;
+                }
+
+                // Mặc định: MỞ KHÓA nếu không match bất kỳ rule nào
+                cbDoituong.Enabled = true;
+            }
+            catch { }
+        }
+
         private void ClearPgdDependentCombos()
         {
             cbXa.Items.Clear(); cbThon.Items.Clear(); cbHoi.Items.Clear(); cbTo.Items.Clear();
@@ -2075,18 +2601,6 @@ namespace HOSONHCS
         private void ResetVisibilityToDefault()
         {
             cbXa.Visible = true; cbThon.Visible = true; cbHoi.Visible = true; cbTo.Visible = true;
-        }
-
-        private void ExportSpecificTemplate(Customer c, string templateFileName)
-        {
-            var destFolder = GetProfileFolderPath(c); Directory.CreateDirectory(destFolder);
-            string templatePath; try { templatePath = ResolveTemplatePath(templateFileName); } catch (FileNotFoundException ex) { MessageBox.Show($"Template {templateFileName} not found: {ex.Message}"); return; }
-            if (!IsDocxFile(templatePath)) { MessageBox.Show($"{templateFileName} source is not a valid .docx."); return; }
-            var shortName = Path.GetFileNameWithoutExtension(templateFileName).Replace(" ", "_"); var ts = DateTime.Now.ToString("yyyyMMdd_HHmmss"); var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + "_" + ts + ".docx");
-            try { File.Copy(templatePath, destDoc, false); } catch (IOException ioex) { MessageBox.Show($"Failed to create destination file: {ioex.Message}"); return; }
-            if (!IsDocxFile(destDoc)) { try { if (File.Exists(destDoc)) File.Delete(destDoc); } catch { } MessageBox.Show("Produced file is not a valid .docx. Aborting."); return; }
-
-            ReplacePlaceholdersInWord(destDoc, c);
         }
 
         private List<Customer> GetSelectedCustomers() { var list = new List<Customer>(); try { foreach (DataGridViewRow row in dgv.SelectedRows) try { var item = row.DataBoundItem as Customer; if (item != null) list.Add(item); } catch { } } catch { } return list; }
@@ -2181,6 +2695,133 @@ namespace HOSONHCS
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi đăng xuất: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ComboBox Fix PGD - Chọn PGD và tự động reload dữ liệu từ file JSON tương ứng
+        private void CbPgdFix_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cbpgdfix == null || cbpgdfix.SelectedItem == null)
+                    return;
+
+                var selected = cbpgdfix.SelectedItem.ToString();
+                if (string.IsNullOrWhiteSpace(selected))
+                    return;
+
+                // Lấy tên file JSON từ PGD đã chọn
+                string jsonFileName = GetJsonFileNameFromPGD(selected);
+
+                // Debug: hiển thị file nào đang được load
+                System.Diagnostics.Debug.WriteLine($"cbpgdfix selected: '{selected}' -> Loading: '{jsonFileName}'");
+
+                // Kiểm tra file tồn tại
+                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
+                if (!File.Exists(filePath))
+                {
+                    MessageBox.Show(
+                        $"Không tìm thấy file dữ liệu:\n{jsonFileName}\n\nĐường dẫn: {filePath}\n\nVui lòng đảm bảo file tồn tại trong thư mục chương trình.",
+                        "Thiếu file dữ liệu",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Force reload dữ liệu từ file JSON
+                LoadXinManData(jsonFileName);
+
+                if (xinmanModel == null)
+                {
+                    MessageBox.Show(
+                        $"Không thể tải dữ liệu từ {jsonFileName}.\n\nFile có thể bị lỗi định dạng JSON.",
+                        "Lỗi tải dữ liệu",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    ClearPgdDependentCombos();
+                    return;
+                }
+
+                // Set PGD vào cbPGD chính
+                suppressComboChanged = true;
+                try
+                {
+                    cbPGD.Text = selected;
+
+                    // Clear và reload tất cả combobox liên quan
+                    cbXa.Items.Clear();
+                    cbThon.Items.Clear();
+                    cbHoi.Items.Clear();
+                    cbTo.Items.Clear();
+
+                    // Thêm các xã
+                    foreach (var com in xinmanModel.communes)
+                        if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name))
+                            cbXa.Items.Add(com.name);
+
+                    // Thêm các hội
+                    var associations = xinmanModel.communes
+                        .Where(c => c.associations != null)
+                        .SelectMany(c => c.associations)
+                        .Where(a => !string.IsNullOrWhiteSpace(a.name))
+                        .Select(a => a.name)
+                        .Distinct(StringComparer.OrdinalIgnoreCase);
+                    foreach (var a in associations)
+                        cbHoi.Items.Add(a);
+
+                    // Thêm các thôn từ commune level
+                    var communeLevelVillages = xinmanModel.communes
+                        .Where(c => c.villages != null)
+                        .SelectMany(c => c.villages)
+                        .Where(v => !string.IsNullOrWhiteSpace(v.name))
+                        .Select(v => v.name)
+                        .Distinct(StringComparer.OrdinalIgnoreCase);
+                    foreach (var v in communeLevelVillages)
+                        if (!cbThon.Items.Contains(v))
+                            cbThon.Items.Add(v);
+
+                    ResetVisibilityToDefault();
+
+                    // ========== HIỂN THỊ DỮ LIỆU LÊN DGV1 ==========
+                    // Load file JSON và hiển thị nội dung lên dgv1 (DataGridView trên tab3)
+                    try
+                    {
+                        if (dgv1 != null && xinManEditor != null)
+                        {
+                            // Gọi XinManEditor để load và hiển thị file JSON lên dgv1
+                            xinManEditor.LoadJsonFile(jsonFileName);
+                        }
+                    }
+                    catch (Exception dgvEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error loading data to dgv1: {dgvEx.Message}");
+                        // Nếu XinManEditor không có method LoadJsonFile, thử cách khác
+                        // Có thể cần refresh dgv1 manually
+                    }
+
+                    MessageBox.Show(
+                        $"✅ Đã tải dữ liệu thành công!\n\n" +
+                        $"📄 File: {jsonFileName}\n" +
+                        $"🏛️ PGD: {xinmanModel.pgd}\n" +
+                        $"📍 Số xã: {cbXa.Items.Count}\n" +
+                        $"🏘️ Số hội: {cbHoi.Items.Count}\n" +
+                        $"🏠 Số thôn: {cbThon.Items.Count}",
+                        "✅ Tải dữ liệu thành công",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+                finally
+                {
+                    suppressComboChanged = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"❌ Lỗi khi tải dữ liệu PGD:\n\n{ex.Message}",
+                    "❌ Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -2463,325 +3104,6 @@ namespace HOSONHCS
             catch { }
         }
 
-        // ================= TẠO STYLE THEME MACBOOK =================
-        private void ApplyMacBookTheme()
-        {
-            try
-            {
-                // Nền form
-                this.BackColor = AppTheme.MacBackground;
-
-                // Tất cả các tab page
-                if (tabPage1 != null)
-                {
-                    tabPage1.BackColor = AppTheme.MacBackground;
-                }
-                if (tabPage2 != null)
-                {
-                    tabPage2.BackColor = AppTheme.MacBackground;
-                }
-                if (tabPage3 != null)
-                {
-                    tabPage3.BackColor = AppTheme.MacBackground;
-                }
-
-                // Tạo style cho TabControl
-                if (tabControl1 != null)
-                {
-                    tabControl1.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
-                }
-
-                // Các GroupBox - kiểu thẻ (off-white thay vì trắng tinh khiết)
-                if (groupBox1 != null)
-                {
-                    groupBox1.BackColor = AppTheme.MacCardBackground;
-                    groupBox1.ForeColor = AppTheme.MacTextPrimary;
-                    groupBox1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-                }
-
-                if (groupBox2 != null)
-                {
-                    groupBox2.BackColor = AppTheme.MacCardBackground;
-                    groupBox2.ForeColor = AppTheme.MacTextPrimary;
-                    groupBox2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-                }
-
-                if (groupBox3 != null)
-                {
-                    groupBox3.BackColor = AppTheme.MacCardBackground;
-                    groupBox3.ForeColor = AppTheme.MacTextPrimary;
-                    groupBox3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-                }
-
-                if (groupBox4 != null)
-                {
-                    groupBox4.BackColor = AppTheme.MacCardBackground;
-                    groupBox4.ForeColor = AppTheme.MacTextPrimary;
-                    groupBox4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-                }
-
-                // Header label14 - Màu sắc hiện đại và dễ nhìn
-                if (label14 != null)
-                {
-                    // Font lớn hơn, hiện đại hơn
-                    label14.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-
-                    // Màu cyan vibrant - sáng, dễ nhìn trên nền xanh
-                    label14.ForeColor = AppTheme.MarqueeCyan;  // RGB(0, 150, 255)
-
-                    // Nếu muốn màu trắng (dễ nhìn nhất), dùng dòng này:
-                    // label14.ForeColor = System.Drawing.Color.White;
-
-                    // BackColor trong suốt để nhìn thấy nền form
-                    label14.BackColor = System.Drawing.Color.Transparent;
-                }
-
-                // Tạo style các nút với màu Mac
-                StyleMacButton(btn01, AppTheme.MacGreen);      // Lưu - Green
-                StyleMacButton(btn03, AppTheme.MacBlue);       // Export 03 - Blue
-                StyleMacButton(btnGUQ, AppTheme.MacBlue);      // Export GUQ - Blue
-                StyleMacButton(btnDelete, AppTheme.MacRed);    // Xóa - Red
-                StyleMacButton(btntaokh, AppTheme.MacOrange);  // Tạo mới - Orange
-                StyleMacButton(btn03Group, AppTheme.MacBlue);  // Nhóm - Blue
-
-                // Các nút Tab2 (nếu tồn tại)
-                StyleMacButton(btnPre, AppTheme.MacBlue);      // Previous
-                StyleMacButton(btnNext, AppTheme.MacBlue);     // Next
-
-                // Các nút Tab3
-                StyleMacButton(btnLogin, AppTheme.MacTeal);    // Login - Teal
-                StyleMacButton(btnSave, AppTheme.MacGreen);    // Save - Green
-                StyleMacButton(btnexit, AppTheme.MacRed);      // Exit - Red
-
-                // Tạo style cho tất cả các DataGridView
-                StyleMacDataGridView();
-                StyleAllDataGridViews();
-
-                // Áp dụng font cho tất cả các label
-                ApplyMacFontsToLabels();
-
-                // Tạo style cho textbox và combobox
-                ApplyMacStyleToTextBoxes();
-                ApplyMacStyleToComboBoxes();
-
-                // Tạo style cho RichTextBox
-                ApplyMacStyleToRichTextBoxes();
-            }
-            catch { }
-        }
-
-        private void StyleMacButton(Button btn, System.Drawing.Color color)
-        {
-            if (btn == null) return;
-
-            try
-            {
-                btn.FlatStyle = FlatStyle.Flat;
-                btn.FlatAppearance.BorderSize = 0;
-                btn.BackColor = color;
-                btn.ForeColor = System.Drawing.Color.White;
-                btn.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
-                btn.Cursor = Cursors.Hand;
-                btn.Height = 36;
-
-                System.Drawing.Color originalColor = color;
-                System.Drawing.Color hoverColor = color.ToArgb() == AppTheme.MacGreen.ToArgb() ? AppTheme.MacGreenHover :
-                                  color.ToArgb() == AppTheme.MacRed.ToArgb() ? AppTheme.MacRedHover :
-                                  color.ToArgb() == AppTheme.MacOrange.ToArgb() ? AppTheme.MacOrangeHover :
-                                  AppTheme.MacBlueHover;
-
-                btn.MouseEnter += (s, e) => { btn.BackColor = hoverColor; };
-                btn.MouseLeave += (s, e) => { btn.BackColor = originalColor; };
-            }
-            catch { }
-        }
-
-        private void StyleMacDataGridView()
-        {
-            try
-            {
-                if (dgv == null) return;
-
-                dgv.BorderStyle = BorderStyle.None;
-                dgv.BackgroundColor = AppTheme.MacCardBackground;
-                dgv.GridColor = AppTheme.MacBorderLight;
-                dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-
-                dgv.DefaultCellStyle.BackColor = System.Drawing.Color.White;
-                dgv.DefaultCellStyle.ForeColor = AppTheme.MacTextPrimary;
-                dgv.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-                dgv.DefaultCellStyle.SelectionBackColor = AppTheme.MacBlue;
-                dgv.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
-                dgv.DefaultCellStyle.Padding = new Padding(6, 3, 6, 3);
-
-                dgv.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(249, 249, 251);
-
-                dgv.EnableHeadersVisualStyles = false;
-                dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-                dgv.ColumnHeadersDefaultCellStyle.BackColor = AppTheme.MacHeaderGradient1;
-                dgv.ColumnHeadersDefaultCellStyle.ForeColor = AppTheme.MacTextPrimary;
-                dgv.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-                dgv.ColumnHeadersDefaultCellStyle.Padding = new Padding(8, 6, 8, 6);
-                dgv.ColumnHeadersHeight = 36;
-
-                dgv.RowTemplate.Height = 32;
-            }
-            catch { }
-        }
-
-        private void StyleAllDataGridViews()
-        {
-            try
-            {
-                foreach (System.Windows.Forms.Control ctrl in GetAllControlsForTheme(this))
-                {
-                    if (ctrl is DataGridView grid && grid != dgv)
-                    {
-                        grid.BorderStyle = BorderStyle.None;
-                        grid.BackgroundColor = AppTheme.MacCardBackground;
-                        grid.GridColor = AppTheme.MacBorderLight;
-                        grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-
-                        grid.DefaultCellStyle.BackColor = System.Drawing.Color.White;
-                        grid.DefaultCellStyle.ForeColor = AppTheme.MacTextPrimary;
-                        grid.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-                        grid.DefaultCellStyle.SelectionBackColor = AppTheme.MacBlue;
-                        grid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
-                        grid.DefaultCellStyle.Padding = new Padding(6, 3, 6, 3);
-
-                        grid.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(249, 249, 251);
-
-                        grid.EnableHeadersVisualStyles = false;
-                        grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-                        grid.ColumnHeadersDefaultCellStyle.BackColor = AppTheme.MacHeaderGradient1;
-                        grid.ColumnHeadersDefaultCellStyle.ForeColor = AppTheme.MacTextPrimary;
-                        grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-                        grid.ColumnHeadersDefaultCellStyle.Padding = new Padding(8, 6, 8, 6);
-                        grid.ColumnHeadersHeight = 36;
-
-                        grid.RowTemplate.Height = 32;
-                    }
-                }
-            }
-            catch { }
-        }
-
-        /// <summary>
-        /// Áp dụng style MacOS cho tất cả RichTextBox - Không viền (borderless)
-        /// Chỉ dùng màu background để phân biệt ô nhập liệu
-        /// </summary>
-        private void ApplyMacStyleToRichTextBoxes()
-        {
-            try
-            {
-                System.Drawing.Font textFont = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular);
-
-                foreach (System.Windows.Forms.Control ctrl in GetAllControlsForTheme(this))
-                {
-                    if (ctrl is RichTextBox rtb)
-                    {
-                        rtb.Font = textFont;
-                        rtb.BackColor = AppTheme.MacInputBackground;
-                        rtb.ForeColor = AppTheme.MacTextPrimary;
-                        rtb.BorderStyle = BorderStyle.None;  // BỎ VIỀN ĐEN - style hiện đại
-
-                        // Add focus effect - đổi màu khi focus
-                        rtb.Enter += (s, e) => { ((RichTextBox)s).BackColor = AppTheme.MacInputBackgroundFocus; };
-                        rtb.Leave += (s, e) => { ((RichTextBox)s).BackColor = AppTheme.MacInputBackground; };
-                    }
-                }
-            }
-            catch { }
-        }
-
-        private void ApplyMacFontsToLabels()
-        {
-            try
-            {
-                System.Drawing.Font labelFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular);
-
-                foreach (System.Windows.Forms.Control ctrl in GetAllControlsForTheme(this))
-                {
-                    if (ctrl is Label lbl && lbl != label14)
-                    {
-                        // Apply BLACK color to ALL labels except label14 (header)
-                        lbl.Font = labelFont;
-                        lbl.ForeColor = System.Drawing.Color.Black; // Force BLACK
-                    }
-                }
-            }
-            catch { }
-        }
-
-        /// <summary>
-        /// Áp dụng style MacOS cho tất cả TextBox - Không viền (borderless)
-        /// Chỉ dùng màu background để phân biệt ô nhập liệu
-        /// </summary>
-        private void ApplyMacStyleToTextBoxes()
-        {
-            try
-            {
-                System.Drawing.Font textFont = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular);
-
-                foreach (System.Windows.Forms.Control ctrl in GetAllControlsForTheme(this))
-                {
-                    if (ctrl is TextBox txt)
-                    {
-                        txt.Font = textFont;
-                        txt.BackColor = AppTheme.MacInputBackground;
-                        txt.ForeColor = AppTheme.MacTextPrimary;
-                        txt.BorderStyle = BorderStyle.None;  // BỎ VIỀN ĐEN - style hiện đại
-
-                        // Thêm padding bằng cách set Multiline (workaround cho BorderStyle.None)
-                        // Không cần padding vì background color đã phân biệt rõ
-
-                        // Add focus effect - đổi màu khi focus
-                        txt.Enter += (s, e) => { ((TextBox)s).BackColor = AppTheme.MacInputBackgroundFocus; };
-                        txt.Leave += (s, e) => { ((TextBox)s).BackColor = AppTheme.MacInputBackground; };
-                    }
-                }
-            }
-            catch { }
-        }
-
-        /// <summary>
-        /// Áp dụng style MacOS cho tất cả ComboBox - Flat style không viền
-        /// Chỉ dùng màu background để phân biệt ô nhập liệu
-        /// </summary>
-        private void ApplyMacStyleToComboBoxes()
-        {
-            try
-            {
-                System.Drawing.Font comboFont = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular);
-
-                foreach (System.Windows.Forms.Control ctrl in GetAllControlsForTheme(this))
-                {
-                    if (ctrl is ComboBox cb)
-                    {
-                        cb.Font = comboFont;
-                        cb.BackColor = AppTheme.MacInputBackground;
-                        cb.ForeColor = AppTheme.MacTextPrimary;
-                        cb.FlatStyle = FlatStyle.Flat;  // Flat style - không viền 3D
-
-                        // ComboBox trong FlatStyle.Flat tự động không có viền đen
-                    }
-                }
-            }
-            catch { }
-        }
-
-        private IEnumerable<System.Windows.Forms.Control> GetAllControlsForTheme(System.Windows.Forms.Control container)
-        {
-            foreach (System.Windows.Forms.Control ctrl in container.Controls)
-            {
-                yield return ctrl;
-                foreach (System.Windows.Forms.Control child in GetAllControlsForTheme(ctrl))
-                {
-                    yield return child;
-                }
-            }
-        }
-
         // Các helper cho CCCD
         private void TxtDigitsOnly_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -2825,7 +3147,17 @@ namespace HOSONHCS
         }
 
         // ========== VALIDATION SỐ ĐIỆN THOẠI ==========
-        // Tự động xóa các ký tự không phải số
+        // KeyPress handler cho số điện thoại: chỉ cho phép số và dấu chấm
+        private void TxtSdt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Cho phép: số, backspace, dấu chấm
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+        }
+
+        // Tự động format số điện thoại với dấu chấm (0812.801.886)
         private void TxtSdt_TextChanged(object sender, EventArgs e)
         {
             try
@@ -2833,13 +3165,57 @@ namespace HOSONHCS
                 var tb = sender as TextBox;
                 if (tb == null) return;
 
+                // Lưu vị trí con trỏ
+                var cursorPosition = tb.SelectionStart;
+                var originalText = tb.Text ?? "";
+
                 // Chỉ giữ lại các chữ số
-                var digits = new string((tb.Text ?? "").Where(char.IsDigit).ToArray());
-                if (tb.Text != digits) 
-                { 
-                    var sel = tb.SelectionStart; 
-                    tb.Text = digits; 
-                    tb.SelectionStart = Math.Min(sel, tb.Text.Length); 
+                var digits = new string(originalText.Where(char.IsDigit).ToArray());
+
+                // Nếu không có thay đổi gì, thoát
+                if (digits.Length == 0)
+                {
+                    if (tb.Text != "") tb.Text = "";
+                    return;
+                }
+
+                // Giới hạn 10 chữ số
+                if (digits.Length > 10)
+                {
+                    digits = digits.Substring(0, 10);
+                }
+
+                // Format: 0812.801.886 (4-3-3)
+                string formatted = "";
+                if (digits.Length <= 4)
+                {
+                    formatted = digits;
+                }
+                else if (digits.Length <= 7)
+                {
+                    formatted = digits.Substring(0, 4) + "." + digits.Substring(4);
+                }
+                else
+                {
+                    formatted = digits.Substring(0, 4) + "." + digits.Substring(4, 3) + "." + digits.Substring(7);
+                }
+
+                // Chỉ cập nhật nếu có thay đổi
+                if (formatted != originalText)
+                {
+                    tb.Text = formatted;
+
+                    // Điều chỉnh vị trí con trỏ
+                    // Nếu đang gõ, giữ con trỏ ở cuối
+                    if (cursorPosition >= originalText.Length)
+                    {
+                        tb.SelectionStart = formatted.Length;
+                    }
+                    else
+                    {
+                        // Nếu đang sửa giữa chuỗi, cố giữ vị trí tương đối
+                        tb.SelectionStart = Math.Min(cursorPosition + (formatted.Length - originalText.Length), formatted.Length);
+                    }
                 }
             }
             catch { }
@@ -2856,6 +3232,7 @@ namespace HOSONHCS
                 var text = tb.Text ?? "";
                 if (string.IsNullOrWhiteSpace(text)) return; // Cho phép rỗng (trường tùy chọn)
 
+                // Lấy chỉ các chữ số (bỏ dấu chấm)
                 var digits = new string(text.Where(char.IsDigit).ToArray());
 
                 // Kiểm tra phải đúng 10 số - không ít hơn, không nhiều hơn
@@ -2863,7 +3240,7 @@ namespace HOSONHCS
                 {
                     MessageBox.Show(
                         $"Số điện thoại phải có đúng 10 chữ số (hiện tại: {digits.Length} chữ số)\n" +
-                        "Ví dụ hợp lệ: 0987654321", 
+                        "Ví dụ hợp lệ: 0812.801.886", 
                         "Lỗi nhập liệu", 
                         MessageBoxButtons.OK, 
                         MessageBoxIcon.Warning
@@ -2877,7 +3254,27 @@ namespace HOSONHCS
 
         private void DateNgaycapCCCD_ValueChanged(object sender, EventArgs e)
         {
-            // Hành vi tùy chọn: điều chỉnh Noicap dựa trên ngày cắt (01/07/2024). Giữ tối thiểu: không làm gì
+            // Tự động điền cbNoicap dựa trên ngày cấp CCCD
+            try
+            {
+                if (cbNoicap == null || dateNgaycapCCCD == null) return;
+
+                // Ngày cắt: 01/07/2024
+                var ngayCat = new DateTime(2024, 7, 1);
+                var ngayCap = dateNgaycapCCCD.Value.Date;
+
+                // Từ 01/07/2024 trở đi: "Bộ Công an"
+                // Trước đó: "Cục CSQLHC về TTXH"
+                if (ngayCap >= ngayCat)
+                {
+                    cbNoicap.Text = "Bộ Công an";
+                }
+                else
+                {
+                    cbNoicap.Text = "Cục CSQLHC về TTXH";
+                }
+            }
+            catch { }
         }
 
         // Xác thực tất cả các DateTimePicker để ngăn ngày tương lai
@@ -2893,6 +3290,63 @@ namespace HOSONHCS
                 {
                     picker.Value = DateTime.Today;
                     MessageBox.Show("Ngày không được lớn hơn ngày hiện tại.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch { }
+        }
+
+        // Validate thời hạn CCCD: cho phép ngày tương lai nhưng validate định dạng
+        private void DateThoihanCCCD_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var picker = sender as DateTimePicker;
+                if (picker == null) return;
+
+                var selectedDate = picker.Value;
+
+                // Validate năm (không quá 5 chữ số)
+                if (selectedDate.Year > 99999 || selectedDate.Year < 1)
+                {
+                    MessageBox.Show(
+                        "Năm không hợp lệ. Vui lòng nhập năm từ 1 đến 99999.",
+                        "Lỗi nhập liệu",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    picker.Value = DateTime.Today.AddYears(10);  // Mặc định 10 năm sau
+                    return;
+                }
+
+                // Validate tháng (1-12) - đã tự động bởi DateTimePicker
+                // Validate ngày (1-31) - đã tự động bởi DateTimePicker
+
+                // Validate đặc biệt cho tháng 2: không quá 29 ngày
+                if (selectedDate.Month == 2 && selectedDate.Day > 29)
+                {
+                    MessageBox.Show(
+                        "Tháng 2 không thể có quá 29 ngày.",
+                        "Lỗi nhập liệu",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    // Reset về ngày hợp lệ (29/02)
+                    picker.Value = new DateTime(selectedDate.Year, 2, 29);
+                    return;
+                }
+
+                // Validate năm nhuận cho ngày 29/02
+                if (selectedDate.Month == 2 && selectedDate.Day == 29)
+                {
+                    if (!DateTime.IsLeapYear(selectedDate.Year))
+                    {
+                        MessageBox.Show(
+                            $"Năm {selectedDate.Year} không phải năm nhuận. Tháng 2 chỉ có 28 ngày.",
+                            "Lỗi nhập liệu",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        // Reset về 28/02
+                        picker.Value = new DateTime(selectedDate.Year, 2, 28);
+                        return;
+                    }
                 }
             }
             catch { }
@@ -3064,6 +3518,148 @@ namespace HOSONHCS
         private void txtSocccd_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        // ========== NÚT TẠO TOÀN BỘ HỒ SƠ ==========
+        private async void Btnall_Click(object sender, EventArgs e)
+        {
+            var customer = ReadForm();
+            if (string.IsNullOrWhiteSpace(customer.Hoten))
+            {
+                MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                string existingFile = null;
+                if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
+                {
+                    try { existingFile = customers[editingIndex]._fileName; } catch { existingFile = null; }
+                }
+
+                if (!string.IsNullOrEmpty(existingFile)) customer._fileName = existingFile;
+
+                SaveCustomerToFile(customer);
+                UpsertCustomerInList(customer);
+
+                // Danh sách file đã tạo
+                var allCreatedFiles = new List<string>();
+
+                // Tạo tất cả các mẫu
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        // 1. Tạo mẫu 01/TD (01 HN, 01 SXKD, hoặc 01 GQVL)
+                        var files01 = CreateProfileFromTemplate(customer, include03: false);
+                        if (files01 != null) allCreatedFiles.AddRange(files01);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 01: {ex.Message}");
+                    }
+
+                    try
+                    {
+                        // 2. Tạo mẫu 03 DS
+                        var file03 = ExportSpecificTemplate(customer, "03 DS.docx");
+                        if (!string.IsNullOrEmpty(file03)) allCreatedFiles.Add(file03);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 03: {ex.Message}");
+                    }
+
+                    try
+                    {
+                        // 3. Tạo mẫu GUQ
+                        var fileGUQ = ExportSpecificTemplate(customer, "GUQ.docx");
+                        if (!string.IsNullOrEmpty(fileGUQ)) allCreatedFiles.Add(fileGUQ);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu GUQ: {ex.Message}");
+                    }
+
+                    try
+                    {
+                        // 4. Tạo mẫu 01TGTV
+                        var file01TGTV = ExportSpecificTemplate(customer, "01TGTV.docx");
+                        if (!string.IsNullOrEmpty(file01TGTV)) allCreatedFiles.Add(file01TGTV);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 01TGTV: {ex.Message}");
+                    }
+                });
+
+                BindGrid();
+                ClearForm();
+
+                // Hiển thị thông báo
+                MessageBox.Show(
+                    $"✅ Đã tạo toàn bộ hồ sơ thành công!\n\n" +
+                    $"📄 Khách hàng: {customer.Hoten}\n" +
+                    $"📁 Số file tạo: {allCreatedFiles.Count}\n\n" +
+                    $"Bao gồm:\n" +
+                    $"- Mẫu 01 (TD/SXKD/GQVL)\n" +
+                    $"- Mẫu 03 DS\n" +
+                    $"- Mẫu GUQ\n" +
+                    $"- Mẫu 01TGTV",
+                    "✅ Tạo toàn bộ hồ sơ",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                // Mở tất cả file vừa tạo
+                OpenCreatedFiles(allCreatedFiles);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"❌ Lỗi khi tạo toàn bộ hồ sơ:\n\n{ex.Message}",
+                    "❌ Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        // Mở một file Word
+        private void OpenFile(string filePath)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+                {
+                    System.Diagnostics.Process.Start(filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Không thể mở file {filePath}: {ex.Message}");
+            }
+        }
+
+        // Mở nhiều file Word
+        private void OpenCreatedFiles(List<string> filePaths)
+        {
+            if (filePaths == null || filePaths.Count == 0) return;
+
+            try
+            {
+                foreach (var filePath in filePaths)
+                {
+                    OpenFile(filePath);
+                    // Delay nhỏ để tránh mở quá nhiều cùng lúc
+                    System.Threading.Thread.Sleep(500);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi khi mở files: {ex.Message}");
+            }
         }
     }
 

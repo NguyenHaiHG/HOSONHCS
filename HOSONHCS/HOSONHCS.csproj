@@ -91,7 +91,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppTheme.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,10 +133,15 @@
     <EmbeddedResource Include="GUQ.docx" />
     <EmbeddedResource Include="01 GQVL.docx" />
     <EmbeddedResource Include="03 DS GROUP.docx" />
+    <EmbeddedResource Include="01TGTV.docx" />
+    <None Include="CCCD12_GUIDE.md" />
+    <None Include="CHANGELOG_CBDOITUONG_THOIHANCCCD.md" />
+    <None Include="CHANGELOG_DATEFORMAT_SDT.md" />
     <None Include="CHANGELOG_FORM2.md" />
     <None Include="CODE_ANALYSIS_REPORT.md" />
     <None Include="DUAL_MARQUEE.md" />
     <None Include="HOSONHCS_TemporaryKey.pfx" />
+    <None Include="hsp.json" />
     <None Include="MARQUEE_FIX.md" />
     <None Include="MARQUEE_FORM_TITLE.md" />
     <None Include="MARQUEE_HEADER_FEATURE.md" />
@@ -157,6 +161,7 @@
     </Content>
     <None Include="UI_BORDERLESS_UPDATE.md" />
     <None Include="VIET_HOA_COMPLETE.md" />
+    <None Include="vixuyen.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
