@@ -805,11 +805,11 @@ namespace HOSONHCS
 
                         if (paraText.IndexOf("{{cccd12}}", StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            // Xóa toàn bộ paragraph cũ (bao gồm "Số: {{cccd12}}")
-                            // Thay thế bằng table 13 cột (cột đầu: "Số:", 12 cột sau: số CCCD)
+                            // Giữ lại "Số: " và thay {{cccd12}} bằng table 12 ô
+                            // Xóa paragraph cũ và tạo table 13 cột (cột đầu: "Số:", 12 cột sau: số)
                             var table = CreateCCCD12Table(digits);
                             para.Parent.InsertAfter(table, para);
-                            para.Remove();  // Xóa paragraph cũ
+                            para.Remove();
 
                             mainPart.Document.Save();
                             return;
@@ -829,17 +829,18 @@ namespace HOSONHCS
 
             var tblPr = new TableProperties();
             var tblStyle = new TableStyle() { Val = "TableGrid" };
-            // Chỉ 12 cột số CCCD: 150 DXA x 12 = 1800 DXA
-            var tblWidth = new TableWidth() { Width = "1800", Type = TableWidthUnitValues.Dxa };
+            // 13 cột: cột đầu "Số:" (800 DXA) + 12 cột số (300 DXA mỗi cột) = 4400 DXA
+            var tblWidth = new TableWidth() { Width = "4400", Type = TableWidthUnitValues.Dxa };
             var tblJc = new TableJustification() { Val = TableRowAlignmentValues.Left };
 
+            // Table borders - tắt hết viền table level
             var tblBorders = new TableBorders(
-                new TopBorder() { Val = BorderValues.Single, Size = 4 },
-                new BottomBorder() { Val = BorderValues.Single, Size = 4 },
-                new LeftBorder() { Val = BorderValues.Single, Size = 4 },
-                new RightBorder() { Val = BorderValues.Single, Size = 4 },
-                new InsideHorizontalBorder() { Val = BorderValues.Single, Size = 4 },
-                new InsideVerticalBorder() { Val = BorderValues.Single, Size = 4 }
+                new TopBorder() { Val = BorderValues.None },
+                new BottomBorder() { Val = BorderValues.None },
+                new LeftBorder() { Val = BorderValues.None },
+                new RightBorder() { Val = BorderValues.None },
+                new InsideHorizontalBorder() { Val = BorderValues.None },
+                new InsideVerticalBorder() { Val = BorderValues.None }
             );
 
             tblPr.Append(tblStyle);
@@ -849,52 +850,84 @@ namespace HOSONHCS
             table.AppendChild(tblPr);
 
             var tableGrid = new TableGrid();
-            // 12 cột chứa số CCCD
+            // Cột đầu tiên: "Số:" - tăng lên 800 để THẤY RÕ CHỮ "Số:"
+            tableGrid.Append(new GridColumn() { Width = "800" });
+            // 12 cột chứa số CCCD - width 300 DXA để ô LỚN, RÕ RÀNG
             for (int i = 0; i < 12; i++)
             {
-                tableGrid.Append(new GridColumn() { Width = "150" });
+                tableGrid.Append(new GridColumn() { Width = "300" });
             }
             table.Append(tableGrid);
 
             var tr = new TableRow();
             var trPr = new TableRowProperties();
-            var trHeight = new TableRowHeight() { Val = 120 };
+            var trHeight = new TableRowHeight() 
+            { 
+                Val = 300,  // Height 300 DXA để ô vuông lớn (300x300)
+                HeightType = HeightRuleValues.Exact
+            };
             trPr.Append(trHeight);
             tr.Append(trPr);
 
-            // 12 ô chứa số CCCD - KHÔNG có ô "Số:"
-            for (int i = 0; i < 12; i++)
+            // 13 ô: ô đầu "Số:" (không viền) + 12 ô số (có viền)
+            for (int i = 0; i < 13; i++)
             {
                 var tc = new TableCell();
                 var tcPr = new TableCellProperties();
-                var tcWidth = new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "150" };
-                var tcBorders = new TableCellBorders(
-                    new TopBorder() { Val = BorderValues.Single, Size = 4 },
-                    new BottomBorder() { Val = BorderValues.Single, Size = 4 },
-                    new LeftBorder() { Val = BorderValues.Single, Size = 4 },
-                    new RightBorder() { Val = BorderValues.Single, Size = 4 }
-                );
-                var shading = new Shading() { Fill = "FFFFFF" };
-                tcPr.Append(tcWidth);
-                tcPr.Append(tcBorders);
-                tcPr.Append(shading);
+
+                if (i == 0)
+                {
+                    // Ô đầu tiên: "Số:" - KHÔNG VIỀN, WIDTH = 800 DXA ĐỂ NHÌN RÕ
+                    var tcWidth = new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "800" };
+                    var tcBorders = new TableCellBorders(
+                        new TopBorder() { Val = BorderValues.None, Size = 0 },
+                        new BottomBorder() { Val = BorderValues.None, Size = 0 },
+                        new LeftBorder() { Val = BorderValues.None, Size = 0 },
+                        new RightBorder() { Val = BorderValues.None, Size = 0 }
+                    );
+                    var shading = new Shading() { Fill = "FFFFFF" };
+                    var tcVAlign = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center };
+                    tcPr.Append(tcWidth);
+                    tcPr.Append(tcBorders);
+                    tcPr.Append(shading);
+                    tcPr.Append(tcVAlign);
+                }
+                else
+                {
+                    // 12 ô chứa số CCCD - CÓ VIỀN ĐEN ĐẬM, 300x300 DXA = ô vuông lớn
+                    var tcWidth = new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "300" };
+                    var tcBorders = new TableCellBorders(
+                        new TopBorder() { Val = BorderValues.Single, Size = 8, Color = "000000" },  // Viền đậm hơn: size 8
+                        new BottomBorder() { Val = BorderValues.Single, Size = 8, Color = "000000" },
+                        new LeftBorder() { Val = BorderValues.Single, Size = 8, Color = "000000" },
+                        new RightBorder() { Val = BorderValues.Single, Size = 8, Color = "000000" }
+                    );
+                    var shading = new Shading() { Fill = "FFFFFF" };
+                    var tcVAlign = new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center };
+                    tcPr.Append(tcWidth);
+                    tcPr.Append(tcBorders);
+                    tcPr.Append(shading);
+                    tcPr.Append(tcVAlign);
+                }
+
                 tc.Append(tcPr);
 
                 var paragraph = new Paragraph();
                 var pPr = new ParagraphProperties();
-                var justification = new Justification() { Val = JustificationValues.Center };
+                var justification = new Justification() { Val = (i == 0) ? JustificationValues.Right : JustificationValues.Center };
                 pPr.Append(justification);
                 paragraph.Append(pPr);
 
                 var run = new Run();
                 var runProperties = new RunProperties();
-                var fontSize = new FontSize() { Val = "20" };
-                var bold = new Bold();
+                var fontSize = new FontSize() { Val = "24" };  // Font 24pt - vừa đủ, KHÔNG BÔI ĐẬM
                 runProperties.Append(fontSize);
-                runProperties.Append(bold);
+                // KHÔNG thêm Bold để chữ dễ nhìn hơn
                 run.Append(runProperties);
 
-                var text = new Text(digits[i].ToString());
+                // Ô đầu: "Số:", các ô sau: số CCCD
+                var textContent = (i == 0) ? "Số:" : digits[i - 1].ToString();
+                var text = new Text(textContent);
                 run.Append(text);
                 paragraph.Append(run);
 
@@ -2327,7 +2360,9 @@ namespace HOSONHCS
              // Normalize chuỗi để loại bỏ dấu (so sánh dễ hơn)
              string normalized = RemoveVietnameseTones(pgdName.Trim().ToLowerInvariant());
 
-             if (normalized.Contains("vi xuyen") || normalized.Contains("vixuyen"))
+             if (normalized.Contains("meo vac") || normalized.Contains("meovac"))
+                 return "meovac.json";
+             else if (normalized.Contains("vi xuyen") || normalized.Contains("vixuyen"))
                  return "vixuyen.json";
              else if (normalized.Contains("dong van") || normalized.Contains("dongvan"))
                  return "dongvan.json";
@@ -2337,7 +2372,9 @@ namespace HOSONHCS
                  return "xinman.json";
 
              // Fallback: thử khớp với tên có dấu
-             if (pgdName.IndexOf("Vị Xuyên", StringComparison.OrdinalIgnoreCase) >= 0)
+             if (pgdName.IndexOf("Mèo Vạc", StringComparison.OrdinalIgnoreCase) >= 0)
+                 return "meovac.json";
+             else if (pgdName.IndexOf("Vị Xuyên", StringComparison.OrdinalIgnoreCase) >= 0)
                  return "vixuyen.json";
              else if (pgdName.IndexOf("Đồng Văn", StringComparison.OrdinalIgnoreCase) >= 0)
                  return "dongvan.json";
