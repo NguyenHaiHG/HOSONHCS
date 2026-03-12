@@ -120,24 +120,29 @@
   <data name="richTextBox1.Text" xml:space="preserve">
     <value>Hướng dẫn:
 
-1, Các chức năng trong phần mềm quý vị điền thông tin phù hợp của khách hàng;
-
-2, Chức năng tạo khách hàng: Sau khi gọi khách hàng cũ ra để sửa thành 1 khách hàng mới thì bấm nút Tạo khách hàng để lưu thông tin khách hàng mới,
+1, Chức năng tạo khách hàng: Sau khi gọi khách hàng cũ ra để sửa thành 1 khách hàng mới thì bấm nút Tạo khách hàng để lưu thông tin khách hàng mới,
 tính năng này dùng để tạo 1 khách hàng khác cùng thôn, tổ, tránh việc phải tạo lại từ đầu tất cả khá mất thời gian.
 
-3, Dữ liệu sau khi tạo sẽ nằm ở Folder ngoài Desktop, sau khi tạo nên coppy vào nơi khác phân vùng ổ C trên máy để tránh mất dữ liệu đã tạo về sau;
+2, Dữ liệu sau khi tạo sẽ nằm ở Folder ngoài Desktop, sau khi tạo nên coppy vào nơi khác phân vùng ổ C trên máy để tránh mất dữ liệu đã tạo về sau;
 
-4, Tính năng tại tab chỉnh sửa dùng để sửa lại thông tin Phòng giao dịch khi có sự thay đổi của Hội - Thôn - Tổ,
+3, Tính năng tại tab chỉnh sửa dùng để sửa lại thông tin Phòng giao dịch khi có sự thay đổi của Hội - Thôn - Tổ,
 đối với tính năng này sau khi đăng nhập sẽ cho phép chỉnh sửa và lưu thông tin vào phần mềm.
 
-5, Tính năng tạo 03 theo nhóm đã sử dụng được, tuy nhiên tác giả đang tiếp tục hoàn thiện ở phiên bản sau;
+4, Tính năng tạo 03 theo nhóm đã sử dụng được, tuy nhiên tác giả đang tiếp tục hoàn thiện ở phiên bản sau;
 
-6, Đối với 1 số ô ngày tháng năm có dấu tick ở đằng trước, nếu không sử dụng, bỏ tick, nếu sử dụng thì tick vào phần mềm sẽ tự động hiển thị điền vào mẫu.
+5, Đối với 1 số ô ngày tháng năm có dấu tick ở đằng trước, nếu không sử dụng, bỏ tick, nếu sử dụng thì tick vào phần mềm sẽ tự động hiển thị điền vào mẫu.
 
-7, Tính năng Cập nhật sẽ có ở phiên bản 6.0.0
-
-8, Tính năng tạo 01/TGTV sẽ có ở phiên bản 6.0.0</value>
+6, Tính năng Cập nhật sẽ có ở phiên bản 6.0.0</value>
   </data>
+  <metadata name="Menh_gia.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="So_luong.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Thanh_tien.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="marqueeTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

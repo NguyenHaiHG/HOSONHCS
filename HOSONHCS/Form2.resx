@@ -151,7 +151,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>61</value>
+    <value>64</value>
   </data>
   <data name="btn03to.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
@@ -181,7 +181,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btn03to.ZOrder" xml:space="preserve">
-    <value>60</value>
+    <value>63</value>
   </data>
   <data name="txtkh1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -208,7 +208,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txtkh1.ZOrder" xml:space="preserve">
-    <value>59</value>
+    <value>62</value>
   </data>
   <data name="txtkh2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -235,7 +235,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txtkh2.ZOrder" xml:space="preserve">
-    <value>58</value>
+    <value>61</value>
   </data>
   <data name="txtkh3.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -262,7 +262,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txtkh3.ZOrder" xml:space="preserve">
-    <value>57</value>
+    <value>60</value>
   </data>
   <data name="txtkh4.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -289,7 +289,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txtkh4.ZOrder" xml:space="preserve">
-    <value>56</value>
+    <value>59</value>
   </data>
   <data name="txtkh5.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -316,7 +316,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txtkh5.ZOrder" xml:space="preserve">
-    <value>55</value>
+    <value>58</value>
   </data>
   <data name="label6.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -349,7 +349,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>54</value>
+    <value>57</value>
   </data>
   <data name="cbdt1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -373,7 +373,7 @@
     <value>Hộ GĐ SXKD VKK</value>
   </data>
   <data name="cbdt1.Items6" xml:space="preserve">
-    <value>Hộ GĐ vùng NT</value>
+    <value>HGĐ cư trú tại VNT</value>
   </data>
   <data name="cbdt1.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 179</value>
@@ -397,7 +397,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbdt1.ZOrder" xml:space="preserve">
-    <value>53</value>
+    <value>56</value>
   </data>
   <data name="label7.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -430,7 +430,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
-    <value>52</value>
+    <value>55</value>
   </data>
   <data name="label8.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -463,7 +463,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
-    <value>51</value>
+    <value>54</value>
   </data>
   <data name="label9.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -496,7 +496,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
-    <value>50</value>
+    <value>53</value>
   </data>
   <data name="label10.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -529,7 +529,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label10.ZOrder" xml:space="preserve">
-    <value>49</value>
+    <value>52</value>
   </data>
   <data name="label11.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -562,142 +562,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label11.ZOrder" xml:space="preserve">
-    <value>48</value>
-  </data>
-  <data name="txtmd1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
-  </data>
-  <data name="txtmd1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>457, 180</value>
-  </data>
-  <data name="txtmd1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="txtmd1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
-  </data>
-  <data name="txtmd1.TabIndex" type="System.Int32, mscorlib">
-    <value>18</value>
-  </data>
-  <data name="&gt;&gt;txtmd1.Name" xml:space="preserve">
-    <value>txtmd1</value>
-  </data>
-  <data name="&gt;&gt;txtmd1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtmd1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtmd1.ZOrder" xml:space="preserve">
-    <value>47</value>
-  </data>
-  <data name="txtmd2.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
-  </data>
-  <data name="txtmd2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>457, 218</value>
-  </data>
-  <data name="txtmd2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="txtmd2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
-  </data>
-  <data name="txtmd2.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="&gt;&gt;txtmd2.Name" xml:space="preserve">
-    <value>txtmd2</value>
-  </data>
-  <data name="&gt;&gt;txtmd2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtmd2.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtmd2.ZOrder" xml:space="preserve">
-    <value>46</value>
-  </data>
-  <data name="txtmd3.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
-  </data>
-  <data name="txtmd3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>457, 255</value>
-  </data>
-  <data name="txtmd3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="txtmd3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
-  </data>
-  <data name="txtmd3.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
-  </data>
-  <data name="&gt;&gt;txtmd3.Name" xml:space="preserve">
-    <value>txtmd3</value>
-  </data>
-  <data name="&gt;&gt;txtmd3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtmd3.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtmd3.ZOrder" xml:space="preserve">
-    <value>45</value>
-  </data>
-  <data name="txtmd4.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
-  </data>
-  <data name="txtmd4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>457, 293</value>
-  </data>
-  <data name="txtmd4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="txtmd4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
-  </data>
-  <data name="txtmd4.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
-  </data>
-  <data name="&gt;&gt;txtmd4.Name" xml:space="preserve">
-    <value>txtmd4</value>
-  </data>
-  <data name="&gt;&gt;txtmd4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtmd4.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtmd4.ZOrder" xml:space="preserve">
-    <value>44</value>
-  </data>
-  <data name="txtmd5.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
-  </data>
-  <data name="txtmd5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>457, 331</value>
-  </data>
-  <data name="txtmd5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="txtmd5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
-  </data>
-  <data name="txtmd5.TabIndex" type="System.Int32, mscorlib">
-    <value>22</value>
-  </data>
-  <data name="&gt;&gt;txtmd5.Name" xml:space="preserve">
-    <value>txtmd5</value>
-  </data>
-  <data name="&gt;&gt;txtmd5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtmd5.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtmd5.ZOrder" xml:space="preserve">
-    <value>43</value>
+    <value>51</value>
   </data>
   <data name="label12.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -730,39 +595,69 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label12.ZOrder" xml:space="preserve">
-    <value>42</value>
+    <value>50</value>
   </data>
   <data name="cbtien1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
   <data name="cbtien1.Items" xml:space="preserve">
-    <value>10.000.000</value>
+    <value>5.000.000</value>
   </data>
   <data name="cbtien1.Items1" xml:space="preserve">
-    <value>20.000.000</value>
+    <value>10.000.000</value>
   </data>
   <data name="cbtien1.Items2" xml:space="preserve">
-    <value>30.000.000</value>
+    <value>15.000.000</value>
   </data>
   <data name="cbtien1.Items3" xml:space="preserve">
-    <value>40.000.000</value>
+    <value>20.000.000</value>
   </data>
   <data name="cbtien1.Items4" xml:space="preserve">
-    <value>50.000.000</value>
+    <value>25.000.000</value>
   </data>
   <data name="cbtien1.Items5" xml:space="preserve">
-    <value>60.000.000</value>
+    <value>30.000.000</value>
   </data>
   <data name="cbtien1.Items6" xml:space="preserve">
-    <value>70.000.000</value>
+    <value>35.000.000</value>
   </data>
   <data name="cbtien1.Items7" xml:space="preserve">
-    <value>80.000.000</value>
+    <value>40.000.000</value>
   </data>
   <data name="cbtien1.Items8" xml:space="preserve">
-    <value>90.000.000</value>
+    <value>45.000.000</value>
   </data>
   <data name="cbtien1.Items9" xml:space="preserve">
+    <value>50.000.000</value>
+  </data>
+  <data name="cbtien1.Items10" xml:space="preserve">
+    <value>55.000.000</value>
+  </data>
+  <data name="cbtien1.Items11" xml:space="preserve">
+    <value>60.000.000</value>
+  </data>
+  <data name="cbtien1.Items12" xml:space="preserve">
+    <value>65.000.000</value>
+  </data>
+  <data name="cbtien1.Items13" xml:space="preserve">
+    <value>70.000.000</value>
+  </data>
+  <data name="cbtien1.Items14" xml:space="preserve">
+    <value>75.000.000</value>
+  </data>
+  <data name="cbtien1.Items15" xml:space="preserve">
+    <value>80.000.000</value>
+  </data>
+  <data name="cbtien1.Items16" xml:space="preserve">
+    <value>85.000.000</value>
+  </data>
+  <data name="cbtien1.Items17" xml:space="preserve">
+    <value>90.000.000</value>
+  </data>
+  <data name="cbtien1.Items18" xml:space="preserve">
+    <value>95.000.000</value>
+  </data>
+  <data name="cbtien1.Items19" xml:space="preserve">
     <value>100.000.000</value>
   </data>
   <data name="cbtien1.Location" type="System.Drawing.Point, System.Drawing">
@@ -787,39 +682,69 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtien1.ZOrder" xml:space="preserve">
-    <value>41</value>
+    <value>49</value>
   </data>
   <data name="cbtien3.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
   <data name="cbtien3.Items" xml:space="preserve">
-    <value>10.000.000</value>
+    <value>5.000.000</value>
   </data>
   <data name="cbtien3.Items1" xml:space="preserve">
-    <value>20.000.000</value>
+    <value>10.000.000</value>
   </data>
   <data name="cbtien3.Items2" xml:space="preserve">
-    <value>30.000.000</value>
+    <value>15.000.000</value>
   </data>
   <data name="cbtien3.Items3" xml:space="preserve">
-    <value>40.000.000</value>
+    <value>20.000.000</value>
   </data>
   <data name="cbtien3.Items4" xml:space="preserve">
-    <value>50.000.000</value>
+    <value>25.000.000</value>
   </data>
   <data name="cbtien3.Items5" xml:space="preserve">
-    <value>60.000.000</value>
+    <value>30.000.000</value>
   </data>
   <data name="cbtien3.Items6" xml:space="preserve">
-    <value>70.000.000</value>
+    <value>35.000.000</value>
   </data>
   <data name="cbtien3.Items7" xml:space="preserve">
-    <value>80.000.000</value>
+    <value>40.000.000</value>
   </data>
   <data name="cbtien3.Items8" xml:space="preserve">
-    <value>90.000.000</value>
+    <value>45.000.000</value>
   </data>
   <data name="cbtien3.Items9" xml:space="preserve">
+    <value>50.000.000</value>
+  </data>
+  <data name="cbtien3.Items10" xml:space="preserve">
+    <value>55.000.000</value>
+  </data>
+  <data name="cbtien3.Items11" xml:space="preserve">
+    <value>60.000.000</value>
+  </data>
+  <data name="cbtien3.Items12" xml:space="preserve">
+    <value>65.000.000</value>
+  </data>
+  <data name="cbtien3.Items13" xml:space="preserve">
+    <value>70.000.000</value>
+  </data>
+  <data name="cbtien3.Items14" xml:space="preserve">
+    <value>75.000.000</value>
+  </data>
+  <data name="cbtien3.Items15" xml:space="preserve">
+    <value>80.000.000</value>
+  </data>
+  <data name="cbtien3.Items16" xml:space="preserve">
+    <value>85.000.000</value>
+  </data>
+  <data name="cbtien3.Items17" xml:space="preserve">
+    <value>90.000.000</value>
+  </data>
+  <data name="cbtien3.Items18" xml:space="preserve">
+    <value>95.000.000</value>
+  </data>
+  <data name="cbtien3.Items19" xml:space="preserve">
     <value>100.000.000</value>
   </data>
   <data name="cbtien3.Location" type="System.Drawing.Point, System.Drawing">
@@ -844,39 +769,69 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtien3.ZOrder" xml:space="preserve">
-    <value>40</value>
+    <value>48</value>
   </data>
   <data name="cbtien2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
   <data name="cbtien2.Items" xml:space="preserve">
-    <value>10.000.000</value>
+    <value>5.000.000</value>
   </data>
   <data name="cbtien2.Items1" xml:space="preserve">
-    <value>20.000.000</value>
+    <value>10.000.000</value>
   </data>
   <data name="cbtien2.Items2" xml:space="preserve">
-    <value>30.000.000</value>
+    <value>15.000.000</value>
   </data>
   <data name="cbtien2.Items3" xml:space="preserve">
-    <value>40.000.000</value>
+    <value>20.000.000</value>
   </data>
   <data name="cbtien2.Items4" xml:space="preserve">
-    <value>50.000.000</value>
+    <value>25.000.000</value>
   </data>
   <data name="cbtien2.Items5" xml:space="preserve">
-    <value>60.000.000</value>
+    <value>30.000.000</value>
   </data>
   <data name="cbtien2.Items6" xml:space="preserve">
-    <value>70.000.000</value>
+    <value>35.000.000</value>
   </data>
   <data name="cbtien2.Items7" xml:space="preserve">
-    <value>80.000.000</value>
+    <value>40.000.000</value>
   </data>
   <data name="cbtien2.Items8" xml:space="preserve">
-    <value>90.000.000</value>
+    <value>45.000.000</value>
   </data>
   <data name="cbtien2.Items9" xml:space="preserve">
+    <value>50.000.000</value>
+  </data>
+  <data name="cbtien2.Items10" xml:space="preserve">
+    <value>55.000.000</value>
+  </data>
+  <data name="cbtien2.Items11" xml:space="preserve">
+    <value>60.000.000</value>
+  </data>
+  <data name="cbtien2.Items12" xml:space="preserve">
+    <value>65.000.000</value>
+  </data>
+  <data name="cbtien2.Items13" xml:space="preserve">
+    <value>70.000.000</value>
+  </data>
+  <data name="cbtien2.Items14" xml:space="preserve">
+    <value>75.000.000</value>
+  </data>
+  <data name="cbtien2.Items15" xml:space="preserve">
+    <value>80.000.000</value>
+  </data>
+  <data name="cbtien2.Items16" xml:space="preserve">
+    <value>85.000.000</value>
+  </data>
+  <data name="cbtien2.Items17" xml:space="preserve">
+    <value>90.000.000</value>
+  </data>
+  <data name="cbtien2.Items18" xml:space="preserve">
+    <value>95.000.000</value>
+  </data>
+  <data name="cbtien2.Items19" xml:space="preserve">
     <value>100.000.000</value>
   </data>
   <data name="cbtien2.Location" type="System.Drawing.Point, System.Drawing">
@@ -901,39 +856,69 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtien2.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>47</value>
   </data>
   <data name="cbtien4.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
   <data name="cbtien4.Items" xml:space="preserve">
-    <value>10.000.000</value>
+    <value>5.000.000</value>
   </data>
   <data name="cbtien4.Items1" xml:space="preserve">
-    <value>20.000.000</value>
+    <value>10.000.000</value>
   </data>
   <data name="cbtien4.Items2" xml:space="preserve">
-    <value>30.000.000</value>
+    <value>15.000.000</value>
   </data>
   <data name="cbtien4.Items3" xml:space="preserve">
-    <value>40.000.000</value>
+    <value>20.000.000</value>
   </data>
   <data name="cbtien4.Items4" xml:space="preserve">
-    <value>50.000.000</value>
+    <value>25.000.000</value>
   </data>
   <data name="cbtien4.Items5" xml:space="preserve">
-    <value>60.000.000</value>
+    <value>30.000.000</value>
   </data>
   <data name="cbtien4.Items6" xml:space="preserve">
-    <value>70.000.000</value>
+    <value>35.000.000</value>
   </data>
   <data name="cbtien4.Items7" xml:space="preserve">
-    <value>80.000.000</value>
+    <value>40.000.000</value>
   </data>
   <data name="cbtien4.Items8" xml:space="preserve">
-    <value>90.000.000</value>
+    <value>45.000.000</value>
   </data>
   <data name="cbtien4.Items9" xml:space="preserve">
+    <value>50.000.000</value>
+  </data>
+  <data name="cbtien4.Items10" xml:space="preserve">
+    <value>55.000.000</value>
+  </data>
+  <data name="cbtien4.Items11" xml:space="preserve">
+    <value>60.000.000</value>
+  </data>
+  <data name="cbtien4.Items12" xml:space="preserve">
+    <value>65.000.000</value>
+  </data>
+  <data name="cbtien4.Items13" xml:space="preserve">
+    <value>70.000.000</value>
+  </data>
+  <data name="cbtien4.Items14" xml:space="preserve">
+    <value>75.000.000</value>
+  </data>
+  <data name="cbtien4.Items15" xml:space="preserve">
+    <value>80.000.000</value>
+  </data>
+  <data name="cbtien4.Items16" xml:space="preserve">
+    <value>85.000.000</value>
+  </data>
+  <data name="cbtien4.Items17" xml:space="preserve">
+    <value>90.000.000</value>
+  </data>
+  <data name="cbtien4.Items18" xml:space="preserve">
+    <value>95.000.000</value>
+  </data>
+  <data name="cbtien4.Items19" xml:space="preserve">
     <value>100.000.000</value>
   </data>
   <data name="cbtien4.Location" type="System.Drawing.Point, System.Drawing">
@@ -958,39 +943,69 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtien4.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>46</value>
   </data>
   <data name="cbtien5.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
   <data name="cbtien5.Items" xml:space="preserve">
-    <value>10.000.000</value>
+    <value>5.000.000</value>
   </data>
   <data name="cbtien5.Items1" xml:space="preserve">
-    <value>20.000.000</value>
+    <value>10.000.000</value>
   </data>
   <data name="cbtien5.Items2" xml:space="preserve">
-    <value>30.000.000</value>
+    <value>15.000.000</value>
   </data>
   <data name="cbtien5.Items3" xml:space="preserve">
-    <value>40.000.000</value>
+    <value>20.000.000</value>
   </data>
   <data name="cbtien5.Items4" xml:space="preserve">
-    <value>50.000.000</value>
+    <value>25.000.000</value>
   </data>
   <data name="cbtien5.Items5" xml:space="preserve">
-    <value>60.000.000</value>
+    <value>30.000.000</value>
   </data>
   <data name="cbtien5.Items6" xml:space="preserve">
-    <value>70.000.000</value>
+    <value>35.000.000</value>
   </data>
   <data name="cbtien5.Items7" xml:space="preserve">
-    <value>80.000.000</value>
+    <value>40.000.000</value>
   </data>
   <data name="cbtien5.Items8" xml:space="preserve">
-    <value>90.000.000</value>
+    <value>45.000.000</value>
   </data>
   <data name="cbtien5.Items9" xml:space="preserve">
+    <value>50.000.000</value>
+  </data>
+  <data name="cbtien5.Items10" xml:space="preserve">
+    <value>55.000.000</value>
+  </data>
+  <data name="cbtien5.Items11" xml:space="preserve">
+    <value>60.000.000</value>
+  </data>
+  <data name="cbtien5.Items12" xml:space="preserve">
+    <value>65.000.000</value>
+  </data>
+  <data name="cbtien5.Items13" xml:space="preserve">
+    <value>70.000.000</value>
+  </data>
+  <data name="cbtien5.Items14" xml:space="preserve">
+    <value>75.000.000</value>
+  </data>
+  <data name="cbtien5.Items15" xml:space="preserve">
+    <value>80.000.000</value>
+  </data>
+  <data name="cbtien5.Items16" xml:space="preserve">
+    <value>85.000.000</value>
+  </data>
+  <data name="cbtien5.Items17" xml:space="preserve">
+    <value>90.000.000</value>
+  </data>
+  <data name="cbtien5.Items18" xml:space="preserve">
+    <value>95.000.000</value>
+  </data>
+  <data name="cbtien5.Items19" xml:space="preserve">
     <value>100.000.000</value>
   </data>
   <data name="cbtien5.Location" type="System.Drawing.Point, System.Drawing">
@@ -1015,7 +1030,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtien5.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>45</value>
   </data>
   <data name="label13.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1048,7 +1063,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label13.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>44</value>
   </data>
   <data name="label14.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1081,7 +1096,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label14.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>43</value>
   </data>
   <data name="label15.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1114,7 +1129,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label15.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>42</value>
   </data>
   <data name="label16.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1147,7 +1162,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>41</value>
   </data>
   <data name="label17.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1156,7 +1171,7 @@
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
   <data name="label17.Location" type="System.Drawing.Point, System.Drawing">
-    <value>34, 76</value>
+    <value>28, 133</value>
   </data>
   <data name="label17.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1180,61 +1195,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label17.ZOrder" xml:space="preserve">
-    <value>32</value>
-  </data>
-  <data name="txttotruong.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
-  </data>
-  <data name="txttotruong.Location" type="System.Drawing.Point, System.Drawing">
-    <value>124, 74</value>
-  </data>
-  <data name="txttotruong.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="txttotruong.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
-  </data>
-  <data name="txttotruong.TabIndex" type="System.Int32, mscorlib">
-    <value>34</value>
-  </data>
-  <data name="&gt;&gt;txttotruong.Name" xml:space="preserve">
-    <value>txttotruong</value>
-  </data>
-  <data name="&gt;&gt;txttotruong.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txttotruong.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txttotruong.ZOrder" xml:space="preserve">
-    <value>31</value>
-  </data>
-  <data name="txtxa.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
-  </data>
-  <data name="txtxa.Location" type="System.Drawing.Point, System.Drawing">
-    <value>124, 47</value>
-  </data>
-  <data name="txtxa.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="txtxa.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
-  </data>
-  <data name="txtxa.TabIndex" type="System.Int32, mscorlib">
-    <value>36</value>
-  </data>
-  <data name="&gt;&gt;txtxa.Name" xml:space="preserve">
-    <value>txtxa</value>
-  </data>
-  <data name="&gt;&gt;txtxa.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtxa.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtxa.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>40</value>
   </data>
   <data name="label18.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1243,7 +1204,7 @@
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
   <data name="label18.Location" type="System.Drawing.Point, System.Drawing">
-    <value>34, 50</value>
+    <value>90, 75</value>
   </data>
   <data name="label18.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1267,7 +1228,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label18.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>39</value>
   </data>
   <data name="cbctr.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -1285,7 +1246,7 @@
     <value>Hộ gia đình Sản xuất kinh doanh tại vùng khó khăn</value>
   </data>
   <data name="cbctr.Items4" xml:space="preserve">
-    <value>Giải quyết việc làm duy trì và mở rộng việc làm</value>
+    <value>Hỗ trợ tạo việc làm duy trì và mở rộng việc làm</value>
   </data>
   <data name="cbctr.Items5" xml:space="preserve">
     <value>Cấp nước sạch và vệ sinh môi trường nông thôn</value>
@@ -1312,7 +1273,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbctr.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>37</value>
   </data>
   <data name="label19.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1345,7 +1306,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label19.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>38</value>
   </data>
   <data name="label20.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1378,7 +1339,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label20.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>36</value>
   </data>
   <data name="cbtime1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -1399,6 +1360,12 @@
     <value>60 tháng</value>
   </data>
   <data name="cbtime1.Items5" xml:space="preserve">
+    <value>72 tháng</value>
+  </data>
+  <data name="cbtime1.Items6" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime1.Items7" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime1.Location" type="System.Drawing.Point, System.Drawing">
@@ -1423,7 +1390,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtime1.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>35</value>
   </data>
   <data name="cbtime2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -1444,6 +1411,12 @@
     <value>60 tháng</value>
   </data>
   <data name="cbtime2.Items5" xml:space="preserve">
+    <value>72 tháng</value>
+  </data>
+  <data name="cbtime2.Items6" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime2.Items7" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime2.Location" type="System.Drawing.Point, System.Drawing">
@@ -1468,7 +1441,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtime2.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>33</value>
   </data>
   <data name="label21.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1501,7 +1474,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label21.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>34</value>
   </data>
   <data name="cbtime3.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -1522,6 +1495,12 @@
     <value>60 tháng</value>
   </data>
   <data name="cbtime3.Items5" xml:space="preserve">
+    <value>72 tháng</value>
+  </data>
+  <data name="cbtime3.Items6" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime3.Items7" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime3.Location" type="System.Drawing.Point, System.Drawing">
@@ -1546,7 +1525,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtime3.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>31</value>
   </data>
   <data name="label22.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1579,7 +1558,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label22.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>32</value>
   </data>
   <data name="cbtime4.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -1600,6 +1579,12 @@
     <value>60 tháng</value>
   </data>
   <data name="cbtime4.Items5" xml:space="preserve">
+    <value>72 tháng</value>
+  </data>
+  <data name="cbtime4.Items6" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime4.Items7" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime4.Location" type="System.Drawing.Point, System.Drawing">
@@ -1624,7 +1609,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtime4.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>29</value>
   </data>
   <data name="label23.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1657,7 +1642,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label23.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>30</value>
   </data>
   <data name="cbtime5.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -1678,6 +1663,12 @@
     <value>60 tháng</value>
   </data>
   <data name="cbtime5.Items5" xml:space="preserve">
+    <value>72 tháng</value>
+  </data>
+  <data name="cbtime5.Items6" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime5.Items7" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime5.Location" type="System.Drawing.Point, System.Drawing">
@@ -1702,7 +1693,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbtime5.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>27</value>
   </data>
   <data name="label24.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1735,7 +1726,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label24.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>28</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1768,7 +1759,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>26</value>
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1801,7 +1792,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>25</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1834,7 +1825,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>24</value>
   </data>
   <data name="label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1867,7 +1858,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>23</value>
   </data>
   <data name="richTextBox1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
@@ -1897,37 +1888,37 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;richTextBox1.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>22</value>
   </data>
-  <data name="dataGridView1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="dgv2.Location" type="System.Drawing.Point, System.Drawing">
     <value>37, 407</value>
   </data>
-  <data name="dataGridView1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="dgv2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="dataGridView1.RowHeadersWidth" type="System.Int32, mscorlib">
+  <data name="dgv2.RowHeadersWidth" type="System.Int32, mscorlib">
     <value>51</value>
   </data>
-  <data name="dataGridView1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="dgv2.Size" type="System.Drawing.Size, System.Drawing">
     <value>653, 168</value>
   </data>
-  <data name="dataGridView1.TabIndex" type="System.Int32, mscorlib">
+  <data name="dgv2.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
   </data>
-  <data name="&gt;&gt;dataGridView1.Name" xml:space="preserve">
-    <value>dataGridView1</value>
+  <data name="&gt;&gt;dgv2.Name" xml:space="preserve">
+    <value>dgv2</value>
   </data>
-  <data name="&gt;&gt;dataGridView1.Type" xml:space="preserve">
+  <data name="&gt;&gt;dgv2.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;dataGridView1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;dgv2.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;dataGridView1.ZOrder" xml:space="preserve">
-    <value>11</value>
+  <data name="&gt;&gt;dgv2.ZOrder" xml:space="preserve">
+    <value>21</value>
   </data>
   <data name="btnxoa.Location" type="System.Drawing.Point, System.Drawing">
-    <value>546, 365</value>
+    <value>459, 366</value>
   </data>
   <data name="btnxoa.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -1951,7 +1942,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnxoa.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>20</value>
   </data>
   <data name="cbdt2.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -1999,7 +1990,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbdt2.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>19</value>
   </data>
   <data name="cbdt3.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -2026,7 +2017,7 @@
     <value>Hộ GĐ vùng NT</value>
   </data>
   <data name="cbdt3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>313, 254</value>
+    <value>314, 254</value>
   </data>
   <data name="cbdt3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2047,7 +2038,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbdt3.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>18</value>
   </data>
   <data name="cbdt4.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -2095,7 +2086,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbdt4.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>17</value>
   </data>
   <data name="cbdt5.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
@@ -2143,7 +2134,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbdt5.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>16</value>
   </data>
   <data name="label25.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2179,7 +2170,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label25.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>15</value>
   </data>
   <data name="label26.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2215,7 +2206,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label26.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>14</value>
   </data>
   <data name="label27.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2251,7 +2242,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label27.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>13</value>
   </data>
   <data name="label28.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2287,7 +2278,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label28.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>12</value>
   </data>
   <data name="label29.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2299,7 +2290,7 @@
     <value>NoControl</value>
   </data>
   <data name="label29.Location" type="System.Drawing.Point, System.Drawing">
-    <value>296, 50</value>
+    <value>76, 107</value>
   </data>
   <data name="label29.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2323,33 +2314,570 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label29.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>11</value>
   </data>
-  <data name="txtthon.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbmd1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8pt, style=Bold</value>
   </data>
-  <data name="txtthon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>340, 47</value>
+  <data name="cbmd1.Items" xml:space="preserve">
+    <value>Mua trâu sinh sản</value>
   </data>
-  <data name="txtthon.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbmd1.Items1" xml:space="preserve">
+    <value>Nuôi trâu sinh sản</value>
+  </data>
+  <data name="cbmd1.Items2" xml:space="preserve">
+    <value>Mua bò sinh sản</value>
+  </data>
+  <data name="cbmd1.Items3" xml:space="preserve">
+    <value>Nuôi bò sinh sản</value>
+  </data>
+  <data name="cbmd1.Items4" xml:space="preserve">
+    <value>Mua dê sinh sản</value>
+  </data>
+  <data name="cbmd1.Items5" xml:space="preserve">
+    <value>Nuôi dê sinh sản</value>
+  </data>
+  <data name="cbmd1.Items6" xml:space="preserve">
+    <value>Nuôi lợn sinh sản</value>
+  </data>
+  <data name="cbmd1.Items7" xml:space="preserve">
+    <value>Nuôi lợn</value>
+  </data>
+  <data name="cbmd1.Items8" xml:space="preserve">
+    <value>Trồng cây quế</value>
+  </data>
+  <data name="cbmd1.Items9" xml:space="preserve">
+    <value>Trồng cây keo</value>
+  </data>
+  <data name="cbmd1.Items10" xml:space="preserve">
+    <value>Trồng cây cam</value>
+  </data>
+  <data name="cbmd1.Items11" xml:space="preserve">
+    <value>Mở rộng cửa hàng tạp hoá</value>
+  </data>
+  <data name="cbmd1.Items12" xml:space="preserve">
+    <value>Mở rộng cửa hàng ăn uống</value>
+  </data>
+  <data name="cbmd1.Items13" xml:space="preserve">
+    <value>Mở rộng cửa hàng bán quần áo</value>
+  </data>
+  <data name="cbmd1.Items14" xml:space="preserve">
+    <value>Nâng cấp, sửa chữa CTNS, CTVS          </value>
+  </data>
+  <data name="cbmd1.Items15" xml:space="preserve">
+    <value>Xây mới CTNS, CTVS                              </value>
+  </data>
+  <data name="cbmd1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>457, 179</value>
+  </data>
+  <data name="cbmd1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="txtthon.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 20</value>
+  <data name="cbmd1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 21</value>
   </data>
-  <data name="txtthon.TabIndex" type="System.Int32, mscorlib">
-    <value>65</value>
+  <data name="cbmd1.TabIndex" type="System.Int32, mscorlib">
+    <value>66</value>
   </data>
-  <data name="&gt;&gt;txtthon.Name" xml:space="preserve">
-    <value>txtthon</value>
+  <data name="&gt;&gt;cbmd1.Name" xml:space="preserve">
+    <value>cbmd1</value>
   </data>
-  <data name="&gt;&gt;txtthon.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;cbmd1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtthon.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbmd1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;txtthon.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbmd1.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="cbmd2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
+  </data>
+  <data name="cbmd2.Items" xml:space="preserve">
+    <value>Mua trâu sinh sản</value>
+  </data>
+  <data name="cbmd2.Items1" xml:space="preserve">
+    <value>Nuôi trâu sinh sản</value>
+  </data>
+  <data name="cbmd2.Items2" xml:space="preserve">
+    <value>Mua bò sinh sản</value>
+  </data>
+  <data name="cbmd2.Items3" xml:space="preserve">
+    <value>Nuôi bò sinh sản</value>
+  </data>
+  <data name="cbmd2.Items4" xml:space="preserve">
+    <value>Mua dê sinh sản</value>
+  </data>
+  <data name="cbmd2.Items5" xml:space="preserve">
+    <value>Nuôi dê sinh sản</value>
+  </data>
+  <data name="cbmd2.Items6" xml:space="preserve">
+    <value>Nuôi lợn sinh sản</value>
+  </data>
+  <data name="cbmd2.Items7" xml:space="preserve">
+    <value>Nuôi lợn</value>
+  </data>
+  <data name="cbmd2.Items8" xml:space="preserve">
+    <value>Trồng cây quế</value>
+  </data>
+  <data name="cbmd2.Items9" xml:space="preserve">
+    <value>Trồng cây keo</value>
+  </data>
+  <data name="cbmd2.Items10" xml:space="preserve">
+    <value>Trồng cây cam</value>
+  </data>
+  <data name="cbmd2.Items11" xml:space="preserve">
+    <value>Mở rộng cửa hàng tạp hoá</value>
+  </data>
+  <data name="cbmd2.Items12" xml:space="preserve">
+    <value>Mở rộng cửa hàng ăn uống</value>
+  </data>
+  <data name="cbmd2.Items13" xml:space="preserve">
+    <value>Mở rộng cửa hàng bán quần áo</value>
+  </data>
+  <data name="cbmd2.Items14" xml:space="preserve">
+    <value>Nâng cấp, sửa chữa CTNS, CTVS          </value>
+  </data>
+  <data name="cbmd2.Items15" xml:space="preserve">
+    <value>Xây mới CTNS, CTVS                              </value>
+  </data>
+  <data name="cbmd2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>457, 217</value>
+  </data>
+  <data name="cbmd2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cbmd2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 21</value>
+  </data>
+  <data name="cbmd2.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
+  </data>
+  <data name="&gt;&gt;cbmd2.Name" xml:space="preserve">
+    <value>cbmd2</value>
+  </data>
+  <data name="&gt;&gt;cbmd2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbmd2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbmd2.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="cbmd3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
+  </data>
+  <data name="cbmd3.Items" xml:space="preserve">
+    <value>Mua trâu sinh sản</value>
+  </data>
+  <data name="cbmd3.Items1" xml:space="preserve">
+    <value>Nuôi trâu sinh sản</value>
+  </data>
+  <data name="cbmd3.Items2" xml:space="preserve">
+    <value>Mua bò sinh sản</value>
+  </data>
+  <data name="cbmd3.Items3" xml:space="preserve">
+    <value>Nuôi bò sinh sản</value>
+  </data>
+  <data name="cbmd3.Items4" xml:space="preserve">
+    <value>Mua dê sinh sản</value>
+  </data>
+  <data name="cbmd3.Items5" xml:space="preserve">
+    <value>Nuôi dê sinh sản</value>
+  </data>
+  <data name="cbmd3.Items6" xml:space="preserve">
+    <value>Nuôi lợn sinh sản</value>
+  </data>
+  <data name="cbmd3.Items7" xml:space="preserve">
+    <value>Nuôi lợn</value>
+  </data>
+  <data name="cbmd3.Items8" xml:space="preserve">
+    <value>Trồng cây quế</value>
+  </data>
+  <data name="cbmd3.Items9" xml:space="preserve">
+    <value>Trồng cây keo</value>
+  </data>
+  <data name="cbmd3.Items10" xml:space="preserve">
+    <value>Trồng cây cam</value>
+  </data>
+  <data name="cbmd3.Items11" xml:space="preserve">
+    <value>Mở rộng cửa hàng tạp hoá</value>
+  </data>
+  <data name="cbmd3.Items12" xml:space="preserve">
+    <value>Mở rộng cửa hàng ăn uống</value>
+  </data>
+  <data name="cbmd3.Items13" xml:space="preserve">
+    <value>Mở rộng cửa hàng bán quần áo</value>
+  </data>
+  <data name="cbmd3.Items14" xml:space="preserve">
+    <value>Nâng cấp, sửa chữa CTNS, CTVS          </value>
+  </data>
+  <data name="cbmd3.Items15" xml:space="preserve">
+    <value>Xây mới CTNS, CTVS                              </value>
+  </data>
+  <data name="cbmd3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>457, 254</value>
+  </data>
+  <data name="cbmd3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cbmd3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 21</value>
+  </data>
+  <data name="cbmd3.TabIndex" type="System.Int32, mscorlib">
+    <value>68</value>
+  </data>
+  <data name="&gt;&gt;cbmd3.Name" xml:space="preserve">
+    <value>cbmd3</value>
+  </data>
+  <data name="&gt;&gt;cbmd3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbmd3.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbmd3.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="cbmd4.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
+  </data>
+  <data name="cbmd4.Items" xml:space="preserve">
+    <value>Mua trâu sinh sản</value>
+  </data>
+  <data name="cbmd4.Items1" xml:space="preserve">
+    <value>Nuôi trâu sinh sản</value>
+  </data>
+  <data name="cbmd4.Items2" xml:space="preserve">
+    <value>Mua bò sinh sản</value>
+  </data>
+  <data name="cbmd4.Items3" xml:space="preserve">
+    <value>Nuôi bò sinh sản</value>
+  </data>
+  <data name="cbmd4.Items4" xml:space="preserve">
+    <value>Mua dê sinh sản</value>
+  </data>
+  <data name="cbmd4.Items5" xml:space="preserve">
+    <value>Nuôi dê sinh sản</value>
+  </data>
+  <data name="cbmd4.Items6" xml:space="preserve">
+    <value>Nuôi lợn sinh sản</value>
+  </data>
+  <data name="cbmd4.Items7" xml:space="preserve">
+    <value>Nuôi lợn</value>
+  </data>
+  <data name="cbmd4.Items8" xml:space="preserve">
+    <value>Trồng cây quế</value>
+  </data>
+  <data name="cbmd4.Items9" xml:space="preserve">
+    <value>Trồng cây keo</value>
+  </data>
+  <data name="cbmd4.Items10" xml:space="preserve">
+    <value>Trồng cây cam</value>
+  </data>
+  <data name="cbmd4.Items11" xml:space="preserve">
+    <value>Mở rộng cửa hàng tạp hoá</value>
+  </data>
+  <data name="cbmd4.Items12" xml:space="preserve">
+    <value>Mở rộng cửa hàng ăn uống</value>
+  </data>
+  <data name="cbmd4.Items13" xml:space="preserve">
+    <value>Mở rộng cửa hàng bán quần áo</value>
+  </data>
+  <data name="cbmd4.Items14" xml:space="preserve">
+    <value>Nâng cấp, sửa chữa CTNS, CTVS          </value>
+  </data>
+  <data name="cbmd4.Items15" xml:space="preserve">
+    <value>Xây mới CTNS, CTVS                              </value>
+  </data>
+  <data name="cbmd4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>457, 293</value>
+  </data>
+  <data name="cbmd4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cbmd4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 21</value>
+  </data>
+  <data name="cbmd4.TabIndex" type="System.Int32, mscorlib">
+    <value>69</value>
+  </data>
+  <data name="&gt;&gt;cbmd4.Name" xml:space="preserve">
+    <value>cbmd4</value>
+  </data>
+  <data name="&gt;&gt;cbmd4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbmd4.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbmd4.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="cbmd5.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8pt, style=Bold</value>
+  </data>
+  <data name="cbmd5.Items" xml:space="preserve">
+    <value>Mua trâu sinh sản</value>
+  </data>
+  <data name="cbmd5.Items1" xml:space="preserve">
+    <value>Nuôi trâu sinh sản</value>
+  </data>
+  <data name="cbmd5.Items2" xml:space="preserve">
+    <value>Mua bò sinh sản</value>
+  </data>
+  <data name="cbmd5.Items3" xml:space="preserve">
+    <value>Nuôi bò sinh sản</value>
+  </data>
+  <data name="cbmd5.Items4" xml:space="preserve">
+    <value>Mua dê sinh sản</value>
+  </data>
+  <data name="cbmd5.Items5" xml:space="preserve">
+    <value>Nuôi dê sinh sản</value>
+  </data>
+  <data name="cbmd5.Items6" xml:space="preserve">
+    <value>Nuôi lợn sinh sản</value>
+  </data>
+  <data name="cbmd5.Items7" xml:space="preserve">
+    <value>Nuôi lợn</value>
+  </data>
+  <data name="cbmd5.Items8" xml:space="preserve">
+    <value>Trồng cây quế</value>
+  </data>
+  <data name="cbmd5.Items9" xml:space="preserve">
+    <value>Trồng cây keo</value>
+  </data>
+  <data name="cbmd5.Items10" xml:space="preserve">
+    <value>Trồng cây cam</value>
+  </data>
+  <data name="cbmd5.Items11" xml:space="preserve">
+    <value>Mở rộng cửa hàng tạp hoá</value>
+  </data>
+  <data name="cbmd5.Items12" xml:space="preserve">
+    <value>Mở rộng cửa hàng ăn uống</value>
+  </data>
+  <data name="cbmd5.Items13" xml:space="preserve">
+    <value>Mở rộng cửa hàng bán quần áo</value>
+  </data>
+  <data name="cbmd5.Items14" xml:space="preserve">
+    <value>Nâng cấp, sửa chữa CTNS, CTVS          </value>
+  </data>
+  <data name="cbmd5.Items15" xml:space="preserve">
+    <value>Xây mới CTNS, CTVS                              </value>
+  </data>
+  <data name="cbmd5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>457, 331</value>
+  </data>
+  <data name="cbmd5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="cbmd5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 21</value>
+  </data>
+  <data name="cbmd5.TabIndex" type="System.Int32, mscorlib">
+    <value>70</value>
+  </data>
+  <data name="&gt;&gt;cbmd5.Name" xml:space="preserve">
+    <value>cbmd5</value>
+  </data>
+  <data name="&gt;&gt;cbmd5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbmd5.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbmd5.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="cbpgd2.Items" xml:space="preserve">
+    <value>Xín Mần</value>
+  </data>
+  <data name="cbpgd2.Items1" xml:space="preserve">
+    <value>Hoàng Su Phì</value>
+  </data>
+  <data name="cbpgd2.Items2" xml:space="preserve">
+    <value>Vị Xuyên</value>
+  </data>
+  <data name="cbpgd2.Items3" xml:space="preserve">
+    <value>Đồng Văn</value>
+  </data>
+  <data name="cbpgd2.Items4" xml:space="preserve">
+    <value>Mèo Vạc</value>
+  </data>
+  <data name="cbpgd2.Items5" xml:space="preserve">
+    <value>Hà Giang</value>
+  </data>
+  <data name="cbpgd2.Items6" xml:space="preserve">
+    <value>Bắc Mê</value>
+  </data>
+  <data name="cbpgd2.Items7" xml:space="preserve">
+    <value>Quản Bạ</value>
+  </data>
+  <data name="cbpgd2.Items8" xml:space="preserve">
+    <value>Yên Minh</value>
+  </data>
+  <data name="cbpgd2.Items9" xml:space="preserve">
+    <value>Bắc Quang</value>
+  </data>
+  <data name="cbpgd2.Items10" xml:space="preserve">
+    <value>Quang Bình</value>
+  </data>
+  <data name="cbpgd2.Items11" xml:space="preserve">
+    <value>Na Hang</value>
+  </data>
+  <data name="cbpgd2.Items12" xml:space="preserve">
+    <value>Chiêm Hoá</value>
+  </data>
+  <data name="cbpgd2.Items13" xml:space="preserve">
+    <value>Yên Sơn</value>
+  </data>
+  <data name="cbpgd2.Items14" xml:space="preserve">
+    <value>Sơn Dương</value>
+  </data>
+  <data name="cbpgd2.Items15" xml:space="preserve">
+    <value>Lâm Bình</value>
+  </data>
+  <data name="cbpgd2.Items16" xml:space="preserve">
+    <value>Hàm Yên</value>
+  </data>
+  <data name="cbpgd2.Items17" xml:space="preserve">
+    <value>Hội Sở tỉnh</value>
+  </data>
+  <data name="cbpgd2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>130, 46</value>
+  </data>
+  <data name="cbpgd2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 21</value>
+  </data>
+  <data name="cbpgd2.TabIndex" type="System.Int32, mscorlib">
+    <value>71</value>
+  </data>
+  <data name="&gt;&gt;cbpgd2.Name" xml:space="preserve">
+    <value>cbpgd2</value>
+  </data>
+  <data name="&gt;&gt;cbpgd2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbpgd2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbpgd2.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="label30.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label30.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 50</value>
+  </data>
+  <data name="label30.Size" type="System.Drawing.Size, System.Drawing">
+    <value>103, 13</value>
+  </data>
+  <data name="label30.TabIndex" type="System.Int32, mscorlib">
+    <value>72</value>
+  </data>
+  <data name="label30.Text" xml:space="preserve">
+    <value>Phòng giao dịch:</value>
+  </data>
+  <data name="&gt;&gt;label30.Name" xml:space="preserve">
+    <value>label30</value>
+  </data>
+  <data name="&gt;&gt;label30.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label30.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label30.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="cbXa2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>130, 75</value>
+  </data>
+  <data name="cbXa2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 21</value>
+  </data>
+  <data name="cbXa2.TabIndex" type="System.Int32, mscorlib">
+    <value>73</value>
+  </data>
+  <data name="&gt;&gt;cbXa2.Name" xml:space="preserve">
+    <value>cbXa2</value>
+  </data>
+  <data name="&gt;&gt;cbXa2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbXa2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbXa2.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="cbTotruong.Location" type="System.Drawing.Point, System.Drawing">
+    <value>130, 133</value>
+  </data>
+  <data name="cbTotruong.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 21</value>
+  </data>
+  <data name="cbTotruong.TabIndex" type="System.Int32, mscorlib">
+    <value>74</value>
+  </data>
+  <data name="&gt;&gt;cbTotruong.Name" xml:space="preserve">
+    <value>cbTotruong</value>
+  </data>
+  <data name="&gt;&gt;cbTotruong.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbTotruong.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbTotruong.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="cbThon2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>130, 106</value>
+  </data>
+  <data name="cbThon2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 21</value>
+  </data>
+  <data name="cbThon2.TabIndex" type="System.Int32, mscorlib">
+    <value>75</value>
+  </data>
+  <data name="&gt;&gt;cbThon2.Name" xml:space="preserve">
+    <value>cbThon2</value>
+  </data>
+  <data name="&gt;&gt;cbThon2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbThon2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cbThon2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btntaoto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>69, 366</value>
+  </data>
+  <data name="btntaoto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 32</value>
+  </data>
+  <data name="btntaoto.TabIndex" type="System.Int32, mscorlib">
+    <value>76</value>
+  </data>
+  <data name="btntaoto.Text" xml:space="preserve">
+    <value>Tạo tổ mới</value>
+  </data>
+  <data name="&gt;&gt;btntaoto.Name" xml:space="preserve">
+    <value>btntaoto</value>
+  </data>
+  <data name="&gt;&gt;btntaoto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btntaoto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btntaoto.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

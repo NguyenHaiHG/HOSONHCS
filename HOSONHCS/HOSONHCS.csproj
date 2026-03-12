@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToData.cs" />
     <Compile Include="XinManEditor.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -135,13 +136,22 @@
     <EmbeddedResource Include="03 DS GROUP.docx" />
     <EmbeddedResource Include="01TGTV.docx" />
     <None Include="CCCD12_GUIDE.md" />
+    <None Include="CHANGELOG_BO_CHECKBOX_DATENDHCCCD.md" />
     <None Include="CHANGELOG_CBDOITUONG_THOIHANCCCD.md" />
     <None Include="CHANGELOG_DATEFORMAT_SDT.md" />
     <None Include="CHANGELOG_FORM2.md" />
+    <None Include="CHANGELOG_FORM2_COMBOBOX.md" />
     <None Include="CODE_ANALYSIS_REPORT.md" />
     <None Include="DUAL_MARQUEE.md" />
+    <None Include="FIX_CBMUCDICH_NO_TITLECASE.md" />
+    <None Include="FIX_DATEDH_DATELAPHS_FORMAT.md" />
+    <None Include="FIX_HGD_CU_TRU_TAI_VNT.md" />
     <None Include="HOSONHCS_TemporaryKey.pfx" />
     <None Include="hsp.json" />
+    <None Include="HUONG_DAN_CHINH_SUA_TO.md" />
+    <None Include="HUONG_DAN_CHON_CHUONG_TRINH_DOI_TUONG.md" />
+    <None Include="HUONG_DAN_LIEN_KET_THON_TOTRUONG.md" />
+    <None Include="HUONG_DAN_LUU_TRU_TO.md" />
     <None Include="MARQUEE_FIX.md" />
     <None Include="MARQUEE_FORM_TITLE.md" />
     <None Include="MARQUEE_HEADER_FEATURE.md" />
@@ -159,6 +169,7 @@
     <Content Include="xinman.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="REPORT_DATEDH_DATELAPHS.md" />
     <None Include="UI_BORDERLESS_UPDATE.md" />
     <None Include="VIET_HOA_COMPLETE.md" />
     <None Include="vixuyen.json" />

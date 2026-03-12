@@ -191,17 +191,25 @@ namespace HOSONHCS
             // Mặc định unchecked = không có giá trị
             try 
             {
+                // dateLaphs: BẮT BUỘC - BỎ checkbox
+                if (dateLaphs != null)
+                {
+                    dateLaphs.ShowCheckBox = false;
+                    dateLaphs.Format = DateTimePickerFormat.Custom;
+                    dateLaphs.CustomFormat = "dd/MM/yyyy";
+                }
+
                 if (dateDH != null) 
                 { 
                     dateDH.ShowCheckBox = true; 
                     dateDH.Checked = false;  // Ngày đến hạn: optional
                 }
+                // datendhcccd: BỎ checkbox (bắt buộc nhập)
                 if (datendhcccd != null) 
                 { 
-                    datendhcccd.ShowCheckBox = true; 
-                    datendhcccd.Checked = false;  // Thời hạn CCCD: optional
+                    datendhcccd.ShowCheckBox = false; 
                 }
-                if (datentk1 != null) 
+                if (datentk1 != null)
                 { 
                     datentk1.ShowCheckBox = true; 
                     datentk1.Checked = false;  // Ngày sinh NTK 1: optional
@@ -540,10 +548,11 @@ namespace HOSONHCS
                         tempFilesToDelete.Add(templatePath);
 
                     var shortName = Path.GetFileNameWithoutExtension(templateName).Replace(" ", "_");
-                    var ts = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                    var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + "_" + ts + ".docx");
+                    // Bỏ timestamp để ghi đè file cũ thay vì tạo file mới
+                    var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + ".docx");
 
-                    File.Copy(templatePath, destDoc, false);
+                    // Ghi đè nếu file đã tồn tại
+                    File.Copy(templatePath, destDoc, true);
 
                     if (!IsDocxFile(destDoc))
                     {
@@ -615,7 +624,7 @@ namespace HOSONHCS
                 { "{{doituong1}}", c.Doituong1 ?? "" },
                 { "{{doituong2}}", c.Doituong2 ?? "" },
                 { "{{doituong}}", !string.IsNullOrWhiteSpace(c.Doituong1) ? c.Doituong1 : (c.Doituong2 ?? "") },
-                { "{{ngaylaphs}}", c.Ngaylaphs == DateTime.MinValue ? "" : c.Ngaylaphs.ToString("dd/MM/yyyy") },
+                { "{{ngaylaphs}}", FormatDateToNgayThangNam(c.Ngaylaphs) },
                 { "{{ngaysinh}}", c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.ToString("dd/MM/yyyy") },
                 { "{{phanky}}", c.Phanky },
                 { "{{pgd}}", c.PGD },
@@ -955,10 +964,11 @@ namespace HOSONHCS
                 }
 
                 var shortName = Path.GetFileNameWithoutExtension(templateFileName).Replace(" ", "_");
-                var ts = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + "_" + ts + ".docx");
+                // Bỏ timestamp để ghi đè file cũ thay vì tạo file mới
+                var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + ".docx");
 
-                File.Copy(templatePath, destDoc, false);
+                // Ghi đè nếu file đã tồn tại
+                File.Copy(templatePath, destDoc, true);
 
                 if (!IsDocxFile(destDoc))
                 {
@@ -1736,15 +1746,14 @@ namespace HOSONHCS
 
          private async void BtnSave_Click(object sender, EventArgs e)
          {
-             var customer = ReadForm();
-             if (string.IsNullOrWhiteSpace(customer.Hoten))
-             {
-                 MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                 return;
-             }
-
              try
              {
+                 var customer = ReadForm();
+                 if (string.IsNullOrWhiteSpace(customer.Hoten))
+                 {
+                     MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                     return;
+                 }
                  string existingFile = null;
                  if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
                  {
@@ -1791,15 +1800,14 @@ namespace HOSONHCS
 
          private async void Btn03_Click(object sender, EventArgs e)
          {
-             var customer = ReadForm();
-             if (string.IsNullOrWhiteSpace(customer.Hoten))
-             {
-                 MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                 return;
-             }
-
              try
              {
+                 var customer = ReadForm();
+                 if (string.IsNullOrWhiteSpace(customer.Hoten))
+                 {
+                     MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                     return;
+                 }
                  string existingFile = null;
                  if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
                  {
@@ -1833,15 +1841,14 @@ namespace HOSONHCS
 
          private async void BtnGUQ_Click(object sender, EventArgs e)
          {
-             var customer = ReadForm();
-             if (string.IsNullOrWhiteSpace(customer.Hoten))
-             {
-                 MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                 return;
-             }
-
              try
              {
+                 var customer = ReadForm();
+                 if (string.IsNullOrWhiteSpace(customer.Hoten))
+                 {
+                     MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                     return;
+                 }
                  string existingFile = null;
                  if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
                  {
@@ -1875,15 +1882,14 @@ namespace HOSONHCS
 
          private async void Btn01tgtv_Click(object sender, EventArgs e)
          {
-             var customer = ReadForm();
-             if (string.IsNullOrWhiteSpace(customer.Hoten))
-             {
-                 MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                 return;
-             }
-
              try
              {
+                 var customer = ReadForm();
+                 if (string.IsNullOrWhiteSpace(customer.Hoten))
+                 {
+                     MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                     return;
+                 }
                  string existingFile = null;
                  if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
                  {
@@ -2038,17 +2044,23 @@ namespace HOSONHCS
              if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
 
              DateTime ngaydenhan = DateTime.MinValue;
-             if (dateDH != null && dateDH.Checked && dateDH.Format != DateTimePickerFormat.Custom)
+             if (dateDH != null && dateDH.Checked)
              {
                  // Ngày đến hạn KHÔNG validate ngày tương lai - cho phép nhập bất kỳ ngày nào
                  ngaydenhan = dateDH.Value.Date;
              }
 
              DateTime thoihancccd = DateTime.MinValue;
-             if (datendhcccd != null && datendhcccd.Checked)
+             if (datendhcccd != null)
              {
-                 // Thời hạn CCCD: cho phép ngày tương lai, KHÔNG validate
+                 // Thời hạn CCCD: phải lớn hơn hoặc bằng ngày hiện tại
                  thoihancccd = datendhcccd.Value.Date;
+
+                 // VALIDATION: Không cho phép tạo hồ sơ nếu CCCD đã hết hạn
+                 if (thoihancccd < DateTime.Today)
+                 {
+                     throw new Exception($"CCCD đã hết hạn ngày {thoihancccd:dd/MM/yyyy}.\n\nKhông thể tạo hồ sơ với CCCD hết hạn.\n\nVui lòng cập nhật CCCD mới.");
+                 }
              }
 
              return new Customer
@@ -2068,18 +2080,18 @@ namespace HOSONHCS
                  PGD = cbPGD.Text,
                  Chuongtrinh = cbChuongtrinh.Text,
                  Vtc = (cbVtc != null ? cbVtc.Text : ""),
-                 Phuongan = ToTitleCase(txtPhuongan != null ? txtPhuongan.Text : ""),
+                 Phuongan = (cbPhuongan != null ? cbPhuongan.Text : ""),
                  Thoihanvay = cbThoihanvay.Text,
                  Phanky = (cbPhanky != null ? cbPhanky.Text : ""),
                  Sotien = cbSotien.Text,
                  Sotien1 = cbSotien1.Text,
                  Sotien2 = cbSotien2.Text,
-                 Soluong1 = txtDoituong1.Text,
-                 Soluong2 = txtDoituong2.Text,
+                 Soluong1 = (cbDoituong1 != null ? cbDoituong1.Text : ""),
+                 Soluong2 = (cbDoituong2 != null ? cbDoituong2.Text : ""),
                  Sotientong = "",
                  Sotienchu = "",
-                 Mucdich1 = ToTitleCase(txtMucdich1 != null ? txtMucdich1.Text : ""),
-                 Mucdich2 = ToTitleCase(txtMucdich2 != null ? txtMucdich2.Text : ""),
+                 Mucdich1 = (cbmucdich1 != null ? cbmucdich1.Text : ""),
+                 Mucdich2 = (cbmucdich2 != null ? cbmucdich2.Text : ""),
                  Doituong1 = (cbDoituong != null ? cbDoituong.Text : ""),
                  Doituong2 = "",
                  Ngaylaphs = ngaylaphs,
@@ -2147,7 +2159,7 @@ namespace HOSONHCS
              // Thông tin chương trình và khoản vay
              cbChuongtrinh.Text = c.Chuongtrinh ?? "";
              try { if (cbVtc != null) cbVtc.Text = c.Vtc ?? ""; } catch { }
-             try { if (txtPhuongan != null) txtPhuongan.Text = c.Phuongan ?? ""; } catch { }
+             try { if (cbPhuongan != null) cbPhuongan.Text = c.Phuongan ?? ""; } catch { }
              cbThoihanvay.Text = c.Thoihanvay ?? "";
              try { if (cbPhanky != null) cbPhanky.Text = c.Phanky ?? ""; } catch { }
 
@@ -2157,11 +2169,11 @@ namespace HOSONHCS
              cbSotien2.Text = c.Sotien2 ?? "";
 
              // Mục đích và Đối tượng
-             try { if (txtMucdich1 != null) txtMucdich1.Text = c.Mucdich1 ?? ""; } catch { }
-             try { if (txtMucdich2 != null) txtMucdich2.Text = c.Mucdich2 ?? ""; } catch { }
+             try { if (cbmucdich1 != null) cbmucdich1.Text = c.Mucdich1 ?? ""; } catch { }
+             try { if (cbmucdich2 != null) cbmucdich2.Text = c.Mucdich2 ?? ""; } catch { }
              try { if (cbDoituong != null) cbDoituong.Text = c.Doituong1 ?? ""; } catch { }
-             try { if (txtDoituong1 != null) txtDoituong1.Text = c.Soluong1 ?? ""; } catch { }
-             try { if (txtDoituong2 != null) txtDoituong2.Text = c.Soluong2 ?? ""; } catch { }
+             try { if (cbDoituong1 != null) cbDoituong1.Text = c.Soluong1 ?? ""; } catch { }
+             try { if (cbDoituong2 != null) cbDoituong2.Text = c.Soluong2 ?? ""; } catch { }
 
              // Các ngày - đảm bảo không có ngày tương lai
              var ngaylaphs = c.Ngaylaphs == DateTime.MinValue ? DateTime.Today : c.Ngaylaphs;
@@ -2191,10 +2203,13 @@ namespace HOSONHCS
              { 
                  if (datendhcccd != null) 
                  {
-                     datendhcccd.ShowCheckBox = true;
+                     // Bỏ checkbox - datendhcccd bắt buộc nhập
                      if (c.Thoihancccd == DateTime.MinValue)
                      {
-                         datendhcccd.Checked = false;
+                         // Nếu chưa có dữ liệu, set ngày mặc định
+                         datendhcccd.Format = DateTimePickerFormat.Custom;
+                         datendhcccd.CustomFormat = "dd/MM/yyyy";
+                         datendhcccd.Value = DateTime.Now;
                      }
                      else
                      {
@@ -2202,7 +2217,6 @@ namespace HOSONHCS
                          var thoihancccd = c.Thoihancccd;
                          datendhcccd.Format = DateTimePickerFormat.Custom;
                          datendhcccd.CustomFormat = "dd/MM/yyyy";
-                         datendhcccd.Checked = true;
                          datendhcccd.Value = thoihancccd;
                      }
                  }
@@ -2306,7 +2320,7 @@ namespace HOSONHCS
              try { cbNoicap.Text = ""; } catch { } try { cbXa.Items.Clear(); cbThon.Items.Clear(); cbHoi.Items.Clear(); cbTo.Items.Clear(); } catch { }
              try { cbXa.Text = ""; cbThon.Text = ""; cbHoi.Text = ""; cbTo.Text = ""; } catch { }
              try { cbChuongtrinh.Text = ""; cbThoihanvay.Text = ""; cbSotien.Text = ""; cbSotien1.Text = ""; cbSotien2.Text = ""; } catch { }
-             try { txtMucdich1.Clear(); txtMucdich2.Clear(); } catch { }
+             try { if (cbmucdich1 != null) cbmucdich1.Text = ""; if (cbmucdich2 != null) cbmucdich2.Text = ""; } catch { }
              try { dateLaphs.Value = DateTime.Today; cbPGD.Text = ""; editingIndex = -1; ResetVisibilityToDefault(); } catch { }
 
              // Reset cbDoituong về trạng thái enabled
@@ -2565,6 +2579,7 @@ namespace HOSONHCS
                 // 1. Hộ nghèo → Hộ nghèo
                 if (normalized.Contains("ho nghe") && !normalized.Contains("can") && !normalized.Contains("moi thoat"))
                 {
+                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;  // Reset về mặc định
                     cbDoituong.Enabled = false;
                     cbDoituong.Text = "Hộ nghèo";
                     return;
@@ -2573,6 +2588,7 @@ namespace HOSONHCS
                 // 2. Hộ cận nghèo → Hộ cận nghèo
                 if (normalized.Contains("ho can nghe"))
                 {
+                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;  // Reset về mặc định
                     cbDoituong.Enabled = false;
                     cbDoituong.Text = "Hộ cận nghèo";
                     return;
@@ -2581,49 +2597,56 @@ namespace HOSONHCS
                 // 3. Hộ mới thoát nghèo → Hộ mới thoát nghèo
                 if (normalized.Contains("ho moi thoat nghe"))
                 {
+                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;  // Reset về mặc định
                     cbDoituong.Enabled = false;
                     cbDoituong.Text = "Hộ mới thoát nghèo";
                     return;
                 }
 
                 // 4. Hộ gia đình Sản xuất kinh doanh tại vùng khó khăn → Hộ GĐ SXKD VKK
-                if ((normalized.Contains("ho gia dinh") && normalized.Contains("san xuat kinh doanh") && normalized.Contains("vung kho khan")) ||
-                    normalized.Contains("sxkd"))
+                if (normalized.Contains("sxkd") ||
+                    (normalized.Contains("san xuat kinh doanh") && normalized.Contains("vung kho khan")) ||
+                    (normalized.Contains("ho gia dinh") && normalized.Contains("san xuat kinh doanh") && normalized.Contains("vung kho khan")))
                 {
+                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;  // Reset về mặc định
                     cbDoituong.Enabled = false;
                     cbDoituong.Text = "Hộ GĐ SXKD VKK";
                     return;
                 }
 
-                // 5. Giải quyết việc làm duy trì và mở rộng việc làm → Cho phép chọn 2 loại
-                if (normalized.Contains("giai quyet viec lam") ||
-                    normalized.Contains("gqvl") ||
-                    (normalized.Contains("duy tri") && normalized.Contains("mo rong") && normalized.Contains("viec lam")))
-                {
-                    cbDoituong.Enabled = true;  // MỞ KHÓA để cho phép chọn
-                    // Đảm bảo có 2 option trong list
-                    if (!cbDoituong.Items.Contains("Người lao động"))
-                        cbDoituong.Items.Add("Người lao động");
-                    if (!cbDoituong.Items.Contains("NLĐ là người DTTS"))
-                        cbDoituong.Items.Add("NLĐ là người DTTS");
-
-                    // Nếu chưa chọn, mặc định chọn option đầu tiên
-                    if (string.IsNullOrWhiteSpace(cbDoituong.Text))
-                        cbDoituong.Text = "Người lao động";
-                    return;
-                }
-
-                // 6. Cấp nước sạch và vệ sinh môi trường nông thôn → Hộ GĐ vùng NT
+                // 5. Cấp nước sạch và vệ sinh môi trường nông thôn → Hộ GĐ vùng NT
                 if (normalized.Contains("cap nuoc sach") ||
                     normalized.Contains("ve sinh moi truong") ||
                     (normalized.Contains("nuoc sach") && normalized.Contains("nong thon")))
                 {
+                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;  // Reset về mặc định
                     cbDoituong.Enabled = false;
-                    cbDoituong.Text = "Hộ GĐ vùng NT";
+                    cbDoituong.Text = "HGĐ cư trú tại VNT";
+                    return;
+                }
+
+                // 6. Hỗ trợ tạo việc làm duy trì và mở rộng việc làm → Người lao động hoặc NLĐ là người DTTS
+                if (normalized.Contains("ho tro tao viec lam") ||
+                    normalized.Contains("gqvl") ||
+                    (normalized.Contains("duy tri") && normalized.Contains("mo rong") && normalized.Contains("viec lam")))
+                {
+                    cbDoituong.Enabled = true;  // MỞ để cho phép chọn
+                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDownList;  // KHOÁ không cho nhập text, chỉ cho chọn từ dropdown
+
+                    // Clear list và chỉ thêm 2 option được phép
+                    cbDoituong.Items.Clear();
+                    cbDoituong.Items.Add("Người lao động");
+                    cbDoituong.Items.Add("NLĐ là người DTTS");
+
+                    // Nếu chưa chọn hoặc giá trị không hợp lệ, mặc định chọn "Người lao động"
+                    if (string.IsNullOrWhiteSpace(cbDoituong.Text) || 
+                        (!cbDoituong.Text.Equals("Người lao động") && !cbDoituong.Text.Equals("NLĐ là người DTTS")))
+                        cbDoituong.Text = "Người lao động";
                     return;
                 }
 
                 // Mặc định: MỞ KHÓA nếu không match bất kỳ rule nào
+                cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;  // Reset về mặc định
                 cbDoituong.Enabled = true;
             }
             catch { }
@@ -3452,6 +3475,16 @@ namespace HOSONHCS
             catch { }
         }
 
+        /// <summary>
+        /// Format DateTime thành chuỗi "Ngày...tháng...năm..."
+        /// Ví dụ: 15/03/2024 → "Ngày 15 tháng 03 năm 2024"
+        /// </summary>
+        private string FormatDateToNgayThangNam(DateTime date)
+        {
+            if (date == DateTime.MinValue) return "";
+            return $"Ngày {date.Day:D2} tháng {date.Month:D2} năm {date.Year}";
+        }
+
         private IEnumerable<string> GetTemplateNamesForCustomer(Customer c, bool include03)
         {
             var list = new List<string>();
@@ -3506,9 +3539,9 @@ namespace HOSONHCS
                 if (n.Contains("gqvl") || n.Contains("gq vl") || n.Contains("gq-vl") || n.Contains("gq_vl"))
                     return true;
 
-                // Kiểm tra cụm từ đầy đủ "Giải quyết việc làm duy trì và mở rộng việc làm"
-                if (n.Contains("giai quyet viec lam duy tri") ||
-                    n.Contains("giai quyet viec lam") && n.Contains("duy tri") && n.Contains("mo rong"))
+                // Kiểm tra cụm từ đầy đủ "Hỗ trợ tạo việc làm duy trì và mở rộng việc làm"
+                if (n.Contains("ho tro tao viec lam duy tri") ||
+                    n.Contains("ho tro tao viec lam") && n.Contains("duy tri") && n.Contains("mo rong"))
                     return true;
             }
             catch { }
@@ -3560,15 +3593,14 @@ namespace HOSONHCS
         // ========== NÚT TẠO TOÀN BỘ HỒ SƠ ==========
         private async void Btnall_Click(object sender, EventArgs e)
         {
-            var customer = ReadForm();
-            if (string.IsNullOrWhiteSpace(customer.Hoten))
-            {
-                MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             try
             {
+                var customer = ReadForm();
+                if (string.IsNullOrWhiteSpace(customer.Hoten))
+                {
+                    MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 string existingFile = null;
                 if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
                 {
@@ -3697,6 +3729,11 @@ namespace HOSONHCS
             {
                 System.Diagnostics.Debug.WriteLine($"Lỗi khi mở files: {ex.Message}");
             }
+        }
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+
         }
     }
 
