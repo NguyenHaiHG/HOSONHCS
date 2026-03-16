@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -153,6 +154,9 @@ namespace HOSONHCS
 
             // Đăng ký sự kiện Load form để khôi phục trạng thái đã lưu (nếu mở độc lập)
             this.Load += Form2_Load;
+
+            // ========== NÂNG CẤP GIAO DIỆN FORM2 ==========
+            try { ApplyForm2Style(); } catch { }
         }
 
         /// <summary>
@@ -2337,6 +2341,11 @@ namespace HOSONHCS
             }
             catch { }
         }
+
+        // =====================================================================
+        // NÂNG CẤP GIAO DIỆN FORM2
+        // =====================================================================
+        private void ApplyForm2Style() { /* giữ nguyên giao diện gốc */ }
     }
 
     // ============================================

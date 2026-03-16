@@ -302,20 +302,8 @@ namespace HOSONHCS
             }
             catch { }
 
-            // ========== KHỞI TẠO TAB GHI CHÚ (TABPAGE5) ==========
-            try { InitializeGhiChuTab(); } catch { }
-
-            // ========== KHỞI TẠO CHATBOT (TABPAGE2) ==========
-            try { InitializeChatbotTab(); } catch { }
-
-            // ========== KHỞI TẠO TAB GIỚI THIỆU (TABPAGE6) ==========
-            try { InitializeTab6(); } catch { }
-
             // Bind dữ liệu vào DataGridView
             BindGrid();
-
-            // ========== NÂNG CẤP GIAO DIỆN TOÀN APP ==========
-            try { ApplyModernStyle(); } catch { }
 
             // ========== KIỂM TRA CẬP NHẬT TỰ ĐỘNG KHI KHỞI ĐỘNG ==========
             try
@@ -707,7 +695,7 @@ namespace HOSONHCS
                 { "{{pgd}}", c.PGD },
                 { "{{thoihancccd}}", c.Thoihancccd == DateTime.MinValue ? "" : c.Thoihancccd.ToString("dd/MM/yyyy") },
                 { "{{khau}}", c.Nhankhau ?? "" },
-                { "{{ld}}", (CountNguoiThuaKe(c) + 1).ToString() },
+                { "{{ld}}", CountNguoiThuaKe(c).ToString() },
 
                 // GUQ
                 { "{{ntk1}}", c.Ntk1 ?? "" },

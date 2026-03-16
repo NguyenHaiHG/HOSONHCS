@@ -117,22 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="richTextBox1.Text" xml:space="preserve">
-    <value>Hướng dẫn:
-
-1, Chức năng tạo khách hàng: Sau khi gọi khách hàng cũ ra để sửa thành 1 khách hàng mới thì bấm nút Tạo khách hàng để lưu thông tin khách hàng mới,
-tính năng này dùng để tạo 1 khách hàng khác cùng thôn, tổ, tránh việc phải tạo lại từ đầu tất cả khá mất thời gian.
-
-2, Dữ liệu sau khi tạo sẽ nằm ở Folder ngoài Desktop, sau khi tạo nên coppy vào nơi khác phân vùng ổ C trên máy để tránh mất dữ liệu đã tạo về sau;
-
-3, Tính năng tại tab chỉnh sửa dùng để sửa lại thông tin Phòng giao dịch khi có sự thay đổi của Hội - Thôn - Tổ,
-đối với tính năng này sau khi đăng nhập sẽ cho phép chỉnh sửa và lưu thông tin vào phần mềm.
-
-4, Tính năng tạo 03 theo nhóm đã sử dụng được, tuy nhiên tác giả đang tiếp tục hoàn thiện ở phiên bản sau;
-
-5, Đối với 1 số ô ngày tháng năm có dấu tick ở đằng trước, nếu không sử dụng, bỏ tick, nếu sử dụng thì tick vào phần mềm sẽ tự động hiển thị điền vào mẫu.
-
-6, Tính năng Cập nhật sẽ có ở phiên bản 6.0.0</value>
+  <data name="richTextBox4.Text" xml:space="preserve">
+    <value>Lưu ý: Phần mềm chỉ nhằm mục đích hỗ trợ Hội, tổ, cán bộ ngân hàng nhập liệu nhanh hơn, hạn chế sai xót không phải để làm thay toàn bộ các khâu lập hồ sơ, các anh chị sử dụng phần mềm chịu trách nhiệm về nội dung nhập vào, đảm bảo khớp đúng, đủ các thông tin theo quy đinh trước khi in ra, trình ký.</value>
   </data>
   <metadata name="Menh_gia.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -143,6 +129,28 @@ tính năng này dùng để tạo 1 khách hàng khác cùng thôn, tổ, trán
   <metadata name="Thanh_tien.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="richTextBox5.Text" xml:space="preserve">
+    <value>GIỚI THIỆU:
+
+Phần mềm Tạo Hồ Sơ Vay Vốn được xây dựng nhằm hỗ trợ Hội, tổ, cán bộ trong việc nhập liệu, kiểm tra và quản lý hồ sơ vay vốn nhanh chóng, chính xác và thuận tiện hơn trong quá trình làm việc.
+
+Phần mềm giúp chuẩn hóa dữ liệu hồ sơ, giảm sai sót khi nhập liệu, đồng thời hỗ trợ tạo bảng kê và xuất dữ liệu theo mẫu phục vụ công tác nghiệp vụ.
+
+Developer: Nguyễn Xuân Hải
+Thiết kế dữ liệu: Nguyễn Văn Đức
+
+Chức năng chính:
+• Nhập và quản lý thông tin hồ sơ vay vốn
+• Kiểm tra và chuẩn hóa dữ liệu tự động
+• Tạo bảng kê và xuất dữ liệu theo mẫu quy định
+• Lưu trữ và tra cứu hồ sơ nhanh chóng
+
+Cập nhật hệ thống:
+Từ phiên bản 6.0.0 trở đi, phần mềm hỗ trợ tự động kiểm tra và cập nhật phiên bản mới qua Internet nhằm đảm bảo hệ thống luôn được cải tiến và nâng cấp.
+
+Lưu ý:
+Phần mềm được xây dựng phục vụ công việc nội bộ, đề nghị người sử dụng bảo mật thông tin dữ liệu trong quá trình sử dụng.</value>
+  </data>
   <metadata name="marqueeTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

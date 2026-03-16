@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>Updater</RootNamespace>
+    <AssemblyName>Updater</AssemblyName>
+    <Platforms>x86;x64</Platforms>
+  </PropertyGroup>
+   <ItemGroup>
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+</Project>
