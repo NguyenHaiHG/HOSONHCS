@@ -17,15 +17,6 @@
       "startDate": "2026-09-02",
       "endDate": "2026-09-02",
       "enabled": true
-    },
-    {
-      "id": "example_active",
-      "title": "Ví Dụ Thông Báo (Đang Bật)",
-      "content": "Đây là ví dụ thông báo đang được bật.\n\nĐể bật/tắt thông báo, chỉnh trường \"enabled\" trong file holiday_notice.json trên GitHub.\n\nĐể thay đổi nội dung, sửa trực tiếp trên GitHub → Commit → người dùng sẽ thấy ngay khi mở app!",
-      "emoji": "📢",
-      "startDate": "2025-01-01",
-      "endDate": "2099-12-31",
-      "enabled": false
     }
   ]
 }
