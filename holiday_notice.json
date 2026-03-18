@@ -25,7 +25,7 @@
       "emoji": "📢",
       "startDate": "2025-01-01",
       "endDate": "2099-12-31",
-      "enabled": false
+      "enabled": true
     }
   ]
 }
