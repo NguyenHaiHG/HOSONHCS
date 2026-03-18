@@ -7,7 +7,7 @@
       "emoji": "🎊",
       "startDate": "2026-03-18",
       "endDate": "2026-03-18",
-      "enabled": false
+      "enabled": true
     },
     {
       "id": "quockhanhvietnam2026",
@@ -16,7 +16,7 @@
       "emoji": "🇻🇳",
       "startDate": "2026-09-02",
       "endDate": "2026-09-02",
-      "enabled": false
+      "enabled": true
     },
     {
       "id": "example_active",
