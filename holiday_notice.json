@@ -1,0 +1,31 @@
+{
+  "notices": [
+    {
+      "id": "tet2026",
+      "title": "Chúc Mừng Năm Mới Bính Ngọ 2026!",
+      "content": "Kính gửi toàn thể cán bộ và nhân viên,\n\nNhân dịp Tết Nguyên Đán Bính Ngọ 2026, Tác giả xin gửi lời chúc mừng năm mới tốt đẹp nhất đến toàn thể anh chị em!\n\n🌟 Chúc mọi người năm mới AN KHANG - THỊNH VƯỢNG - VẠN SỰ NHƯ Ý!\n\nTrân trọng,\n",
+      "emoji": "🎊",
+      "startDate": "2026-03-18",
+      "endDate": "2026-03-18",
+      "enabled": false
+    },
+    {
+      "id": "quockhanhvietnam2026",
+      "title": "Chúc Mừng Quốc Khánh 2/9!",
+      "content": "Nhân kỷ niệm 81 năm Ngày Quốc khánh nước CHXHCN Việt Nam (2/9/1945 - 2/9/2026),\n\nTôi trân trọng gửi lời chúc mừng đến toàn thể cán bộ Hội, các tổ TK&VV.\n\n🇻🇳 Chúc mừng ngày Quốc Khánh!\n\nTrân trọng,\n",
+      "emoji": "🇻🇳",
+      "startDate": "2026-09-02",
+      "endDate": "2026-09-02",
+      "enabled": false
+    },
+    {
+      "id": "example_active",
+      "title": "Ví Dụ Thông Báo (Đang Bật)",
+      "content": "Đây là ví dụ thông báo đang được bật.\n\nĐể bật/tắt thông báo, chỉnh trường \"enabled\" trong file holiday_notice.json trên GitHub.\n\nĐể thay đổi nội dung, sửa trực tiếp trên GitHub → Commit → người dùng sẽ thấy ngay khi mở app!",
+      "emoji": "📢",
+      "startDate": "2025-01-01",
+      "endDate": "2099-12-31",
+      "enabled": false
+    }
+  ]
+}
