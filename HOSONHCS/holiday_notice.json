@@ -1,0 +1,22 @@
+{
+  "notices": [
+    {
+      "id": "2026",
+      "title": "Chúc Mừng Năm Mới Bính Ngọ 2026!",
+      "content": "Kính gửi toàn thể cán bộ và nhân viên,\n\nNhân dịp Tết Nguyên Đán Bính Ngọ 2026, Tác giả xin gửi lời chúc mừng năm mới tốt đẹp nhất đến toàn thể anh chị em!\n\n🌟 Chúc mọi người năm mới AN KHANG - THỊNH VƯỢNG - VẠN SỰ NHƯ Ý!\n\nTrân trọng,\n",
+      "emoji": "🎊",
+      "startDate": "2026-03-18",
+      "endDate": "2026-03-18",
+      "enabled": true
+    },
+    {
+      "id": "quockhanhvietnam2026",
+      "title": "Chúc Mừng Quốc Khánh 2/9!",
+      "content": "Nhân kỷ niệm 81 năm Ngày Quốc khánh nước CHXHCN Việt Nam (2/9/1945 - 2/9/2026),\n\nTôi trân trọng gửi lời chúc mừng đến toàn thể cán bộ Hội, các tổ TK&VV.\n\n🇻🇳 Chúc mừng ngày Quốc Khánh!\n\nTrân trọng,\n",
+      "emoji": "🇻🇳",
+      "startDate": "2026-09-02",
+      "endDate": "2026-09-02",
+      "enabled": true
+    }
+  ]
+}

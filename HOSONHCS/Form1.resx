@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="richTextBox4.Text" xml:space="preserve">
-    <value>Lưu ý: Phần mềm chỉ nhằm mục đích hỗ trợ Hội, tổ, cán bộ ngân hàng nhập liệu nhanh hơn, hạn chế sai xót không phải để làm thay toàn bộ các khâu lập hồ sơ, các anh chị sử dụng phần mềm chịu trách nhiệm về nội dung nhập vào, đảm bảo khớp đúng, đủ các thông tin theo quy đinh trước khi in ra, trình ký.</value>
-  </data>
   <metadata name="Menh_gia.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

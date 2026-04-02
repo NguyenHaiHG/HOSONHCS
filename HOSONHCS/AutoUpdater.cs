@@ -127,16 +127,6 @@ namespace HOSONHCS
                 {
                     // 404 = Repository chưa có release nào
                     System.Diagnostics.Debug.WriteLine("[AutoUpdater] 404 - Repository chưa có release nào");
-
-                    // HIỆN THÔNG BÁO NGAY CẢ KHI SILENT (để debug)
-                    MessageBox.Show(
-                        "⚠️ Repository chưa có bản phát hành (release)\n\n" +
-                        "Vui lòng tạo release trên GitHub:\n" +
-                        "https://github.com/NguyenHaiHG/HOSONHCS/releases/new",
-                        "Chưa có release",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                    );
                     return null;
                 }
 
@@ -148,8 +138,8 @@ namespace HOSONHCS
                         $"Không thể kết nối đến server cập nhật.\n\n{ex.Message}\n\n" +
                         "Có thể do:\n" +
                         "- Không có kết nối Internet\n" +
-                        "- Server GitHub đang bảo trì\n" +
-                        "- Repository chưa có bản phát hành (release)",
+                        "- Server đang bảo trì\n" +
+                        "- Chưa có bản phát hành nào",
                         "Lỗi kết nối",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
@@ -322,17 +312,19 @@ namespace HOSONHCS
         /// <summary>
         /// Hiển thị dialog hỏi user có muốn cập nhật không
         /// </summary>
-        public static async Task ShowUpdateDialogAsync(UpdateInfo updateInfo)
+        public static async Task<bool> ShowUpdateDialogAsync(UpdateInfo updateInfo)
         {
-            if (updateInfo == null) return;
+            if (updateInfo == null) return false;
 
-            var message = $"Có phiên bản mới: {updateInfo.Version}\n" +
+            var message = $"🆕 CÓ PHIÊN BẢN MỚI!\n\n" +
                          $"Phiên bản hiện tại: {CurrentVersion}\n" +
+                         $"Phiên bản mới: {updateInfo.Version}\n" +
                          $"Ngày phát hành: {updateInfo.PublishedDate:dd/MM/yyyy}\n\n" +
-                         $"Thay đổi:\n{updateInfo.Changelog}\n\n" +
-                         $"Bạn có muốn cập nhật ngay bây giờ không?";
+                         $"📝 Nội dung cập nhật:\n{updateInfo.Changelog}\n\n" +
+                         $"Bạn có muốn cập nhật ngay bây giờ không?\n" +
+                         $"(Chọn Không sẽ thoát ứng dụng)";
 
-            var result = MessageBox.Show(message, "Cập nhật mới", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var result = MessageBox.Show(message, "🆕 Cập nhật mới", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (result == DialogResult.Yes)
             {
@@ -414,7 +406,10 @@ namespace HOSONHCS
                 await DownloadAndInstallAsync(updateInfo, progress);
 
                 progressForm.Close();
+                return true;
             }
+
+            return false;
         }
     }
 

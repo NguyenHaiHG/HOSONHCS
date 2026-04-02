@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace HOSONHCS
 {
@@ -130,6 +131,9 @@ namespace HOSONHCS
 
             // Đăng ký sự kiện cho cbpgd2 - Load dữ liệu khi chọn PGD
             try { cbpgd2.SelectedIndexChanged += CbPgd2_SelectedIndexChanged; } catch { }
+
+            // Đăng ký sự kiện cho cbTinh2 - Load cbpgd2 theo tỉnh được chọn
+            try { cbTinh2.SelectedIndexChanged += CbTinh2_SelectedIndexChanged; } catch { }
 
             // Đăng ký sự kiện cho cbctr - Cập nhật danh sách đối tượng khi chọn chương trình
             try { cbctr.SelectedIndexChanged += Cbctr_SelectedIndexChanged; } catch { }
@@ -313,7 +317,9 @@ namespace HOSONHCS
                     ["{{totruong}}"] = totruong,
                     ["{{xa}}"] = xa,
                     ["{{thon1}}"] = thon,
-                    ["{{chuongtrinh}}"] = chuongtrinh
+                    ["{{chuongtrinh}}"] = chuongtrinh,
+                    ["{{pgd}}"] = Clean(cbpgd2?.Text ?? ""),
+                    ["{{tinh}}"] = Clean(cbTinh2?.Text ?? "")
                 };
 
                 // Thêm placeholder cho từng tổ viên (1-5)
@@ -770,9 +776,12 @@ namespace HOSONHCS
                 doc.MainDocumentPart.Document.Save();
             }
 
-            // -------- MỞ FILE WORD VỮA TẠO --------
-            // Mở file Word bằng ứng dụng mặc định
-            System.Diagnostics.Process.Start(output);
+            // -------- CHUYỂN SANG PDF VÀ MỞ FILE --------
+            string pdfOutput = ConvertDocxToPdf(output);
+            if (!string.IsNullOrEmpty(pdfOutput))
+                System.Diagnostics.Process.Start(pdfOutput);
+            else
+                System.Diagnostics.Process.Start(output); // fallback nếu lỗi PDF
         }
 
         // ============================================
@@ -1237,8 +1246,11 @@ namespace HOSONHCS
         /// </summary>
         private void Form2_Load(object sender, EventArgs e)
         {
-            // Load dữ liệu xinman.json
-            LoadXinManData();
+            // Auto-populate cbTinh2 từ file JSON trong thư mục
+            try { TinhHelper.PopulateComboBox(cbTinh2); } catch { }
+
+            // Auto chọn tỉnh đầu tiên → trigger CbTinh2_SelectedIndexChanged → populate cbpgd2
+            try { if (cbTinh2 != null && cbTinh2.Items.Count > 0) cbTinh2.SelectedIndex = 0; } catch { }
 
             // Load danh sách tổ đã lưu từ file JSON
             LoadToFromFiles();
@@ -1250,6 +1262,43 @@ namespace HOSONHCS
         // ============================================
         // LOAD DỮ LIỆU XINMAN.JSON
         // ============================================
+
+        /// <summary>
+        /// Xử lý sự kiện SelectedIndexChanged của cbTinh2
+        /// Đọc file JSON tương ứng với tỉnh (TinhModel), populate cbpgd2 và xinmanModels
+        /// </summary>
+        private void CbTinh2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cbTinh2 == null || string.IsNullOrWhiteSpace(cbTinh2.Text)) return;
+
+                string selectedTinh = cbTinh2.Text.Trim();
+
+                // Xóa dữ liệu cũ
+                xinmanModels.Clear();
+                if (cbpgd2 != null) { cbpgd2.Items.Clear(); cbpgd2.Text = ""; }
+                if (cbXa2 != null) { cbXa2.Items.Clear(); cbXa2.Text = ""; }
+                if (cbThon2 != null) { cbThon2.Items.Clear(); cbThon2.Text = ""; }
+                if (cbTotruong != null) { cbTotruong.Items.Clear(); cbTotruong.Text = ""; }
+
+                var tinhModel = TinhHelper.LoadTinhModel(selectedTinh);
+                if (tinhModel?.pgds == null) return;
+
+                foreach (var pgdEntry in tinhModel.pgds)
+                {
+                    if (string.IsNullOrWhiteSpace(pgdEntry.pgd)) continue;
+                    var model = new XinManModel { pgd = pgdEntry.pgd, communes = pgdEntry.communes ?? new List<Commune>() };
+                    xinmanModels[pgdEntry.pgd] = model;
+                    if (cbpgd2 != null && !cbpgd2.Items.Contains(pgdEntry.pgd))
+                        cbpgd2.Items.Add(pgdEntry.pgd);
+                }
+
+                if (cbpgd2 != null && cbpgd2.Items.Count > 0)
+                    cbpgd2.SelectedIndex = 0;
+            }
+            catch { }
+        }
 
         /// <summary>
         /// Load dữ liệu từ tất cả các file JSON có sẵn (xinman.json, dongvan.json, meovac.json, vixuyen.json, v.v.)
@@ -2346,6 +2395,45 @@ namespace HOSONHCS
         // NÂNG CẤP GIAO DIỆN FORM2
         // =====================================================================
         private void ApplyForm2Style() { /* giữ nguyên giao diện gốc */ }
+
+        // ============================================
+        // CHUYỂN ĐỔI DOCX → PDF (dùng Word Interop)
+        // ============================================
+
+        /// <summary>
+        /// Chuyển file .docx → .pdf và xóa file .docx gốc.
+        /// Yêu cầu Microsoft Word đã cài đặt trên máy.
+        /// </summary>
+        private string ConvertDocxToPdf(string docxPath)
+        {
+            string pdfPath = Path.ChangeExtension(docxPath, ".pdf");
+            Word.Application wordApp = null;
+            Word.Document doc = null;
+            try
+            {
+                wordApp = new Word.Application { Visible = false };
+                doc = wordApp.Documents.Open(docxPath);
+                doc.ExportAsFixedFormat(pdfPath, Word.WdExportFormat.wdExportFormatPDF);
+                return File.Exists(pdfPath) ? pdfPath : null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi chuyển PDF: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                try { doc?.Close(false); } catch { }
+                try { if (doc != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(doc); } catch { }
+                doc = null;
+                try { wordApp?.Quit(false); } catch { }
+                try { if (wordApp != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(wordApp); } catch { }
+                wordApp = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                try { if (File.Exists(docxPath)) File.Delete(docxPath); } catch { }
+            }
+        }
     }
 
     // ============================================

@@ -89,20 +89,20 @@ namespace HOSONHCS
                 y = AddSection(content, y, "›  TỔNG QUAN", new[]
                 {
                     "Phần mềm quản lý hồ sơ vay vốn Ngân hàng Chính sách Xã hội (NHCSXH),",
-                    "hỗ trợ Hội, tổ cán bộ tín dụng lập hồ sơ, xuất mẫu biểu Word chuẩn Bộ,",
+                    "hỗ trợ Hội, tổ lập hồ sơ, xuất mẫu biểu chuẩn,",
                     "quản lý danh sách khách hàng và tra cứu thông tin nhanh."
                 });
 
                 // ── SECTION: Tính năng ────────────────────────────────────────
                 y = AddSection(content, y, "›  TÍNH NĂNG CHÍNH", new[]
                 {
-                    "  [01]  Nhập & lưu hồ sơ khách hàng vay vốn (JSON per file)",
+                    "  [01]  Nhập & lưu hồ sơ khách hàng vay vốn",
                     "  [02]  Xuất mẫu biểu Word: 01/TD, 03/DS, GUQ, 01-TGTV, Bìa",
                     "  [03]  Quản lý & chỉnh sửa danh sách",
                     "  [04]  Lập bảng kê tiền giao dịch theo tổ trưởng, khách hàng",
                     "  [05]  Ghi chú nội bộ với danh mục & tìm kiếm",
                     "  [06]  Chatbot NHCSXH — hỏi đáp nghiệp vụ ngân hàng",
-                    "  [07]  Cập nhật tự động qua GitHub Releases"
+                    "  [07]  Cập nhật tự động qua Internet"
                 });
 
                 // ── SECTION: Stack kỹ thuật ───────────────────────────────────
@@ -113,7 +113,7 @@ namespace HOSONHCS
                     "  UI         Windows Forms (WinForms)",
                     "  Storage    JSON (Newtonsoft.Json)  /  *.json per record",
                     "  Export     OpenXML (DocumentFormat.OpenXml)  →  *.docx",
-                    "  Update     GitHub Releases API  +  Updater.exe",
+                    "  Update     ... Releases API  +  Updater.exe",
                     "  IDE        Visual Studio 2022/2026"
                 });
 
@@ -129,12 +129,14 @@ namespace HOSONHCS
                     "  └── *.json              # danh sách ..."
                 });
 
-                // ── SECTION: Tác giả / liên hệ ───────────────────────────────
-                y = AddSection(content, y, "›  TÁC GIẢ & LIÊN HỆ", new[]
+                // ── SECTION: Nhóm tác giả và liên hệ ───────────────────────────────
+                y = AddSection(content, y, "› NHÓM TÁC GIẢ & LIÊN HỆ", new[]
                 {
-                    "  Developer   Nguyễn Hải",
-                    "  Email       nxhaihg@gmail.com",
-                    "  License     Internal use — NHCSXH"
+                    "  Developer:   Nguyễn Hải - PGD Xín Mần, Chi nhánh Tuyên Quang",
+                    "  Email:       nxhaihg@gmail.com",
+                    "  Nguyễn Văn Đức - PGD Xín Mần, Cấu hình thông tin các tỉnh",
+                    "  Trần Văn Ba  - PGD Vị Xuyên,Test quá trình vận hành app & đề xuất ý tưởng",
+                    "  License:     Internal use — NHCSXH"
                 });
 
                 // ── Footer ────────────────────────────────────────────────────

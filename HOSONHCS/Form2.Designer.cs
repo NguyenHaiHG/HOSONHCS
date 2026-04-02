@@ -96,18 +96,22 @@ namespace HOSONHCS
             this.cbTotruong = new System.Windows.Forms.ComboBox();
             this.cbThon2 = new System.Windows.Forms.ComboBox();
             this.btntaoto = new System.Windows.Forms.Button();
+            this.label31 = new System.Windows.Forms.Label();
+            this.cbTinh2 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgv2)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             resources.ApplyResources(this.label1, "label1");
+            this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label1.Name = "label1";
             // 
             // btn03to
             // 
             this.btn03to.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(74)))), ((int)(((byte)(106)))));
+            this.btn03to.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.btn03to, "btn03to");
             this.btn03to.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btn03to.Name = "btn03to";
@@ -115,30 +119,35 @@ namespace HOSONHCS
             // 
             // txtkh1
             // 
+            this.txtkh1.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.txtkh1, "txtkh1");
             this.txtkh1.ForeColor = System.Drawing.Color.Black;
             this.txtkh1.Name = "txtkh1";
             // 
             // txtkh2
             // 
+            this.txtkh2.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.txtkh2, "txtkh2");
             this.txtkh2.ForeColor = System.Drawing.Color.Black;
             this.txtkh2.Name = "txtkh2";
             // 
             // txtkh3
             // 
+            this.txtkh3.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.txtkh3, "txtkh3");
             this.txtkh3.ForeColor = System.Drawing.Color.Black;
             this.txtkh3.Name = "txtkh3";
             // 
             // txtkh4
             // 
+            this.txtkh4.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.txtkh4, "txtkh4");
             this.txtkh4.ForeColor = System.Drawing.Color.Black;
             this.txtkh4.Name = "txtkh4";
             // 
             // txtkh5
             // 
+            this.txtkh5.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.txtkh5, "txtkh5");
             this.txtkh5.ForeColor = System.Drawing.Color.Black;
             this.txtkh5.Name = "txtkh5";
@@ -146,11 +155,13 @@ namespace HOSONHCS
             // label6
             // 
             resources.ApplyResources(this.label6, "label6");
+            this.label6.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label6.Name = "label6";
             // 
             // cbdt1
             // 
+            this.cbdt1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbdt1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbdt1, "cbdt1");
             this.cbdt1.ForeColor = System.Drawing.Color.Black;
@@ -168,41 +179,48 @@ namespace HOSONHCS
             // label7
             // 
             resources.ApplyResources(this.label7, "label7");
+            this.label7.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label7.Name = "label7";
             // 
             // label8
             // 
             resources.ApplyResources(this.label8, "label8");
+            this.label8.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label8.Name = "label8";
             // 
             // label9
             // 
             resources.ApplyResources(this.label9, "label9");
+            this.label9.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label9.Name = "label9";
             // 
             // label10
             // 
             resources.ApplyResources(this.label10, "label10");
+            this.label10.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label10.Name = "label10";
             // 
             // label11
             // 
             resources.ApplyResources(this.label11, "label11");
+            this.label11.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label11.Name = "label11";
             // 
             // label12
             // 
             resources.ApplyResources(this.label12, "label12");
+            this.label12.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label12.Name = "label12";
             // 
             // cbtien1
             // 
+            this.cbtien1.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbtien1, "cbtien1");
             this.cbtien1.ForeColor = System.Drawing.Color.Black;
             this.cbtien1.FormattingEnabled = true;
@@ -231,6 +249,7 @@ namespace HOSONHCS
             // 
             // cbtien3
             // 
+            this.cbtien3.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbtien3, "cbtien3");
             this.cbtien3.ForeColor = System.Drawing.Color.Black;
             this.cbtien3.FormattingEnabled = true;
@@ -259,6 +278,7 @@ namespace HOSONHCS
             // 
             // cbtien2
             // 
+            this.cbtien2.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbtien2, "cbtien2");
             this.cbtien2.ForeColor = System.Drawing.Color.Black;
             this.cbtien2.FormattingEnabled = true;
@@ -287,6 +307,7 @@ namespace HOSONHCS
             // 
             // cbtien4
             // 
+            this.cbtien4.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbtien4, "cbtien4");
             this.cbtien4.ForeColor = System.Drawing.Color.Black;
             this.cbtien4.FormattingEnabled = true;
@@ -315,6 +336,7 @@ namespace HOSONHCS
             // 
             // cbtien5
             // 
+            this.cbtien5.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbtien5, "cbtien5");
             this.cbtien5.ForeColor = System.Drawing.Color.Black;
             this.cbtien5.FormattingEnabled = true;
@@ -344,42 +366,49 @@ namespace HOSONHCS
             // label13
             // 
             resources.ApplyResources(this.label13, "label13");
+            this.label13.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label13.Name = "label13";
             // 
             // label14
             // 
             resources.ApplyResources(this.label14, "label14");
+            this.label14.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label14.Name = "label14";
             // 
             // label15
             // 
             resources.ApplyResources(this.label15, "label15");
+            this.label15.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label15.Name = "label15";
             // 
             // label16
             // 
             resources.ApplyResources(this.label16, "label16");
+            this.label16.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label16.Name = "label16";
             // 
             // label17
             // 
             resources.ApplyResources(this.label17, "label17");
+            this.label17.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label17.Name = "label17";
             // 
             // label18
             // 
             resources.ApplyResources(this.label18, "label18");
+            this.label18.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label18.Name = "label18";
             this.label18.Click += new System.EventHandler(this.label18_Click);
             // 
             // cbctr
             // 
+            this.cbctr.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbctr, "cbctr");
             this.cbctr.ForeColor = System.Drawing.Color.Black;
             this.cbctr.FormattingEnabled = true;
@@ -395,17 +424,20 @@ namespace HOSONHCS
             // label19
             // 
             resources.ApplyResources(this.label19, "label19");
+            this.label19.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label19.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label19.Name = "label19";
             // 
             // label20
             // 
             resources.ApplyResources(this.label20, "label20");
+            this.label20.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label20.Name = "label20";
             // 
             // cbtime1
             // 
+            this.cbtime1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbtime1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbtime1, "cbtime1");
             this.cbtime1.ForeColor = System.Drawing.Color.Black;
@@ -423,6 +455,7 @@ namespace HOSONHCS
             // 
             // cbtime2
             // 
+            this.cbtime2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbtime2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbtime2, "cbtime2");
             this.cbtime2.ForeColor = System.Drawing.Color.Black;
@@ -441,11 +474,13 @@ namespace HOSONHCS
             // label21
             // 
             resources.ApplyResources(this.label21, "label21");
+            this.label21.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label21.Name = "label21";
             // 
             // cbtime3
             // 
+            this.cbtime3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbtime3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbtime3, "cbtime3");
             this.cbtime3.ForeColor = System.Drawing.Color.Black;
@@ -464,11 +499,13 @@ namespace HOSONHCS
             // label22
             // 
             resources.ApplyResources(this.label22, "label22");
+            this.label22.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label22.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label22.Name = "label22";
             // 
             // cbtime4
             // 
+            this.cbtime4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbtime4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbtime4, "cbtime4");
             this.cbtime4.ForeColor = System.Drawing.Color.Black;
@@ -487,11 +524,13 @@ namespace HOSONHCS
             // label23
             // 
             resources.ApplyResources(this.label23, "label23");
+            this.label23.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label23.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label23.Name = "label23";
             // 
             // cbtime5
             // 
+            this.cbtime5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbtime5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbtime5, "cbtime5");
             this.cbtime5.ForeColor = System.Drawing.Color.Black;
@@ -510,36 +549,42 @@ namespace HOSONHCS
             // label24
             // 
             resources.ApplyResources(this.label24, "label24");
+            this.label24.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label24.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label24.Name = "label24";
             // 
             // label2
             // 
             resources.ApplyResources(this.label2, "label2");
+            this.label2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label2.Name = "label2";
             // 
             // label3
             // 
             resources.ApplyResources(this.label3, "label3");
+            this.label3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label3.Name = "label3";
             // 
             // label4
             // 
             resources.ApplyResources(this.label4, "label4");
+            this.label4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label4.Name = "label4";
             // 
             // label5
             // 
             resources.ApplyResources(this.label5, "label5");
+            this.label5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label5.Name = "label5";
             // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.richTextBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.richTextBox1, "richTextBox1");
             this.richTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.richTextBox1.Name = "richTextBox1";
@@ -547,12 +592,14 @@ namespace HOSONHCS
             // dgv2
             // 
             this.dgv2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv2.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.dgv2, "dgv2");
             this.dgv2.Name = "dgv2";
             this.dgv2.RowTemplate.Height = 24;
             // 
             // btnxoa
             // 
+            this.btnxoa.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnxoa.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             resources.ApplyResources(this.btnxoa, "btnxoa");
             this.btnxoa.Name = "btnxoa";
@@ -560,6 +607,7 @@ namespace HOSONHCS
             // 
             // cbdt2
             // 
+            this.cbdt2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbdt2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbdt2, "cbdt2");
             this.cbdt2.ForeColor = System.Drawing.Color.Black;
@@ -576,6 +624,7 @@ namespace HOSONHCS
             // 
             // cbdt3
             // 
+            this.cbdt3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbdt3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbdt3, "cbdt3");
             this.cbdt3.ForeColor = System.Drawing.Color.Black;
@@ -592,6 +641,7 @@ namespace HOSONHCS
             // 
             // cbdt4
             // 
+            this.cbdt4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbdt4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbdt4, "cbdt4");
             this.cbdt4.ForeColor = System.Drawing.Color.Black;
@@ -608,6 +658,7 @@ namespace HOSONHCS
             // 
             // cbdt5
             // 
+            this.cbdt5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbdt5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cbdt5, "cbdt5");
             this.cbdt5.ForeColor = System.Drawing.Color.Black;
@@ -625,36 +676,41 @@ namespace HOSONHCS
             // label25
             // 
             resources.ApplyResources(this.label25, "label25");
+            this.label25.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label25.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label25.Name = "label25";
             // 
             // label26
             // 
             resources.ApplyResources(this.label26, "label26");
+            this.label26.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label26.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label26.Name = "label26";
             // 
             // label27
             // 
             resources.ApplyResources(this.label27, "label27");
+            this.label27.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label27.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label27.Name = "label27";
             // 
             // label28
             // 
             resources.ApplyResources(this.label28, "label28");
+            this.label28.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label28.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label28.Name = "label28";
             // 
             // label29
             // 
             resources.ApplyResources(this.label29, "label29");
+            this.label29.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label29.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label29.Name = "label29";
             // 
             // cbmd1
             // 
-            this.cbmd1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbmd1.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbmd1, "cbmd1");
             this.cbmd1.ForeColor = System.Drawing.Color.Black;
             this.cbmd1.FormattingEnabled = true;
@@ -679,7 +735,7 @@ namespace HOSONHCS
             // 
             // cbmd2
             // 
-            this.cbmd2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbmd2.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbmd2, "cbmd2");
             this.cbmd2.ForeColor = System.Drawing.Color.Black;
             this.cbmd2.FormattingEnabled = true;
@@ -704,7 +760,7 @@ namespace HOSONHCS
             // 
             // cbmd3
             // 
-            this.cbmd3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbmd3.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbmd3, "cbmd3");
             this.cbmd3.ForeColor = System.Drawing.Color.Black;
             this.cbmd3.FormattingEnabled = true;
@@ -729,7 +785,7 @@ namespace HOSONHCS
             // 
             // cbmd4
             // 
-            this.cbmd4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbmd4.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbmd4, "cbmd4");
             this.cbmd4.ForeColor = System.Drawing.Color.Black;
             this.cbmd4.FormattingEnabled = true;
@@ -754,7 +810,7 @@ namespace HOSONHCS
             // 
             // cbmd5
             // 
-            this.cbmd5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbmd5.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.cbmd5, "cbmd5");
             this.cbmd5.ForeColor = System.Drawing.Color.Black;
             this.cbmd5.FormattingEnabled = true;
@@ -779,6 +835,7 @@ namespace HOSONHCS
             // 
             // cbpgd2
             // 
+            this.cbpgd2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbpgd2.FormattingEnabled = true;
             this.cbpgd2.Items.AddRange(new object[] {
             resources.GetString("cbpgd2.Items"),
@@ -805,38 +862,65 @@ namespace HOSONHCS
             // label30
             // 
             resources.ApplyResources(this.label30, "label30");
+            this.label30.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label30.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.label30.Name = "label30";
             // 
             // cbXa2
             // 
+            this.cbXa2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbXa2.FormattingEnabled = true;
             resources.ApplyResources(this.cbXa2, "cbXa2");
             this.cbXa2.Name = "cbXa2";
             // 
             // cbTotruong
             // 
+            this.cbTotruong.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbTotruong.FormattingEnabled = true;
             resources.ApplyResources(this.cbTotruong, "cbTotruong");
             this.cbTotruong.Name = "cbTotruong";
             // 
             // cbThon2
             // 
+            this.cbThon2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbThon2.FormattingEnabled = true;
             resources.ApplyResources(this.cbThon2, "cbThon2");
             this.cbThon2.Name = "cbThon2";
             // 
             // btntaoto
             // 
+            this.btntaoto.Cursor = System.Windows.Forms.Cursors.Hand;
             resources.ApplyResources(this.btntaoto, "btntaoto");
             this.btntaoto.Name = "btntaoto";
             this.btntaoto.UseVisualStyleBackColor = true;
+            // 
+            // label31
+            // 
+            resources.ApplyResources(this.label31, "label31");
+            this.label31.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.label31.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.label31.Name = "label31";
+            // 
+            // cbTinh2
+            // 
+            this.cbTinh2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbTinh2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTinh2.FormattingEnabled = true;
+            this.cbTinh2.Items.AddRange(new object[] {
+            resources.GetString("cbTinh2.Items"),
+            resources.GetString("cbTinh2.Items1"),
+            resources.GetString("cbTinh2.Items2")});
+            resources.ApplyResources(this.cbTinh2, "cbTinh2");
+            this.cbTinh2.Name = "cbTinh2";
+            this.cbTinh2.SelectedIndexChanged += new System.EventHandler(this.CbTinh2_SelectedIndexChanged);
             // 
             // Form2
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Teal;
+            this.BackColor = System.Drawing.Color.Green;
+            this.Controls.Add(this.cbTinh2);
+            this.Controls.Add(this.label31);
             this.Controls.Add(this.btntaoto);
             this.Controls.Add(this.cbThon2);
             this.Controls.Add(this.cbTotruong);
@@ -978,5 +1062,7 @@ namespace HOSONHCS
         private ComboBox cbTotruong;
         private ComboBox cbThon2;
         private Button btntaoto;
+        private Label label31;
+        private ComboBox cbTinh2;
     }
 }

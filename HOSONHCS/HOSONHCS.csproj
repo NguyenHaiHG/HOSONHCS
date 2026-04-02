@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -93,6 +93,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppSecrets.cs" />
     <Compile Include="AutoUpdater.cs" />
     <Compile Include="BangKeData.cs" />
     <Compile Include="BangKeTien.cs" />
@@ -109,6 +110,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form1.DocViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.GhiChu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,11 +128,18 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="HolidayNotice.cs" />
+    <Compile Include="HolidayNoticeChecker.cs" />
+    <Compile Include="HolidayNoticeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="KnowledgeItem.cs" />
     <Compile Include="KnowledgeSeed.cs" />
     <Compile Include="NoteItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TinhHelper.cs" />
+    <Compile Include="ToanQuocEncryptor.cs" />
     <Compile Include="ToData.cs" />
     <Compile Include="UIStyler.cs" />
     <Compile Include="XinManEditor.cs" />
@@ -159,8 +170,8 @@
     <EmbeddedResource Include="GUQ.docx" />
     <EmbeddedResource Include="01 GQVL.docx" />
     <EmbeddedResource Include="03 DS GROUP.docx" />
-    <EmbeddedResource Include="01TGTV.docx" />
     <EmbeddedResource Include="BIA.docx" />
+    <EmbeddedResource Include="01TGTV.docx" />
     <None Include="CCCD12_GUIDE.md" />
     <None Include="CHANGELOG_BO_CHECKBOX_DATENDHCCCD.md" />
     <None Include="CHANGELOG_CBDOITUONG_THOIHANCCCD.md" />
@@ -168,12 +179,13 @@
     <None Include="CHANGELOG_FORM2.md" />
     <None Include="CHANGELOG_FORM2_COMBOBOX.md" />
     <None Include="CODE_ANALYSIS_REPORT.md" />
+    <None Include="DOCS\DATA_STRUCTURE.md" />
+    <None Include="DOCS\FUNCTIONS_ALGORITHMS.md" />
     <None Include="DUAL_MARQUEE.md" />
     <None Include="FIX_CBMUCDICH_NO_TITLECASE.md" />
     <None Include="FIX_DATEDH_DATELAPHS_FORMAT.md" />
     <None Include="FIX_HGD_CU_TRU_TAI_VNT.md" />
     <None Include="HOSONHCS_TemporaryKey.pfx" />
-    <None Include="hsp.json" />
     <None Include="HUONG_DAN_AUTO_UPDATE.md" />
     <None Include="HUONG_DAN_CHINH_SUA_TO.md" />
     <None Include="HUONG_DAN_CHON_CHUONG_TRINH_DOI_TUONG.md" />
@@ -193,13 +205,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Content Include="Modern app icon with.ico" />
-    <Content Include="xinman.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="REPORT_DATEDH_DATELAPHS.md" />
+    <None Include="toanquoc.json" />
     <None Include="UI_BORDERLESS_UPDATE.md" />
     <None Include="VIET_HOA_COMPLETE.md" />
-    <None Include="vixuyen.json" />
+    <Content Include="toanquoc.enc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="_encrypt_build.ps1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

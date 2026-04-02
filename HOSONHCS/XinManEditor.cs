@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace HOSONHCS
 {
@@ -32,6 +33,10 @@ namespace HOSONHCS
         // Trạng thái tìm kiếm
         private List<int> searchMatches = new List<int>();
         private int currentMatchIndex = -1;
+
+        // Context chỉnh sửa toanquoc.enc: tỉnh và PGD đang được load
+        private string _tinhName = null;
+        private string _pgdName  = null;
 
         public void AttachControls(DataGridView dgv, TextBox txtUsername, TextBox txtPassword, Button btnLogin, TextBox txtSearch, Button btnSave = null)
         {
@@ -320,35 +325,88 @@ namespace HOSONHCS
 
                 newModel.communes = communes.Values.ToList();
 
-                // Ghi backup và lưu atomic
-                var json = JsonConvert.SerializeObject(newModel, Formatting.Indented);
-                var temp = xinmanPath + ".tmp";
-                File.WriteAllText(temp, json, Encoding.UTF8);
-
-                // Sao lưu
-                try
+                // Lưu vào đúng nơi: toanquoc.enc nếu đang chỉnh sửa từ đó, còn lại xinman.json
+                if (!string.IsNullOrEmpty(_tinhName) && !string.IsNullOrEmpty(_pgdName))
                 {
-                    if (File.Exists(xinmanPath))
-                    {
-                        var bak = xinmanPath + ".bak." + DateTime.Now.ToString("yyyyMMddHHmmss");
-                        File.Copy(xinmanPath, bak);
-                    }
+                    SaveToToanQuocEnc(newModel);
                 }
-                catch { }
+                else
+                {
+                    var json = JsonConvert.SerializeObject(newModel, Formatting.Indented);
+                    var temp = xinmanPath + ".tmp";
+                    File.WriteAllText(temp, json, Encoding.UTF8);
+                    File.Copy(temp, xinmanPath, true);
+                    try { File.Delete(temp); } catch { }
+                    MessageBox.Show("Lưu xinman.json thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadModel();
+                    PopulateGridFromModel();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lưu: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                // Thay thế
-                File.Copy(temp, xinmanPath, true);
-                try { File.Delete(temp); } catch { }
+        private void SaveToToanQuocEnc(XinManModel newModel)
+        {
+            try
+            {
+                var json = ToanQuocEncryptor.GetJson();
+                if (string.IsNullOrEmpty(json))
+                {
+                    MessageBox.Show("Không đọc được toanquoc.enc.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                MessageBox.Show("Lưu xinman.json thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var arr = JArray.Parse(json);
 
-                // Tải lại model để đảm bảo UI phản ánh bất kỳ chuẩn hóa nào
-                LoadModel();
+                // Tìm tỉnh khớp
+                JObject tinhObj = null;
+                foreach (JObject t in arr)
+                    if (string.Equals(t["tinh"]?.ToString()?.Trim(), _tinhName, StringComparison.OrdinalIgnoreCase))
+                    { tinhObj = t; break; }
+
+                if (tinhObj == null)
+                {
+                    MessageBox.Show($"Không tìm thấy tỉnh '{_tinhName}' trong toanquoc.enc.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Tìm PGD khớp
+                var pgdsArr = tinhObj["pgds"] as JArray;
+                if (pgdsArr == null)
+                {
+                    MessageBox.Show($"Tỉnh '{_tinhName}' không có pgds.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                JObject pgdObj = null;
+                foreach (JObject p in pgdsArr)
+                    if (string.Equals(p["pgd"]?.ToString()?.Trim(), _pgdName, StringComparison.OrdinalIgnoreCase))
+                    { pgdObj = p; break; }
+
+                if (pgdObj == null)
+                {
+                    MessageBox.Show($"Không tìm thấy PGD '{_pgdName}' trong tỉnh '{_tinhName}'.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Ghi lại communes của PGD này
+                pgdObj["communes"] = JArray.FromObject(newModel.communes ?? new List<Commune>());
+
+                // Mã hóa và lưu
+                ToanQuocEncryptor.SaveJson(arr.ToString(Formatting.None));
+                TinhHelper.RefreshCache();
+
+                MessageBox.Show($"Đã lưu PGD '{_pgdName}' vào toanquoc.enc thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Reload lại để UI phản ánh đúng
                 PopulateGridFromModel();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi lưu xinman.json: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi lưu toanquoc.enc: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -392,6 +450,8 @@ namespace HOSONHCS
                 try { if (txtSearch != null) txtSearch.Text = ""; } catch { }
 
                 // Tải lại model để hủy bỏ mọi thay đổi chưa lưu và khôi phục trạng thái ban đầu
+                _tinhName = null;
+                _pgdName  = null;
                 LoadModel();
                 PopulateGridFromModel();
             }
@@ -399,6 +459,22 @@ namespace HOSONHCS
             {
                 MessageBox.Show("Lỗi khi đăng xuất: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Load trực tiếp từ một TinhPgdEntry — dùng khi cbTinhfix + cbpgdfix chọn PGD cụ thể.
+        /// tinhName dùng để biết lưu lại vào tỉnh nào trong toanquoc.enc.
+        /// </summary>
+        internal void LoadFromPgdEntry(TinhPgdEntry entry, string tinhName = null)
+        {
+            _tinhName = tinhName?.Trim();
+            _pgdName  = entry?.pgd?.Trim();
+            model = new XinManModel
+            {
+                pgd = entry?.pgd ?? "",
+                communes = entry?.communes ?? new List<Commune>()
+            };
+            PopulateGridFromModel();
         }
 
         // Method public để load file JSON khác (vixuyen.json, hsp.json, dongvan.json) và hiển thị lên dgv1
@@ -415,7 +491,8 @@ namespace HOSONHCS
 
                 if (!File.Exists(filePath))
                 {
-                    MessageBox.Show($"File {jsonFileName} không tồn tại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    model = new XinManModel { pgd = "", communes = new List<Commune>() };
+                    PopulateGridFromModel();
                     return;
                 }
 
@@ -426,9 +503,8 @@ namespace HOSONHCS
                     var json = File.ReadAllText(filePath, Encoding.UTF8);
                     model = JsonConvert.DeserializeObject<XinManModel>(json);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    MessageBox.Show($"Lỗi khi đọc file {jsonFileName}:\n{ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     model = null;
                 }
 
@@ -440,10 +516,7 @@ namespace HOSONHCS
                 // Hiển thị dữ liệu lên DataGridView
                 PopulateGridFromModel();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi khi tải file JSON:\n{ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch { }
         }
 
         private void LoadModel()

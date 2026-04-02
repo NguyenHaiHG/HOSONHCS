@@ -1,0 +1,1858 @@
+{
+  "pgd": "Vị Xuyên",
+  "communes": [
+    {
+      "name": "Bạch Ngọc",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Dìn",
+              "groups": [
+                "Đặng Thị Tiến"
+              ]
+            },
+            {
+              "name": "Ngọc bình",
+              "groups": [
+                "Triệu Quốc Hào"
+              ]
+            },
+            {
+              "name": "Phai",
+              "groups": [
+                "Hoàng Văn Khằm",
+                "Vi Văn Ngọc"
+              ]
+            },
+            {
+              "name": "Tòong",
+              "groups": [
+                "Chẩu Ngọc Thân",
+                "Giàng Văn Châư"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Minh thành",
+              "groups": [
+                "Sùng Văn Tư",
+                "Vàng Mí Dình"
+              ]
+            },
+            {
+              "name": "Mường",
+              "groups": [
+                "Hoàng Thị Phương",
+                "Lục Thị Đại"
+              ]
+            },
+            {
+              "name": "Pạu",
+              "groups": [
+                "Chẩu Văn Luân",
+                "Hoàng Trọng Lân",
+                "Nông Thị Hợp"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản xám",
+              "groups": [
+                "Chẩu Văn Trường",
+                "Lưu Văn Thân"
+              ]
+            },
+            {
+              "name": "Diếc",
+              "groups": [
+                "Hoàng Văn Thượng",
+                "Vương Quốc Toại"
+              ]
+            },
+            {
+              "name": "Khuổi dò",
+              "groups": [
+                "Vàng Seo Sùng"
+              ]
+            },
+            {
+              "name": "Khuổi vài",
+              "groups": [
+                "Giàng Xuân Vư"
+              ]
+            },
+            {
+              "name": "Tân bình",
+              "groups": [
+                "Chương Văn Đẹp"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Ngọc lâm",
+              "groups": [
+                "Giàng Seo Hoà"
+              ]
+            },
+            {
+              "name": "Ngọc sơn",
+              "groups": [
+                "Đặng Văn Nhậy"
+              ]
+            },
+            {
+              "name": "Riềng",
+              "groups": [
+                "Nguyễn Thị Lập",
+                "Nông Văn Mông"
+              ]
+            },
+            {
+              "name": "Tiến thành",
+              "groups": [
+                "Chẩu Thanh Bộ",
+                "Chẩu Văn Minh"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cao Bồ",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Chất tiền",
+              "groups": [
+                "Cháng Văn Hùng"
+              ]
+            },
+            {
+              "name": "Thác tăng",
+              "groups": [
+                "Bàn Văn Pầu"
+              ]
+            },
+            {
+              "name": "Tát khao",
+              "groups": [
+                "Đặng Văn Hà"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản dâng",
+              "groups": [
+                "Bàn Văn Dậu",
+                "Hoàng Văn Quỳnh"
+              ]
+            },
+            {
+              "name": "Tham còn",
+              "groups": [
+                "Lý Văn Nghiềm"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Gia tuyến",
+              "groups": [
+                "Bàn Văn Thiếp"
+              ]
+            },
+            {
+              "name": "Khuổi luông",
+              "groups": [
+                "Đặng Văn Giang"
+              ]
+            },
+            {
+              "name": "Thác tậu",
+              "groups": [
+                "Đặng Văn Giang"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Lùng tao",
+              "groups": [
+                "Đặng Văn Tài"
+              ]
+            },
+            {
+              "name": "Tham vè",
+              "groups": [
+                "Lý Xuân Thanh"
+              ]
+            },
+            {
+              "name": "Thác hùng",
+              "groups": [
+                "Bàn Văn Ngọc"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lao Chải",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Cáo sào",
+              "groups": [
+                "Giàng Seo Chúng"
+              ]
+            },
+            {
+              "name": "Nhìu sang",
+              "groups": [
+                "Bồn Văn Hồng"
+              ]
+            },
+            {
+              "name": "Nặm tẳm",
+              "groups": [
+                "Trần Văn Bình"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Ngài là Thầu",
+              "groups": [
+                "Giàng Seo Giáo"
+              ]
+            },
+            {
+              "name": "Nậm lầu",
+              "groups": [
+                "Hoàng Văn Cải"
+              ]
+            },
+            {
+              "name": "Nặm tà",
+              "groups": [
+                "Vàng Văn Thiên"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Lùng chu Phùng",
+              "groups": [
+                "Vàng Seo Cháng"
+              ]
+            },
+            {
+              "name": "Nặm Nịch",
+              "groups": [
+                "Đặng Văn Thàm"
+              ]
+            },
+            {
+              "name": "Tả ván",
+              "groups": [
+                "Trần Văn Tẳng",
+                "Đặng Văn Củi"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản phùng",
+              "groups": [
+                "Sùng Seo Sơn"
+              ]
+            },
+            {
+              "name": "Nặm lạn",
+              "groups": [
+                "Đặng Văn Mành"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Linh Hồ",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản buổng",
+              "groups": [
+                "Nông Văn Nam"
+              ]
+            },
+            {
+              "name": "Bản đông",
+              "groups": [
+                "Triệu Văn Hiền"
+              ]
+            },
+            {
+              "name": "Cốc thổ",
+              "groups": [
+                "Chu Đức Long"
+              ]
+            },
+            {
+              "name": "Khuổi vài",
+              "groups": [
+                "Trần Thị Sinh"
+              ]
+            },
+            {
+              "name": "Minh thành",
+              "groups": [
+                "Nguyễn Văn Huỳnh"
+              ]
+            },
+            {
+              "name": "Nà Diềm",
+              "groups": [
+                "Lô Thị Thành",
+                "Phạm Văn Phương"
+              ]
+            },
+            {
+              "name": "Nà pồng",
+              "groups": [
+                "Hoàng Văn Long"
+              ]
+            },
+            {
+              "name": "Nà qua",
+              "groups": [
+                "Mùng Văn Toán"
+              ]
+            },
+            {
+              "name": "Nặm thanh",
+              "groups": [
+                "Lý Quang Duyên"
+              ]
+            },
+            {
+              "name": "Trang",
+              "groups": [
+                "Nông Thị Tuyết",
+                "Trần Kim Liễu"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản Sáng",
+              "groups": [
+                "Phan Trường Long"
+              ]
+            },
+            {
+              "name": "Bản vai",
+              "groups": [
+                "Nông Thị Hòa"
+              ]
+            },
+            {
+              "name": "Cuôm",
+              "groups": [
+                "Trương Ngọc Giáp"
+              ]
+            },
+            {
+              "name": "Khuổi khà",
+              "groups": [
+                "Dương Văn Vinh"
+              ]
+            },
+            {
+              "name": "Khuổi khài",
+              "groups": [
+                "Nùng Văn Sơn"
+              ]
+            },
+            {
+              "name": "Khuổi lác",
+              "groups": [
+                "Thèn Văn Chấn"
+              ]
+            },
+            {
+              "name": "Lăng mu",
+              "groups": [
+                "Đặng Thị Tâm"
+              ]
+            },
+            {
+              "name": "Lũng loét",
+              "groups": [
+                "Đặng Văn Thì"
+              ]
+            },
+            {
+              "name": "Nà chuồng",
+              "groups": [
+                "Tô Thị Bền"
+              ]
+            },
+            {
+              "name": "Nà khà",
+              "groups": [
+                "Hoàng Thị Hảo",
+                "Đỗ Công Trường"
+              ]
+            },
+            {
+              "name": "Tân lập",
+              "groups": [
+                "Quách Văn Cương"
+              ]
+            },
+            {
+              "name": "Đồng",
+              "groups": [
+                "Lâm Trung Thực",
+                "Lý Thị Xuân"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản lủa",
+              "groups": [
+                "Lưu Văn Thông"
+              ]
+            },
+            {
+              "name": "Cốc Héc",
+              "groups": [
+                "Vương Seo Tiến"
+              ]
+            },
+            {
+              "name": "Lùng chang",
+              "groups": [
+                "Đặng Văn Minh",
+                "Đặng Văn Năm"
+              ]
+            },
+            {
+              "name": "Nặm dầu",
+              "groups": [
+                "Lý Văn Suẩn"
+              ]
+            },
+            {
+              "name": "Nặm nhùng",
+              "groups": [
+                "Lò Seo Chúng"
+              ]
+            },
+            {
+              "name": "Nặm đăm",
+              "groups": [
+                "Hứa Văn Tích"
+              ]
+            },
+            {
+              "name": "Thủy Lâm",
+              "groups": [
+                "Nguyễn Văn Thắng"
+              ]
+            },
+            {
+              "name": "Trung sơn",
+              "groups": [
+                "Nguyễn Mạnh Hồng",
+                "Nguyễn Đình Hải"
+              ]
+            },
+            {
+              "name": "Tát hạ",
+              "groups": [
+                "Nguyễn Văn Thái"
+              ]
+            },
+            {
+              "name": "Tân phong",
+              "groups": [
+                "Lê Văn Phức"
+              ]
+            },
+            {
+              "name": "Xuân Phong",
+              "groups": [
+                "Phạm Văn Nghiệp"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản tàn",
+              "groups": [
+                "Vương Đức Nguyên",
+                "Đặng Thị Liên"
+              ]
+            },
+            {
+              "name": "Bản tát",
+              "groups": [
+                "Hà Văn Chấp"
+              ]
+            },
+            {
+              "name": "Hai luồng",
+              "groups": [
+                "Thèn Tiến Săm"
+              ]
+            },
+            {
+              "name": "Ngọc hà",
+              "groups": [
+                "Vũ Quốc Yên"
+              ]
+            },
+            {
+              "name": "Ngọc quang",
+              "groups": [
+                "Triệu Văn An"
+              ]
+            },
+            {
+              "name": "Ngọc thượng",
+              "groups": [
+                "Chu Thị Hiến"
+              ]
+            },
+            {
+              "name": "Nà lách",
+              "groups": [
+                "Hoàng Văn Nho"
+              ]
+            },
+            {
+              "name": "Nà lầu",
+              "groups": [
+                "Phan Hữu Trò"
+              ]
+            },
+            {
+              "name": "Nà trà",
+              "groups": [
+                "Hoàng Văn Thị"
+              ]
+            },
+            {
+              "name": "Tấng",
+              "groups": [
+                "Nông Đức Bển"
+              ]
+            },
+            {
+              "name": "Đội 5",
+              "groups": [
+                "Hoàng Thị Đạo",
+                "Trương Thị Vân"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Minh Tân",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Khâu khà",
+              "groups": [
+                "Phàn Văn Xuân"
+              ]
+            },
+            {
+              "name": "Lùng thiềng",
+              "groups": [
+                "Tẩn Sào Xuân"
+              ]
+            },
+            {
+              "name": "Lùng vài",
+              "groups": [
+                "Ly Thìn Lữ"
+              ]
+            },
+            {
+              "name": "Thượng lâm",
+              "groups": [
+                "Nguyễn Thanh Nhâm"
+              ]
+            },
+            {
+              "name": "Tả lẻng",
+              "groups": [
+                "Dương Thị Thu"
+              ]
+            },
+            {
+              "name": "Xín chải",
+              "groups": [
+                "Lý Sào Vần"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản phố",
+              "groups": [
+                "Hạng Khái Lành"
+              ]
+            },
+            {
+              "name": "Bắc xum",
+              "groups": [
+                "Mã Thị Nhình",
+                "Mương Thị Vẽ",
+                "Đàm Thúy Lan"
+              ]
+            },
+            {
+              "name": "Tân sơn",
+              "groups": [
+                "Lộc Xuân Vân",
+                "Vương Văn Cường"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản hình",
+              "groups": [
+                "Nguyễn Xuân Quân",
+                "Nguyễn Đức Khiêm"
+              ]
+            },
+            {
+              "name": "Khâu ngày",
+              "groups": [
+                "Vàng Mí Sính"
+              ]
+            },
+            {
+              "name": "Mã hoàng Phìn",
+              "groups": [
+                "Hầu Mí Phương"
+              ]
+            },
+            {
+              "name": "Phìn sảng",
+              "groups": [
+                "Lý Xuân Thạch"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Phú Linh",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản ngàn",
+              "groups": [
+                "Lã Thị Phương",
+                "Phàn Văn Chắng"
+              ]
+            },
+            {
+              "name": "Bản thấu",
+              "groups": [
+                "Lý Đức Thuận"
+              ]
+            },
+            {
+              "name": "Bản thẳm",
+              "groups": [
+                "Nguyễn Thị Xiêm"
+              ]
+            },
+            {
+              "name": "Mường bắc",
+              "groups": [
+                "Nguyễn Thế Đông"
+              ]
+            },
+            {
+              "name": "Mường trung",
+              "groups": [
+                "Lý Chương Thiện"
+              ]
+            },
+            {
+              "name": "Noong 1",
+              "groups": [
+                "Phù Thị Liên"
+              ]
+            },
+            {
+              "name": "Noong 2",
+              "groups": [
+                "Phà Văn Tuấn"
+              ]
+            },
+            {
+              "name": "Đán dầu",
+              "groups": [
+                "Vàng Khái Sì"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản lù",
+              "groups": [
+                "Hoàng Thị Chanh"
+              ]
+            },
+            {
+              "name": "Chăn 1",
+              "groups": [
+                "Nguyễn Xuân Đặt"
+              ]
+            },
+            {
+              "name": "Chăn 2",
+              "groups": [
+                "Hoàng Thị Thành"
+              ]
+            },
+            {
+              "name": "Cốc lải",
+              "groups": [
+                "Hoàng Văn Binh"
+              ]
+            },
+            {
+              "name": "Lùng áng",
+              "groups": [
+                "Bàn Thị Siểm"
+              ]
+            },
+            {
+              "name": "Lũng bẻ",
+              "groups": [
+                "Đặng Văn Quyển"
+              ]
+            },
+            {
+              "name": "Lắp 2",
+              "groups": [
+                "Hoàng Thị Châm"
+              ]
+            },
+            {
+              "name": "Nà thuông",
+              "groups": [
+                "Lý Thị Tâm",
+                "Nguyễn Thị Dinh"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản chang",
+              "groups": [
+                "Trần Bá Thuyết"
+              ]
+            },
+            {
+              "name": "Khuổi niềng",
+              "groups": [
+                "Phùng Kiều Hưng"
+              ]
+            },
+            {
+              "name": "Lang lầu",
+              "groups": [
+                "Lục Văn Thinh"
+              ]
+            },
+            {
+              "name": "Nà cáy",
+              "groups": [
+                "Phàn Văn Thành"
+              ]
+            },
+            {
+              "name": "Nà cọ",
+              "groups": [
+                "Nông Thị Thiết"
+              ]
+            },
+            {
+              "name": "Nà cọn",
+              "groups": [
+                "Hoàng Văn Dư"
+              ]
+            },
+            {
+              "name": "Nà pù",
+              "groups": [
+                "Triệu Văn Lìu"
+              ]
+            },
+            {
+              "name": "Nà pồng",
+              "groups": [
+                "Phùng Văn Hai"
+              ]
+            },
+            {
+              "name": "Nà trừ",
+              "groups": [
+                "Xuân Thị Tuyết"
+              ]
+            },
+            {
+              "name": "Pắc pà",
+              "groups": [
+                "Hậu Hữu Tính"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản khò",
+              "groups": [
+                "Nông Thị Hà"
+              ]
+            },
+            {
+              "name": "Bản lầu",
+              "groups": [
+                "Vi Văn Khu"
+              ]
+            },
+            {
+              "name": "Bản lầy",
+              "groups": [
+                "Đặng Văn Giang"
+              ]
+            },
+            {
+              "name": "Bản mạ",
+              "groups": [
+                "Phàn Thị Nghĩa"
+              ]
+            },
+            {
+              "name": "Bản tha",
+              "groups": [
+                "Lê Thị Sơn"
+              ]
+            },
+            {
+              "name": "Bắc ngàn",
+              "groups": [
+                "Lý Thị Thu Hằng"
+              ]
+            },
+            {
+              "name": "Mường nam",
+              "groups": [
+                "Lục Thị Minh"
+              ]
+            },
+            {
+              "name": "Nà ngoan",
+              "groups": [
+                "Ban Kim Long"
+              ]
+            },
+            {
+              "name": "Nà ác",
+              "groups": [
+                "Lô Thị Mến"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Thanh Thủy",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Mào phìn",
+              "groups": [
+                "Bàn Văn Đồng"
+              ]
+            },
+            {
+              "name": "Nà miều",
+              "groups": [
+                "Nguyễn Văn Thưởng"
+              ]
+            },
+            {
+              "name": "Nà màu",
+              "groups": [
+                "Bàn Văn Kăn"
+              ]
+            },
+            {
+              "name": "Thanh sơn",
+              "groups": [
+                "Nguyễn Văn Tài"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Cường thịnh",
+              "groups": [
+                "Lục Thị Tuyến",
+                "Nguyễn Tuyến Thảng"
+              ]
+            },
+            {
+              "name": "Nà sát",
+              "groups": [
+                "Lý Thị Chiu"
+              ]
+            },
+            {
+              "name": "Nà toong",
+              "groups": [
+                "Đặng Văn Yên"
+              ]
+            },
+            {
+              "name": "Nặm ngặt",
+              "groups": [
+                "Đặng Văn Si"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Cốc nghè",
+              "groups": [
+                "Đặng Văn Liệt"
+              ]
+            },
+            {
+              "name": "Lùng đoóc",
+              "groups": [
+                "Lý Văn Bặn"
+              ]
+            },
+            {
+              "name": "Nà thài",
+              "groups": [
+                "Nguyễn Văn Lợi"
+              ]
+            },
+            {
+              "name": "Nặm tẹ",
+              "groups": [
+                "Trương Văn Thụy"
+              ]
+            },
+            {
+              "name": "Sửu",
+              "groups": [
+                "Nguyễn Đức Dược"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Giang nam",
+              "groups": [
+                "Hoàng Thọ Dụng",
+                "Mã Thị Hội",
+                "Nông Thị Luyên"
+              ]
+            },
+            {
+              "name": "Xà phìn",
+              "groups": [
+                "Tương Văn Điện"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Thuận Hòa",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Khâu miàng",
+              "groups": [
+                "Sùng Mí Tỏa"
+              ]
+            },
+            {
+              "name": "Lũng buông",
+              "groups": [
+                "Nguyễn Thị Tình"
+              ]
+            },
+            {
+              "name": "Mịch A",
+              "groups": [
+                "Hoàng Xuân Ích",
+                "Thượng Thị Viễn"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Hòa sơn",
+              "groups": [
+                "Dương Thanh Đức",
+                "Lệnh Thị Yểu"
+              ]
+            },
+            {
+              "name": "Lũng pù",
+              "groups": [
+                "Giàng Thị Tuyết"
+              ]
+            },
+            {
+              "name": "Lũng rầy",
+              "groups": [
+                "Lý Văn Sỉu"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Lũng khỏe B",
+              "groups": [
+                "Lò Khái Lùng"
+              ]
+            },
+            {
+              "name": "Minh tiến",
+              "groups": [
+                "Thào Thìn Phú"
+              ]
+            },
+            {
+              "name": "Mịch B",
+              "groups": [
+                "Lệnh Thị Thiện",
+                "Nguyễn Văn Ngoát"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Hòa bắc",
+              "groups": [
+                "Thượng Thị Loan"
+              ]
+            },
+            {
+              "name": "Khâu trà",
+              "groups": [
+                "Sùng Tờ Quán"
+              ]
+            },
+            {
+              "name": "Minh phong",
+              "groups": [
+                "La Thành Dương"
+              ]
+            },
+            {
+              "name": "Pồng chằm",
+              "groups": [
+                "Vàng Thìn Sồ"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Thượng Sơn",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bó đướt",
+              "groups": [
+                "Phàn Văn Đông",
+                "Vương Văn Sơn"
+              ]
+            },
+            {
+              "name": "Cao bành",
+              "groups": [
+                "Lý Văn Đền"
+              ]
+            },
+            {
+              "name": "Đán khao",
+              "groups": [
+                "Thào Kháy Phà"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Lùng vùi",
+              "groups": [
+                "Triệu Vàn Tòng",
+                "Đặng Lắc Phàn"
+              ]
+            },
+            {
+              "name": "Vàng luông",
+              "groups": [
+                "Phàn Văn Tanh",
+                "Đặng Văn Sử"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản khoét",
+              "groups": [
+                "Trieu Van Sien",
+                "Triệu Mùi Chài"
+              ]
+            },
+            {
+              "name": "Nậm am",
+              "groups": [
+                "Đặng Văn Pảng",
+                "Đặng Văn Sảng"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản bó",
+              "groups": [
+                "Lý Văn Minh"
+              ]
+            },
+            {
+              "name": "Hạ sơn",
+              "groups": [
+                "Nguyễn Thị Linh"
+              ]
+            },
+            {
+              "name": "Khuổi Luông",
+              "groups": [
+                "Đặng Văn Lanh"
+              ]
+            },
+            {
+              "name": "Trung sơn",
+              "groups": [
+                "Lý Văn Hòa",
+                "Đặng Ngọc Sơn"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tùng Bá",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản Kiếng",
+              "groups": [
+                "Hoàng Văn Hính"
+              ]
+            },
+            {
+              "name": "Hồng minh",
+              "groups": [
+                "Nông Văn Xuê"
+              ]
+            },
+            {
+              "name": "Khuôn phà",
+              "groups": [
+                "Lý Văn Tiến"
+              ]
+            },
+            {
+              "name": "Nà lòa",
+              "groups": [
+                "Lý Văn Vân"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Nà giáo",
+              "groups": [
+                "Đán Văn Ích"
+              ]
+            },
+            {
+              "name": "Nà thé",
+              "groups": [
+                "Quan Thị Hằng"
+              ]
+            },
+            {
+              "name": "Nà vàn",
+              "groups": [
+                "Bàn Văn Chậu"
+              ]
+            },
+            {
+              "name": "Phúc hạ",
+              "groups": [
+                "Bàn Thị Cu"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Khuôn làng",
+              "groups": [
+                "Lương Văn Nguyên"
+              ]
+            },
+            {
+              "name": "Nà phầy",
+              "groups": [
+                "Đán Văn An"
+              ]
+            },
+            {
+              "name": "Nậm rịa",
+              "groups": [
+                "Nông Thị Luyến"
+              ]
+            },
+            {
+              "name": "Tát cà",
+              "groups": [
+                "Mã Văn Lưu"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản mào",
+              "groups": [
+                "Nông Văn Kín"
+              ]
+            },
+            {
+              "name": "Bản đén",
+              "groups": [
+                "Nông Văn Kiên",
+                "Phan Thi Hop"
+              ]
+            },
+            {
+              "name": "Hồng tiến",
+              "groups": [
+                "Chúng Văn Oanh",
+                "Vương Văn Toán"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Việt Lâm",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản Chang",
+              "groups": [
+                "Đặng Văn Trỏng"
+              ]
+            },
+            {
+              "name": "Chung",
+              "groups": [
+                "Hà Thị Nga",
+                "Trần Thị Đài"
+              ]
+            },
+            {
+              "name": "Khuổi Hóp",
+              "groups": [
+                "Đàm Văn Lành"
+              ]
+            },
+            {
+              "name": "Nặm Ngạn",
+              "groups": [
+                "Đặng Văn Tặng"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Hát",
+              "groups": [
+                "Nguyễn Thị Miện",
+                "Nguyễn Thị Tuýt"
+              ]
+            },
+            {
+              "name": "Khuổi chậu",
+              "groups": [
+                "Thèn Văn Long"
+              ]
+            },
+            {
+              "name": "Nặm thín",
+              "groups": [
+                "Phàn Văn Dần",
+                "Đặng Văn Chẳn"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Chang",
+              "groups": [
+                "Nguyễn Bá Tước"
+              ]
+            },
+            {
+              "name": "Lùng sinh",
+              "groups": [
+                "Quan Văn Chiểu",
+                "Trần Thị Hạnh"
+              ]
+            },
+            {
+              "name": "Nặm chang",
+              "groups": [
+                "Hoàng Văn Nhị"
+              ]
+            },
+            {
+              "name": "Nặm thăn",
+              "groups": [
+                "Chương Văn Họp"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Dưới",
+              "groups": [
+                "Nguyễn Thị Chúc",
+                "Nguyễn Thị Dược"
+              ]
+            },
+            {
+              "name": "Lèn",
+              "groups": [
+                "Lý Thị Bích Đoàn",
+                "Lục Thị Kiều"
+              ]
+            },
+            {
+              "name": "Nặm quăng",
+              "groups": [
+                "Chương Thị Sậu",
+                "Đặng Quang Đại"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vị Xuyên",
+      "associations": [
+        {
+          "name": "Hội cựu chiến binh",
+          "code": null,
+          "villages": [
+            {
+              "name": "Làng cúng",
+              "groups": [
+                "Hoàng Ngọc Hữu",
+                "Lã Mạnh Thắng",
+                "Nguyễn Thị Bằng"
+              ]
+            },
+            {
+              "name": "Làng mới",
+              "groups": [
+                "Bùi Văn Bình"
+              ]
+            },
+            {
+              "name": "Làng trần",
+              "groups": [
+                "Lục Văn Cương"
+              ]
+            },
+            {
+              "name": "Làng vàng 1",
+              "groups": [
+                "Nguyễn Thị Lả"
+              ]
+            },
+            {
+              "name": "Làng vàng 2",
+              "groups": [
+                "Lê Thị Niệm"
+              ]
+            },
+            {
+              "name": "Thôn 12",
+              "groups": [
+                "Ngô Thi Tâm"
+              ]
+            },
+            {
+              "name": "Thôn 15",
+              "groups": [
+                "Đỗ Thị Luấn"
+              ]
+            },
+            {
+              "name": "Thôn 24",
+              "groups": [
+                "Vũ Thị Hiến"
+              ]
+            },
+            {
+              "name": "Thôn 25",
+              "groups": [
+                "Trần Thị Ngọt"
+              ]
+            },
+            {
+              "name": "Thôn Mý",
+              "groups": [
+                "Nguyễn Xuân Đoàn",
+                "Nông Thị Tùy"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội liên hiệp phụ nữ",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bình vàng",
+              "groups": [
+                "Nguyễn Thị Liền"
+              ]
+            },
+            {
+              "name": "Làng nùng",
+              "groups": [
+                "Nguyễn Thị Lợi",
+                "Trần Thị Phương"
+              ]
+            },
+            {
+              "name": "Thôn 10",
+              "groups": [
+                "Mai Thị Vân"
+              ]
+            },
+            {
+              "name": "Thôn 30",
+              "groups": [
+                "Hoàng Thị Minh Thu",
+                "Nguyễn Thị Quảng"
+              ]
+            },
+            {
+              "name": "Thôn 31",
+              "groups": [
+                "Đinh Thị Thu Trang"
+              ]
+            },
+            {
+              "name": "Thôn 5",
+              "groups": [
+                "Phùng Thị Thúy"
+              ]
+            },
+            {
+              "name": "Thôn Suối Đồng",
+              "groups": [
+                "Mã Thị Thào"
+              ]
+            },
+            {
+              "name": "Vạt",
+              "groups": [
+                "Vũ Thị Lý"
+              ]
+            },
+            {
+              "name": "Đông cáp 1",
+              "groups": [
+                "Hoàng Ngọc Long"
+              ]
+            },
+            {
+              "name": "Đông cáp 2",
+              "groups": [
+                "Đặng Văn Sáng"
+              ]
+            },
+            {
+              "name": "Độc lập",
+              "groups": [
+                "Nguyễn Văn Dư"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hội nông dân",
+          "code": null,
+          "villages": [
+            {
+              "name": "Bản bang",
+              "groups": [
+                "Tráng Thị Hoa"
+              ]
+            },
+            {
+              "name": "Hợp thành",
+              "groups": [
+                "Trần Quang Thuần"
+              ]
+            },
+            {
+              "name": "Thôn 11",
+              "groups": [
+                "Lộc Thị Hối"
+              ]
+            },
+            {
+              "name": "Thôn 14",
+              "groups": [
+                "Tạ Thị Hồng"
+              ]
+            },
+            {
+              "name": "Thôn 17",
+              "groups": [
+                "Nguyễn Văn Thỏ"
+              ]
+            },
+            {
+              "name": "Thôn 18",
+              "groups": [
+                "Tiêu Văn Thanh"
+              ]
+            },
+            {
+              "name": "Thôn 19",
+              "groups": [
+                "Nông Thành Chung"
+              ]
+            },
+            {
+              "name": "Thôn 20",
+              "groups": [
+                "Nguyễn Danh Dự"
+              ]
+            },
+            {
+              "name": "Thôn 22",
+              "groups": [
+                "Đặng Thị Nhẫn"
+              ]
+            },
+            {
+              "name": "Thôn 23",
+              "groups": [
+                "Hoàng Thị Hiếu"
+              ]
+            },
+            {
+              "name": "Tân tiến",
+              "groups": [
+                "Cấn Mạnh Cường"
+              ]
+            },
+            {
+              "name": "Tân đức",
+              "groups": [
+                "Trần Thị Nguyệt"
+              ]
+            },
+            {
+              "name": "Việt Thành",
+              "groups": [
+                "Lại Ngọc Minh"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Đoàn thanh niên",
+          "code": null,
+          "villages": [
+            {
+              "name": "Làng khẻn",
+              "groups": [
+                "Nguyễn Thị Đềm"
+              ]
+            },
+            {
+              "name": "Làng má",
+              "groups": [
+                "Bảo Chí Viện",
+                "Vi Thị Huế"
+              ]
+            },
+            {
+              "name": "Thôn 13",
+              "groups": [
+                "Lê Thị Hoa"
+              ]
+            },
+            {
+              "name": "Thôn 2",
+              "groups": [
+                "Phạm Thị Nết"
+              ]
+            },
+            {
+              "name": "Thôn 26",
+              "groups": [
+                "Nguyễn Thị Lý"
+              ]
+            },
+            {
+              "name": "Thôn 27",
+              "groups": [
+                "Đinh Thị Nở"
+              ]
+            },
+            {
+              "name": "Thôn 28",
+              "groups": [
+                "Nguyễn Thị Vinh"
+              ]
+            },
+            {
+              "name": "Thôn 29",
+              "groups": [
+                "Nguyễn Hưu Tiến"
+              ]
+            },
+            {
+              "name": "Thôn 3",
+              "groups": [
+                "Đỗ Thị Lê"
+              ]
+            },
+            {
+              "name": "Thôn 8",
+              "groups": [
+                "Vi Thị Bình"
+              ]
+            },
+            {
+              "name": "Đức thành",
+              "groups": [
+                "Nguyễn Văn Tụ"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

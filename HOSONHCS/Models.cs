@@ -19,11 +19,13 @@ namespace HOSONHCS
         public string Hoi { get; set; }
         public string Totruong { get; set; }
         public string To { get; set; }
+        public string Tinh { get; set; }
         public string PGD { get; set; }
         public string Chuongtrinh { get; set; }
         public string Vtc { get; set; }
         public string Phuongan { get; set; }
         public DateTime Ngaydenhan { get; set; }
+        public DateTime Ngaygiaingaan { get; set; }
         public DateTime Thoihancccd { get; set; }
         public string Thoihanvay { get; set; }
         public string Sotien { get; set; }
@@ -63,6 +65,7 @@ namespace HOSONHCS
             Ngaysinh = DateTime.MinValue;
             Ngaylaphs = DateTime.MinValue;
             Ngaydenhan = DateTime.MinValue;
+            Ngaygiaingaan = DateTime.MinValue;
             Thoihancccd = DateTime.MinValue;
         }
     }
@@ -92,5 +95,17 @@ namespace HOSONHCS
     {
         public string name { get; set; }
         public List<string> groups { get; set; }
+    }
+
+    public class TinhPgdEntry
+    {
+        public string pgd { get; set; }
+        public List<Commune> communes { get; set; } = new List<Commune>();
+    }
+
+    public class TinhModel
+    {
+        public string tinh { get; set; }
+        public List<TinhPgdEntry> pgds { get; set; } = new List<TinhPgdEntry>();
     }
 }

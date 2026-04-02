@@ -107,6 +107,7 @@ namespace HOSONHCS
          private async void BtnSave_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -153,6 +154,7 @@ namespace HOSONHCS
          private async void Btn03_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -188,6 +190,7 @@ namespace HOSONHCS
          private async void BtnGUQ_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -223,6 +226,7 @@ namespace HOSONHCS
          private async void Btn01tgtv_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -258,6 +262,7 @@ namespace HOSONHCS
          private async void BtnBia_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -334,6 +339,8 @@ namespace HOSONHCS
                     return;
                 }
 
+                if (!ValidateDuplicateCccdSdt()) return;
+
                 customer._fileName = null;
 
                 try
@@ -401,6 +408,7 @@ namespace HOSONHCS
         private async void Btnall_Click(object sender, EventArgs e)
         {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
 
             try
             {

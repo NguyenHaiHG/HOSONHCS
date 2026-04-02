@@ -290,6 +290,7 @@ namespace HOSONHCS
                  Hoi = cbHoi.Text,
                  Totruong = cbTo.Text,
                  To = "",
+                 Tinh = (cbTinh != null ? cbTinh.Text : ""),
                  PGD = cbPGD.Text,
                  Chuongtrinh = cbChuongtrinh.Text,
                  Vtc = (cbVtc != null ? cbVtc.Text : ""),
@@ -350,14 +351,64 @@ namespace HOSONHCS
              suppressComboChanged = true;
              try
              {
-                 cbPGD.Text = c.PGD ?? ""; 
+                 // Bước 1: set cbTinh trước (xác định tỉnh), dùng GetTinhFromPGD để tương thích ngược
+                 var tinh = !string.IsNullOrEmpty(c.Tinh) ? c.Tinh : GetTinhFromPGD(c.PGD ?? "");
+                 if (cbTinh != null)
+                 {
+                     cbTinh.Text = tinh;
+                     // Populate cbPGD items theo tỉnh (giống CbTinh_SelectedIndexChanged)
+                     cbPGD.Items.Clear();
+                     currentTinhModel = null;
+                     if (!string.IsNullOrWhiteSpace(tinh))
+                     {
+                         string tinhJson = GetTinhJsonFileName(tinh);
+                         if (!string.IsNullOrEmpty(tinhJson))
+                         {
+                             string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, tinhJson);
+                             if (System.IO.File.Exists(path))
+                             {
+                                 try
+                                 {
+                                     var jstr = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8);
+                                     currentTinhModel = Newtonsoft.Json.JsonConvert.DeserializeObject<TinhModel>(jstr);
+                                     if (currentTinhModel?.pgds != null)
+                                         foreach (var p in currentTinhModel.pgds)
+                                             if (!string.IsNullOrWhiteSpace(p.pgd))
+                                                 cbPGD.Items.Add(p.pgd);
+                                 }
+                                 catch { currentTinhModel = null; }
+                             }
+                         }
+                         else
+                         {
+                             foreach (var pgd in GetPgdItemsForTinh(tinh))
+                                 cbPGD.Items.Add(pgd);
+                         }
+                     }
+                 }
 
-                 string jsonFileName = GetJsonFileNameFromPGD(c.PGD ?? "");
+                 // Bước 2: set cbPGD
+                 cbPGD.Text = c.PGD ?? "";
 
-                 LoadXinManData(jsonFileName);
-                 if (cbXa.Items.Count == 0 && xinmanModel != null) 
-                     foreach (var com in xinmanModel.communes) 
-                         if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name)) 
+                 // Bước 3: load data JSON cho cbXa/cbHoi/cbThon/cbTo
+                 if (currentTinhModel?.pgds != null)
+                 {
+                     var pgdEntry = currentTinhModel.pgds.FirstOrDefault(p =>
+                         string.Equals(p.pgd, c.PGD, StringComparison.OrdinalIgnoreCase));
+                     if (pgdEntry != null)
+                         xinmanModel = new XinManModel { pgd = pgdEntry.pgd, communes = pgdEntry.communes ?? new System.Collections.Generic.List<Commune>() };
+                     else
+                         xinmanModel = null;
+                 }
+                 else
+                 {
+                     string jsonFileName = GetJsonFileNameFromPGD(c.PGD ?? "");
+                     LoadXinManData(jsonFileName);
+                 }
+
+                 if (cbXa.Items.Count == 0 && xinmanModel != null)
+                     foreach (var com in xinmanModel.communes)
+                         if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name))
                              cbXa.Items.Add(com.name);
 
                  try { if (!string.IsNullOrEmpty(c.Xa)) { if (!cbXa.Items.Cast<object>().Any(x => string.Equals((x ?? "").ToString(), c.Xa, StringComparison.OrdinalIgnoreCase))) cbXa.Items.Add(c.Xa); cbXa.Text = c.Xa; } else cbXa.Text = ""; } catch { }

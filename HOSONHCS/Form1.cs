@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace HOSONHCS
 {
@@ -32,8 +33,12 @@ namespace HOSONHCS
         // ========== XINMAN DATA (PGD/XÃ/THÔN/HỘI/TỔ) ==========
         // Model chứa toàn bộ dữ liệu cơ cấu tổ chức từ xinman.json
         private XinManModel xinmanModel;
+        // Model chứa dữ liệu tỉnh (nhiều PGD trong một file) - ví dụ: tuyenquang.json
+        private TinhModel currentTinhModel;
         // Editor để chỉnh sửa xinman.json trên tab3 (cần login)
         private XinManEditor xinManEditor;
+        // TinhModel đang được chọn trong cbTinhfix (dùng để populate cbpgdfix → dgv1)
+        private TinhModel _editTinhModel = null;
 
         // ========== CÁC CỞ SUPPRESS (NGĂN SỰ KIỆN ĐỆ QUY) ==========
         // Cờ để ngăn combobox gọi sự kiện SelectedIndexChanged khi đang load dữ liệu
@@ -79,7 +84,12 @@ namespace HOSONHCS
             "Trồng cây cam",
             "Mở rộng cửa hàng tạp hoá",
             "Mở rộng cửa hàng ăn uống",
-            "Mở rộng cửa hàng bán quần áo"
+            "Mở rộng cửa hàng bán quần áo",
+            "Trồng và chăm sóc cây cà phê",
+            "Trồng và chăm sóc cây cao su",
+            "Trồng cây ăn quả",
+            "Trồng cây bời lời",
+            "Trồng cây tiêu"
         };
         public Form1()
         {
@@ -112,6 +122,10 @@ namespace HOSONHCS
             try { btnTaobangke.Click += BtnTaobangke_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
 
             // (Đã xoá btnUpdate)
+
+            // ========== NÚT CẬP NHẬT VÀ XOÁ FORM ==========
+            try { btnUpdate.Click += BtnUpdate_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
+            try { btnClear.Click += BtnClear_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
 
             // ComboBox Fix PGD - cho phép chọn nhanh và reload dữ liệu PGD
             try { cbpgdfix.SelectedIndexChanged += CbPgdFix_SelectedIndexChanged; } catch { /* bỏ qua nếu control không tồn tại */ }
@@ -154,53 +168,67 @@ namespace HOSONHCS
                 dateNgaycapCCCD.ValueChanged += DateNgaycapCCCD_ValueChanged; 
             } catch { }
 
-            // ========== NGĂN CHỌN NGÀY TRONG TƯƠNG LAI ==========
-            // Set MaxDate = hôm nay cho tất cả DateTimePicker để không cho chọn ngày tương lai
+            // ========== VALIDATE NGÀY TRONG TƯƠNG LAI: DÙNG LEAVE THAY VALUECHANGED ==========
+            // Bỏ MaxDate để user nhập tự do, chỉ validate khi rời khỏi ô (Leave)
             try 
             {
                 if (dateLaphs != null) 
                 { 
-                    dateLaphs.MaxDate = DateTime.Today;
-                    dateLaphs.ValueChanged += DatePicker_ValueChanged;
+                    dateLaphs.MaxDate = DateTime.MaxValue;
+                    dateLaphs.Leave += DatePickerChecked_Leave;
                 }
                 if (dateNgaycapCCCD != null) 
                 { 
-                    dateNgaycapCCCD.MaxDate = DateTime.Today;
-                    dateNgaycapCCCD.ValueChanged += DatePicker_ValueChanged;
+                    dateNgaycapCCCD.MaxDate = DateTime.MaxValue;
+                    dateNgaycapCCCD.Format = DateTimePickerFormat.Custom;
+                    dateNgaycapCCCD.CustomFormat = " ";
+                    dateNgaycapCCCD.Leave += DatePickerChecked_Leave;
+                    dateNgaycapCCCD.Enter += DatePicker_Enter;
                 }
                 if (dateNgaysinh != null) 
                 { 
-                    dateNgaysinh.MaxDate = DateTime.Today;
-                    dateNgaysinh.ValueChanged += DatePicker_ValueChanged;
+                    dateNgaysinh.MaxDate = DateTime.MaxValue;
+                    dateNgaysinh.Format = DateTimePickerFormat.Custom;
+                    dateNgaysinh.CustomFormat = " ";
+                    dateNgaysinh.Leave += DatePickerChecked_Leave;
+                    dateNgaysinh.Enter += DatePicker_Enter;
+                    dateNgaysinh.ValueChanged += DateNgaysinh_ValueChanged;
                 }
                 if (dateDH != null) 
                 { 
-                    // Ngày đến hạn KHÔNG giới hạn MaxDate - cho phép nhập ngày tương lai
+                    // Ngày đến hạn: cho phép nhập ngày tương lai, không validate
                     dateDH.MaxDate = DateTime.MaxValue;
-                    // KHÔNG gắn sự kiện DatePicker_ValueChanged để không validate ngày tương lai
+                }
+                if (dateGn != null)
+                {
+                    dateGn.MaxDate = DateTime.MaxValue;
                 }
                 if (datendhcccd != null) 
                 { 
-                    // Thời hạn CCCD: cho phép nhập tương lai nhưng validate định dạng
+                    // Thời hạn CCCD: cho phép tương lai, chỉ validate định dạng khi rời ô
                     datendhcccd.MaxDate = DateTime.MaxValue;
-                    datendhcccd.ValueChanged += DateThoihanCCCD_ValueChanged;
+                    datendhcccd.Leave += DateThoihanCCCD_ValueChanged;
                 }
-                // ========== DATEPICKER NGÀY SINH NTK: CẦN SET MAXDATE ==========
-                // datentk1/2/3 là DateTimePicker, cũng cần set MaxDate để tránh chọn ngày tương lai
+                // ========== DATEPICKER NGÀY SINH NTK: VALIDATE KHI RỜI Ô ==========
+                // datentk1/2/3 có ShowCheckBox=true, chỉ validate sau khi nhập xong (Leave)
+                // Không dùng MaxDate để tránh reset ngay khi đang gõ
                 if (datentk1 != null)
                 {
-                    datentk1.MaxDate = DateTime.Today;
-                    datentk1.ValueChanged += DatePicker_ValueChanged;
+                    datentk1.MaxDate = DateTime.MaxValue;
+                    datentk1.Leave += DatePickerChecked_Leave;
+                    datentk1.ValueChanged += DateNtk_ValueChanged;
                 }
                 if (datentk2 != null)
                 {
-                    datentk2.MaxDate = DateTime.Today;
-                    datentk2.ValueChanged += DatePicker_ValueChanged;
+                    datentk2.MaxDate = DateTime.MaxValue;
+                    datentk2.Leave += DatePickerChecked_Leave;
+                    datentk2.ValueChanged += DateNtk_ValueChanged;
                 }
                 if (datentk3 != null)
                 {
-                    datentk3.MaxDate = DateTime.Today;
-                    datentk3.ValueChanged += DatePicker_ValueChanged;
+                    datentk3.MaxDate = DateTime.MaxValue;
+                    datentk3.Leave += DatePickerChecked_Leave;
+                    datentk3.ValueChanged += DateNtk_ValueChanged;
                 }
             } catch { }
 
@@ -210,39 +238,61 @@ namespace HOSONHCS
             try { cbXa.SelectedIndexChanged += CbXa_SelectedIndexChanged; } catch { }
             try { cbThon.SelectedIndexChanged += CbThon_SelectedIndexChanged; } catch { }
             try { cbHoi.SelectedIndexChanged += CbHoi_SelectedIndexChanged; } catch { }
+            try { cbHoi.TextChanged += CbHoi_TextChanged; } catch { }
 
             // ========== TỰ ĐỘNG ĐIỀN CBDOITUONG DỰA TRÊN CBCHUONGTRINH ==========
             try { cbChuongtrinh.SelectedIndexChanged += CbChuongtrinh_SelectedIndexChanged; } catch { }
 
+            // ========== TỰ ĐỘNG TÍNH NGÀY ĐẾN HẠN ==========
+            try { cbThoihanvay.SelectedIndexChanged += CbThoihanvay_SelectedIndexChanged; } catch { }
+
+            // ========== TỰ ĐỘNG ĐIỀU KHIỂN CBMUCDICH1/2 DỰA TRÊN CBPHUONGAN ==========
+            try { cbPhuongan.SelectedIndexChanged += CbPhuongan_SelectedIndexChanged; } catch { }
+            try { cbPhuongan.TextChanged += CbPhuongan_TextChanged; } catch { }
+            // cbmucdich2 mặc định bị khoá, chỉ mở khi cbPhuongan chọn CTNS, CTVS
+            try { if (cbmucdich2 != null) cbmucdich2.Enabled = false; } catch { }
+
             // ========== FORMAT SỐ TIỀN TỰ ĐỘNG ==========
-            // cbSotien: chỉ cho nhập số, tự động format với dấu '.' ngăn cách hàng nghìn
+            // cbSotien/cbSotien1/cbSotien2: chỉ cho nhập số, tự động format với dấu '.' ngăn cách hàng nghìn
             try { cbSotien.KeyPress += CbMoney_KeyPress; cbSotien.TextChanged += CbMoney_TextChanged; } catch { }
+            try { cbSotien1.KeyPress += CbMoney_KeyPress; cbSotien1.TextChanged += CbMoney_TextChanged; } catch { }
+            try { cbSotien2.KeyPress += CbMoney_KeyPress; cbSotien2.TextChanged += CbMoney_TextChanged; } catch { }
 
             // ========== HIỂN THỊ CHECKBOX CHO CÁC TRƯỜNG NGÀY OPTIONAL ==========
             // Các DateTimePicker có ShowCheckBox = true để user có thể bỏ chọn (không bắt buộc nhập)
             // Mặc định unchecked = không có giá trị
             try 
             {
-                // dateLaphs: BẮT BUỘC - BỎ checkbox
+                // dateLaphs: BẮT BUỘC - BỎ checkbox, bắt đầu trống
                 if (dateLaphs != null)
                 {
                     dateLaphs.ShowCheckBox = false;
                     dateLaphs.Format = DateTimePickerFormat.Custom;
-                    dateLaphs.CustomFormat = "dd/MM/yyyy";
+                    dateLaphs.CustomFormat = " ";
+                    dateLaphs.Enter += DatePicker_Enter;
                 }
 
                 if (dateDH != null) 
                 { 
-                    dateDH.ShowCheckBox = true; 
-                    dateDH.Checked = false;  // Ngày đến hạn: optional
+                    // Ngày đến hạn: KHOÁ hoàn toàn - chỉ hiển thị, không thao tác
+                    dateDH.ShowCheckBox = false;
+                    dateDH.Enabled = false;
+                    dateDH.CustomFormat = "          "; // mặc định ẩn, chỉ hiện khi tính ra
                 }
-                // datendhcccd: BỎ checkbox (bắt buộc nhập) - Luôn set Checked = true
+                if (dateGn != null)
+                {
+                    // Ngày giải ngân: có checkbox - tick để chọn
+                    dateGn.ShowCheckBox = true;
+                    dateGn.Checked = false;
+                    dateGn.MaxDate = DateTime.MaxValue;
+                }
+                // datendhcccd: BỎ checkbox, bắt đầu trống
                 if (datendhcccd != null) 
                 { 
                     datendhcccd.ShowCheckBox = false;
                     datendhcccd.Format = DateTimePickerFormat.Custom;
-                    datendhcccd.CustomFormat = "dd/MM/yyyy";
-                    datendhcccd.Checked = true;  // Luôn checked vì bắt buộc
+                    datendhcccd.CustomFormat = " ";
+                    datendhcccd.Enter += DatePicker_Enter;
                 }
                 if (datentk1 != null)
                 { 
@@ -311,6 +361,9 @@ namespace HOSONHCS
             // ========== KHỞI TẠO TAB GIỚI THIỆU (TABPAGE6) ==========
             try { InitializeTab6(); } catch { }
 
+            // ========== KHỞI TẠO TAB XEM VĂN BẢN WORD (TABPAGE7) ==========
+            try { InitializeTab7(); } catch { }
+
             // Bind dữ liệu vào DataGridView
             BindGrid();
 
@@ -337,6 +390,11 @@ namespace HOSONHCS
             // Khởi tạo hiệu ứng chạy chữ cho thanh tiêu đề Form (title bar)
             // Text "PHẦN MỀM TẠO HỒ SƠ VAY VỐN" sẽ chạy từ phải sang trái
             try { InitializeMarquee(); } catch { }
+
+            // ========== THÔNG BÁO NGÀY LỄ / SỰ KIỆN ĐẶC BIỆT ==========
+            // Fetch thông báo từ GitHub và hiện popup nếu hôm nay có sự kiện
+            // Gọi sau khi form đã hiển thị hoàn toàn (Shown event) để Invoke không bị lỗi
+            this.Shown += async (s, ev) => await HolidayNoticeChecker.CheckAndShowAsync(this);
         }
 
         // ========================================================================
@@ -653,7 +711,7 @@ namespace HOSONHCS
                 foreach (var f in tempFilesToDelete) { try { if (File.Exists(f)) File.Delete(f); } catch { } }
             }
 
-            return createdFiles;
+            return ConvertDocxListToPdf(createdFiles);
         }
 
         private void ReplacePlaceholdersInWord(string docPath, Customer c)
@@ -683,13 +741,13 @@ namespace HOSONHCS
                 { "{{chuongtrinh}}", c.Chuongtrinh },
                 { "{{vtc}}", c.Vtc },
                 { "{{phuongan}}", c.Phuongan },
-                { "{{ngaydenhan}}", c.Ngaydenhan == DateTime.MinValue ? "" : c.Ngaydenhan.ToString("dd/MM/yyyy") },
+                { "{{ngaydenhan}}", c.Ngaydenhan == DateTime.MinValue ? "...../...../....." : c.Ngaydenhan.ToString("dd/MM/yyyy") },
                 { "{{thoihanvay}}", c.Thoihanvay },
                 { "{{sotien}}", c.Sotien },
                 { "{{sotien1}}", c.Sotien1 },
                 { "{{sotien2}}", c.Sotien2 },
                 { "{{sotientong}}", c.Sotientong },
-                { "{{sotienchu}}", c.Sotienchu },
+                { "{{sotienchu}}", string.IsNullOrEmpty(c.Sotienchu) ? "" : char.ToUpper(c.Sotienchu[0]) + c.Sotienchu.Substring(1) },
                 { "{{soluong1}}", c.Soluong1 ?? "" },
                 { "{{soluong2}}", string.IsNullOrWhiteSpace(c.Soluong2) ? "" : c.Soluong2 },
                 // Ưu tiên trường Mucdich nhập tự do; nếu trống, dùng Doituong (combo) làm dự phòng
@@ -705,7 +763,8 @@ namespace HOSONHCS
                 { "{{nam}}", c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.Year.ToString() },
                 { "{{phanky}}", c.Phanky },
                 { "{{pgd}}", c.PGD },
-                { "{{thoihancccd}}", c.Thoihancccd == DateTime.MinValue ? "" : c.Thoihancccd.ToString("dd/MM/yyyy") },
+                { "{{tinh}}", c.Tinh ?? "" },
+                { "{{thoihancccd}}", !string.IsNullOrEmpty(c.ThoihancccdText) ? c.ThoihancccdText : (c.Thoihancccd == DateTime.MinValue ? "" : c.Thoihancccd.ToString("dd/MM/yyyy")) },
                 { "{{khau}}", c.Nhankhau ?? "" },
                 { "{{ld}}", (CountNguoiThuaKe(c) + 1).ToString() },
 
@@ -770,6 +829,36 @@ namespace HOSONHCS
                 System.Diagnostics.Debug.WriteLine($"ERROR in 03 DS mapping: {ex.Message}");
             }
 
+            // Đối với mẫu 01 GQVL: {{chiphi}} = sotien + 40%, {{thunhap}} = chiphi + sotien
+            try
+            {
+                if (Is01GQVL(docPath))
+                {
+                    long sotienVal = ParseMoneyStringToLong(c.Sotien);
+                    long chiPhiVal = (long)Math.Round(sotienVal * 1.4);
+                    long thuNhapVal = chiPhiVal + sotienVal;
+                    replacements["{{chiphi}}"] = string.Format(CultureInfo.InvariantCulture, "{0:N0}", chiPhiVal).Replace(",", ".");
+                    replacements["{{thunhap}}"] = string.Format(CultureInfo.InvariantCulture, "{0:N0}", thuNhapVal).Replace(",", ".");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ERROR in 01 GQVL chiphi/thunhap: {ex.Message}");
+            }
+
+            // Đối với mẫu BIA: nếu không có người thừa kế → hiển thị {{ngaylaphs}} dạng trống chờ ký
+            try
+            {
+                if (IsBia(docPath) && CountNguoiThuaKe(c) == 0)
+                {
+                    replacements["{{ngaylaphs}}"] = "Ngày ..... Tháng ..... Năm .....";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ERROR in BIA ngaylaphs override: {ex.Message}");
+            }
+
             try { ReplacePlaceholdersUsingOpenXml(docPath, replacements, c); }
             catch (Exception ex) { MessageBox.Show("Error replacing placeholders (OpenXML): " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
          }
@@ -792,7 +881,7 @@ namespace HOSONHCS
                 if (!long.TryParse(digits, out long value)) return;
                 if (value <= 0) return;
                 var words = NumberToVietnameseWords(value);
-                if (!string.IsNullOrWhiteSpace(words)) c.Sotienchu = words + " đồng";
+                if (!string.IsNullOrWhiteSpace(words)) c.Sotienchu = char.ToUpper(words[0]) + words.Substring(1) + " đồng";
             }
             catch { }
         }
@@ -1068,7 +1157,8 @@ namespace HOSONHCS
 
                 ReplacePlaceholdersInWord(destDoc, c);
 
-                return destDoc;
+                var pdfPaths = ConvertDocxListToPdf(new List<string> { destDoc });
+                return pdfPaths.Count > 0 ? pdfPaths[0] : null;
             }
             catch (Exception ex)
             {
@@ -1737,7 +1827,17 @@ namespace HOSONHCS
 
         // Các stub của Designer được tham chiếu trong Designer.cs
         private void richTextBox1_TextChanged(object sender, EventArgs e) { }
-        private void Form1_Load(object sender, EventArgs e) { }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Auto-populate cbTinh và cbTinhfix từ file JSON trong thư mục
+            try { TinhHelper.PopulateComboBox(cbTinh); } catch { }
+            try { TinhHelper.PopulateComboBox(cbTinhfix); } catch { }
+
+            // Đăng ký sự kiện cbTinhfix → populate cbpgdfix
+            try { cbTinhfix.SelectedIndexChanged += CbTinhfix_SelectedIndexChanged; } catch { }
+            // Đăng ký sự kiện cbpgdfix → load dữ liệu PGD lên dgv1
+            try { cbpgdfix.SelectedIndexChanged += CbpgdfixEditor_SelectedIndexChanged; } catch { }
+        }
 
          // -------------------------
          // Xử lý UI / CRUD
@@ -1838,6 +1938,7 @@ namespace HOSONHCS
          private async void BtnSave_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -1851,13 +1952,14 @@ namespace HOSONHCS
                  else customer._fileName = customer._fileName; // leave as-is (null or set)
 
                  SaveCustomerToFile(customer);
-                 // btn01 should export only template 01 (no 03, no GUQ)
-                 var createdFiles = await Task.Run(() => CreateProfileFromTemplate(customer, include03: false));
+                  // Thêm vào list ngay sau khi lưu file, trước await, để kiểm tra trùng vẫn hoạt động nếu template lỗi
+                  UpsertCustomerInList(customer);
 
-                 UpsertCustomerInList(customer);
+                  // btn01 should export only template 01 (no 03, no GUQ)
+                  var createdFiles = await Task.Run(() => CreateProfileFromTemplate(customer, include03: false));
 
-                 BindGrid();
-                 ClearForm();
+                  BindGrid();
+                  ClearForm();
 
                  // Hiển thị thông báo xuất mẫu 01/TD thành công
                  MessageBox.Show(
@@ -1888,6 +1990,7 @@ namespace HOSONHCS
          private async void Btn03_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -1925,6 +2028,7 @@ namespace HOSONHCS
          private async void BtnGUQ_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -1962,6 +2066,7 @@ namespace HOSONHCS
          private async void Btn01tgtv_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -1999,6 +2104,7 @@ namespace HOSONHCS
          private async void BtnBia_Click(object sender, EventArgs e)
          {
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
             try
             {
                 var customer = ReadForm();
@@ -2154,23 +2260,31 @@ namespace HOSONHCS
              if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
 
              DateTime ngaydenhan = DateTime.MinValue;
-             if (dateDH != null && dateDH.Checked)
+             DateTime ngaygiaingaan = DateTime.MinValue;
+             if (dateGn != null && dateGn.Checked)
              {
-                 // Ngày đến hạn KHÔNG validate ngày tương lai - cho phép nhập bất kỳ ngày nào
-                 ngaydenhan = dateDH.Value.Date;
+                 ngaygiaingaan = dateGn.Value.Date;
+                 // Ngày đến hạn lấy từ dateDH (đã được tính tự động)
+                 if (dateDH != null)
+                     ngaydenhan = dateDH.Value.Date;
              }
 
              DateTime thoihancccd = DateTime.MinValue;
-             if (datendhcccd != null)
+             string thoihancccdText = "";
+             if (ngaysinh != DateTime.MinValue)
              {
-                 // Thời hạn CCCD: phải lớn hơn hoặc bằng ngày hiện tại
+                 thoihancccd = CalcThoiHanCCCD(ngaysinh, ngaycap);
+                 thoihancccdText = thoihancccd == DateTime.MinValue ? "không thời hạn" : thoihancccd.ToString("dd/MM/yyyy");
+             }
+             else if (datendhcccd != null && datendhcccd.CustomFormat != " ")
+             {
                  thoihancccd = datendhcccd.Value.Date;
-
-                 // VALIDATION: Không cho phép tạo hồ sơ nếu CCCD đã hết hạn
-                 if (thoihancccd < DateTime.Today)
-                 {
-                     throw new Exception($"CCCD đã hết hạn ngày {thoihancccd:dd/MM/yyyy}.\n\nKhông thể tạo hồ sơ với CCCD hết hạn.\n\nVui lòng cập nhật CCCD mới.");
-                 }
+                 thoihancccdText = thoihancccd.ToString("dd/MM/yyyy");
+             }
+             // VALIDATION: Không cho phép tạo hồ sơ nếu CCCD đã hết hạn (chỉ khi có ngày, không áp dụng khi không thời hạn)
+             if (thoihancccd != DateTime.MinValue && thoihancccd < DateTime.Today)
+             {
+                 throw new Exception($"CCCD đã hết hạn ngày {thoihancccd:dd/MM/yyyy}.\n\nKhông thể tạo hồ sơ với CCCD hết hạn.\n\nVui lòng cập nhật CCCD mới.");
              }
 
              return new Customer
@@ -2187,6 +2301,7 @@ namespace HOSONHCS
                  Hoi = cbHoi.Text,
                  Totruong = cbTo.Text,
                  To = "",
+                 Tinh = (cbTinh != null ? cbTinh.Text : ""),
                  PGD = cbPGD.Text,
                  Chuongtrinh = cbChuongtrinh.Text,
                  Vtc = (cbVtc != null ? cbVtc.Text : ""),
@@ -2206,7 +2321,9 @@ namespace HOSONHCS
                  Doituong2 = "",
                  Ngaylaphs = ngaylaphs,
                  Ngaydenhan = ngaydenhan,
+                 Ngaygiaingaan = ngaygiaingaan,
                  Thoihancccd = thoihancccd,
+                 ThoihancccdText = thoihancccdText,
                  Dantoc = (cbDantoc != null ? cbDantoc.Text : ""),
                  Sdt = (txtSdt != null ? txtSdt.Text : ""),  // Lưu với format có dấu chấm (0812.801.886)
                  Nhankhau = (txtNhankhau != null ? txtNhankhau.Text.Trim() : ""),
@@ -2225,16 +2342,26 @@ namespace HOSONHCS
              txtHoten.Text = c.Hoten ?? "";
              txtSocccd.Text = c.Socccd ?? "";
              cbNhandang.Text = c.Nhandang ?? "";
-             var ngaycap = c.Ngaycap == DateTime.MinValue ? DateTime.Today : c.Ngaycap;
-             if (ngaycap > DateTime.Today) ngaycap = DateTime.Today;
-             dateNgaycapCCCD.Value = ngaycap;
 
+             // dateNgaycapCCCD
+             try
+             {
+                 var ngaycap = c.Ngaycap == DateTime.MinValue ? DateTime.Today : c.Ngaycap;
+                 if (ngaycap > DateTime.Today) ngaycap = DateTime.Today;
+                 dateNgaycapCCCD.Format = DateTimePickerFormat.Custom;
+                 dateNgaycapCCCD.CustomFormat = "dd/MM/yyyy";
+                 dateNgaycapCCCD.Value = ngaycap;
+             } catch { }
+
+             // dateNgaysinh
              try 
              { 
                  if (dateNgaysinh != null) 
                  {
                      var ngaysinh = c.Ngaysinh == DateTime.MinValue ? DateTime.Today : c.Ngaysinh;
                      if (ngaysinh > DateTime.Today) ngaysinh = DateTime.Today;
+                     dateNgaysinh.Format = DateTimePickerFormat.Custom;
+                     dateNgaysinh.CustomFormat = "dd/MM/yyyy";
                      dateNgaysinh.Value = ngaysinh;
                  }
              } catch { }
@@ -2250,15 +2377,44 @@ namespace HOSONHCS
              suppressComboChanged = true;
              try
              {
-                 cbPGD.Text = c.PGD ?? ""; 
+                 // Bước 1: set cbTinh, populate cbPGD theo tỉnh
+                 var tinh = !string.IsNullOrEmpty(c.Tinh) ? c.Tinh : GetTinhFromPGD(c.PGD ?? "");
+                 if (cbTinh != null)
+                 {
+                     cbTinh.Text = tinh;
+                     cbPGD.Items.Clear();
+                     currentTinhModel = null;
+                     if (!string.IsNullOrWhiteSpace(tinh))
+                     {
+                         currentTinhModel = TinhHelper.LoadTinhModel(tinh);
+                         if (currentTinhModel?.pgds != null)
+                             foreach (var p in currentTinhModel.pgds)
+                                 if (!string.IsNullOrWhiteSpace(p.pgd))
+                                     cbPGD.Items.Add(p.pgd);
+                     }
+                 }
 
-                 // Lấy tên file JSON từ PGD của customer
-                 string jsonFileName = GetJsonFileNameFromPGD(c.PGD ?? "");
+                 // Bước 2: set cbPGD
+                 cbPGD.Text = c.PGD ?? "";
 
-                 LoadXinManData(jsonFileName);
-                 if (cbXa.Items.Count == 0 && xinmanModel != null) 
-                     foreach (var com in xinmanModel.communes) 
-                         if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name)) 
+                 // Bước 3: load data cho cbXa/cbHoi/cbThon/cbTo
+                 if (currentTinhModel?.pgds != null)
+                 {
+                     var pgdEntry = currentTinhModel.pgds.FirstOrDefault(p =>
+                         string.Equals(p.pgd, c.PGD, StringComparison.OrdinalIgnoreCase));
+                     xinmanModel = pgdEntry != null
+                         ? new XinManModel { pgd = pgdEntry.pgd, communes = pgdEntry.communes ?? new List<Commune>() }
+                         : null;
+                 }
+                 else
+                 {
+                     string jsonFileName = GetJsonFileNameFromPGD(c.PGD ?? "");
+                     LoadXinManData(jsonFileName);
+                 }
+
+                 if (cbXa.Items.Count == 0 && xinmanModel != null)
+                     foreach (var com in xinmanModel.communes)
+                         if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name))
                              cbXa.Items.Add(com.name);
 
                  try { if (!string.IsNullOrEmpty(c.Xa)) { if (!cbXa.Items.Cast<object>().Any(x => string.Equals((x ?? "").ToString(), c.Xa, StringComparison.OrdinalIgnoreCase))) cbXa.Items.Add(c.Xa); cbXa.Text = c.Xa; } else cbXa.Text = ""; } catch { }
@@ -2272,6 +2428,7 @@ namespace HOSONHCS
              cbChuongtrinh.Text = c.Chuongtrinh ?? "";
              try { if (cbVtc != null) cbVtc.Text = c.Vtc ?? ""; } catch { }
              try { if (cbPhuongan != null) cbPhuongan.Text = c.Phuongan ?? ""; } catch { }
+             try { ApplyPhuonganState(c.Phuongan ?? ""); } catch { }
              cbThoihanvay.Text = c.Thoihanvay ?? "";
              try { if (cbPhanky != null) cbPhanky.Text = c.Phanky ?? ""; } catch { }
 
@@ -2287,27 +2444,43 @@ namespace HOSONHCS
              try { if (cbDoituong1 != null) cbDoituong1.Text = c.Soluong1 ?? ""; } catch { }
              try { if (cbDoituong2 != null) cbDoituong2.Text = c.Soluong2 ?? ""; } catch { }
 
-             // Các ngày - đảm bảo không có ngày tương lai
-             var ngaylaphs = c.Ngaylaphs == DateTime.MinValue ? DateTime.Today : c.Ngaylaphs;
-             if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
-             dateLaphs.Value = ngaylaphs;
+             // dateLaphs
+             try
+             {
+                 var ngaylaphs = c.Ngaylaphs == DateTime.MinValue ? DateTime.Today : c.Ngaylaphs;
+                 if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
+                 dateLaphs.Format = DateTimePickerFormat.Custom;
+                 dateLaphs.CustomFormat = "dd/MM/yyyy";
+                 dateLaphs.Value = ngaylaphs;
+             } catch { }
              try 
              { 
-                 if (dateDH != null) 
+                 // dateDH: khoá hoàn toàn, chỉ hiển thị giá trị tính toán
+                 if (dateDH != null)
                  {
-                     dateDH.ShowCheckBox = true;
-                     if (c.Ngaydenhan == DateTime.MinValue)
+                     dateDH.ShowCheckBox = false;
+                     dateDH.Enabled = false;
+                     dateDH.Format = DateTimePickerFormat.Custom;
+                 }
+                 // dateGn: checkbox ở đây - load trạng thái từ dữ liệu khách
+                 if (dateGn != null)
+                 {
+                     if (c.Ngaygiaingaan == DateTime.MinValue)
                      {
-                         dateDH.Checked = false;
+                         dateGn.Checked = false;
+                         dateDH.CustomFormat = " "; // ẩn ngày đến hạn
                      }
                      else
                      {
-                         var ngaydenhan = c.Ngaydenhan;
-                         if (ngaydenhan > DateTime.Today) ngaydenhan = DateTime.Today;
-                         dateDH.Format = DateTimePickerFormat.Custom;
-                         dateDH.CustomFormat = "dd/MM/yyyy";
-                         dateDH.Checked = true;
-                         dateDH.Value = ngaydenhan;
+                         dateGn.Checked = true;
+                         dateGn.Format = DateTimePickerFormat.Custom;
+                         dateGn.CustomFormat = "dd/MM/yyyy";
+                         dateGn.Value = c.Ngaygiaingaan;
+                         if (c.Ngaydenhan != DateTime.MinValue)
+                         {
+                             dateDH.CustomFormat = "dd/MM/yyyy";
+                             dateDH.Value = c.Ngaydenhan;
+                         }
                      }
                  }
              } catch { }
@@ -2315,21 +2488,24 @@ namespace HOSONHCS
              { 
                  if (datendhcccd != null) 
                  {
-                     // Bỏ checkbox - datendhcccd bắt buộc nhập
-                     if (c.Thoihancccd == DateTime.MinValue)
+                     datendhcccd.Format = DateTimePickerFormat.Custom;
+                     if (c.Thoihancccd == DateTime.MinValue && string.IsNullOrEmpty(c.ThoihancccdText))
                      {
-                         // Nếu chưa có dữ liệu, set ngày mặc định
-                         datendhcccd.Format = DateTimePickerFormat.Custom;
-                         datendhcccd.CustomFormat = "dd/MM/yyyy";
-                         datendhcccd.Value = DateTime.Now;
+                         datendhcccd.CustomFormat = " "; // trống nếu chưa có dữ liệu
+                         datendhcccd.Enabled = false;
+                     }
+                     else if (c.ThoihancccdText == "không thời hạn")
+                     {
+                         // Trên 60 tuổi: hiển thị text không thời hạn
+                         datendhcccd.CustomFormat = "'không thời hạn'";
+                         if (c.Thoihancccd != DateTime.MinValue) datendhcccd.Value = c.Thoihancccd;
+                         datendhcccd.Enabled = false;
                      }
                      else
                      {
-                         // Thời hạn CCCD: KHÔNG validate ngày tương lai - cho phép bất kỳ ngày nào
-                         var thoihancccd = c.Thoihancccd;
-                         datendhcccd.Format = DateTimePickerFormat.Custom;
                          datendhcccd.CustomFormat = "dd/MM/yyyy";
-                         datendhcccd.Value = thoihancccd;
+                         if (c.Thoihancccd != DateTime.MinValue) datendhcccd.Value = c.Thoihancccd;
+                         datendhcccd.Enabled = false;
                      }
                  }
              } catch { }
@@ -2344,28 +2520,30 @@ namespace HOSONHCS
              try { if (txtcccd3 != null) txtcccd3.Text = c.CccdNtk3 ?? ""; } catch { }
 
              // ========== NGÀY SINH NGƯỜI THỪA KẾ (NTK) - DATEPICKER ==========
-             // datentk1/2/3 là DateTimePicker: cần parse string Namsinh1/2/3 thành DateTime
              try 
              { 
                  if (datentk1 != null) 
                  {
-                     datentk1.ShowCheckBox = true;  // Luôn hiển checkbox
-                     if (string.IsNullOrWhiteSpace(c.Namsinh1))  // Nếu không có dữ liệu
+                     datentk1.Format = DateTimePickerFormat.Custom;
+                     datentk1.ShowCheckBox = true;
+                     if (string.IsNullOrWhiteSpace(c.Namsinh1))
                      {
-                         datentk1.Checked = false;  // Bỏ tích checkbox = không có giá trị
+                         datentk1.Checked = false;
+                         datentk1.CustomFormat = " ";
                      }
                      else
                      {
-                         // Parse string Namsinh1 (dd/MM/yyyy) thành DateTime
                          DateTime parsedDate = ParseDateTextOrFallback(c.Namsinh1);
-                         if (parsedDate != DateTime.MinValue)  // Nếu parse thành công
+                         if (parsedDate != DateTime.MinValue)
                          {
-                             datentk1.Checked = true;  // Tích checkbox
-                             datentk1.Value = parsedDate;  // Set giá trị DateTime
+                             datentk1.CustomFormat = "dd/MM/yyyy";
+                             datentk1.Checked = true;
+                             datentk1.Value = parsedDate;
                          }
                          else
                          {
-                             datentk1.Checked = false;  // Parse lỗi thì bỏ tích
+                             datentk1.Checked = false;
+                             datentk1.CustomFormat = " ";
                          }
                      }
                  }
@@ -2374,22 +2552,26 @@ namespace HOSONHCS
              { 
                  if (datentk2 != null) 
                  {
+                     datentk2.Format = DateTimePickerFormat.Custom;
                      datentk2.ShowCheckBox = true;
                      if (string.IsNullOrWhiteSpace(c.Namsinh2))
                      {
                          datentk2.Checked = false;
+                         datentk2.CustomFormat = " ";
                      }
                      else
                      {
                          DateTime parsedDate = ParseDateTextOrFallback(c.Namsinh2);
                          if (parsedDate != DateTime.MinValue)
                          {
+                             datentk2.CustomFormat = "dd/MM/yyyy";
                              datentk2.Checked = true;
                              datentk2.Value = parsedDate;
                          }
                          else
                          {
                              datentk2.Checked = false;
+                             datentk2.CustomFormat = " ";
                          }
                      }
                  }
@@ -2398,22 +2580,26 @@ namespace HOSONHCS
              { 
                  if (datentk3 != null) 
                  {
+                     datentk3.Format = DateTimePickerFormat.Custom;
                      datentk3.ShowCheckBox = true;
                      if (string.IsNullOrWhiteSpace(c.Namsinh3))
                      {
                          datentk3.Checked = false;
+                         datentk3.CustomFormat = " ";
                      }
                      else
                      {
                          DateTime parsedDate = ParseDateTextOrFallback(c.Namsinh3);
                          if (parsedDate != DateTime.MinValue)
                          {
+                             datentk3.CustomFormat = "dd/MM/yyyy";
                              datentk3.Checked = true;
                              datentk3.Value = parsedDate;
                          }
                          else
                          {
                              datentk3.Checked = false;
+                             datentk3.CustomFormat = " ";
                          }
                      }
                  }
@@ -2426,26 +2612,33 @@ namespace HOSONHCS
 
          private void ClearForm()
          {
-             try { txtHoten.Clear(); } catch { } try { txtSocccd.Text = ""; } catch { } try { cbNhandang.Text = ""; } catch { }
-             try { dateNgaycapCCCD.Value = DateTime.Today; } catch { }
-             try { if (dateNgaysinh != null) dateNgaysinh.Value = DateTime.Today; } catch { }
-             try { cbNoicap.Text = ""; } catch { } try { cbXa.Items.Clear(); cbThon.Items.Clear(); cbHoi.Items.Clear(); cbTo.Items.Clear(); } catch { }
-             try { cbXa.Text = ""; cbThon.Text = ""; cbHoi.Text = ""; cbTo.Text = ""; } catch { }
-             try { cbChuongtrinh.Text = ""; cbThoihanvay.Text = ""; cbSotien.Text = ""; cbSotien1.Text = ""; cbSotien2.Text = ""; } catch { }
-             try { if (cbmucdich1 != null) cbmucdich1.Text = ""; if (cbmucdich2 != null) cbmucdich2.Text = ""; } catch { }
-             try { dateLaphs.Value = DateTime.Today; cbPGD.Text = ""; editingIndex = -1; ResetVisibilityToDefault(); } catch { }
+             // ── Text / ComboBox ──
+             try { txtHoten.Clear(); } catch { }
+             try { txtSocccd.Text = ""; } catch { }
+             try { cbNhandang.SelectedIndex = -1; } catch { }
+             try { cbNoicap.SelectedIndex = -1; } catch { }
+             try { cbPGD.SelectedIndex = -1; } catch { }
+             try { cbXa.Items.Clear(); cbXa.Text = ""; } catch { }
+             try { cbThon.Items.Clear(); cbThon.Text = ""; } catch { }
+             try { cbHoi.Items.Clear(); cbHoi.Text = ""; } catch { }
+             try { cbTo.Items.Clear(); cbTo.Text = ""; } catch { }
+             try { cbChuongtrinh.Text = ""; } catch { }
+             try { cbThoihanvay.SelectedIndex = -1; } catch { }
+             try { cbSotien.Text = ""; cbSotien1.Text = ""; cbSotien2.Text = ""; } catch { }
+             try { if (cbmucdich1 != null) cbmucdich1.Text = ""; } catch { }
+             try { if (cbmucdich2 != null) cbmucdich2.Text = ""; } catch { }
+             try { if (cbDoituong != null) { cbDoituong.Enabled = true; cbDoituong.SelectedIndex = -1; } } catch { }
+             try { if (cbVtc != null) cbVtc.SelectedIndex = -1; } catch { }
+             try { if (cbPhuongan != null) cbPhuongan.Text = ""; } catch { }
+             try { if (cbPhanky != null) cbPhanky.SelectedIndex = -1; } catch { }
+             try { if (cbGioitinh != null) cbGioitinh.SelectedIndex = -1; } catch { }
+             try { if (cbDantoc != null) cbDantoc.SelectedIndex = -1; } catch { }
+             try { if (cbDoituong1 != null) cbDoituong1.Text = ""; } catch { }
+             try { if (cbDoituong2 != null) cbDoituong2.Text = ""; } catch { }
 
-             // Reset cbDoituong về trạng thái enabled
-             try { if (cbDoituong != null) cbDoituong.Enabled = true; cbDoituong.Text = ""; } catch { }
-
-             // Xóa các trường ngày bằng cách bỏ tích chọn (các control vẫn hiển thị)
-             try { if (dateDH != null) dateDH.Checked = false; } catch { }
-             try { if (datendhcccd != null) datendhcccd.Checked = false; } catch { }
-             try { if (datentk1 != null) datentk1.Checked = false; } catch { }
-             try { if (datentk2 != null) datentk2.Checked = false; } catch { }
-             try { if (datentk3 != null) datentk3.Checked = false; } catch { }
-
-             // Xóa các trường NTK
+             // ── TextBox phụ ──
+             try { if (txtSdt != null) txtSdt.Text = ""; } catch { }
+             try { if (txtNhankhau != null) txtNhankhau.Text = ""; } catch { }
              try { if (txtntk1 != null) txtntk1.Text = ""; } catch { }
              try { if (txtntk2 != null) txtntk2.Text = ""; } catch { }
              try { if (txtntk3 != null) txtntk3.Text = ""; } catch { }
@@ -2456,9 +2649,24 @@ namespace HOSONHCS
              try { if (cbqh2 != null) cbqh2.Text = ""; } catch { }
              try { if (cbqh3 != null) cbqh3.Text = ""; } catch { }
 
-             // Xóa các trường khác
-             try { if (txtSdt != null) txtSdt.Text = ""; } catch { }
-             try { if (txtNhankhau != null) txtNhankhau.Text = ""; } catch { }
+             // ── DateTimePicker không checkbox: ẩn ngày bằng CustomFormat trống ──
+             try { dateNgaycapCCCD.Format = DateTimePickerFormat.Custom; dateNgaycapCCCD.CustomFormat = " "; } catch { }
+             try { if (dateNgaysinh != null) { dateNgaysinh.Format = DateTimePickerFormat.Custom; dateNgaysinh.CustomFormat = " "; } } catch { }
+             try { dateLaphs.Format = DateTimePickerFormat.Custom; dateLaphs.CustomFormat = " "; } catch { }
+             try { if (datendhcccd != null) { datendhcccd.Format = DateTimePickerFormat.Custom; datendhcccd.CustomFormat = " "; datendhcccd.Enabled = false; } } catch { }
+
+             // ── DateTimePicker có checkbox: bỏ tick và ẩn ngày ──
+             try { if (dateGn != null) dateGn.Checked = false; } catch { }
+             try { if (datentk1 != null) { datentk1.Checked = false; datentk1.CustomFormat = " "; } } catch { }
+             try { if (datentk2 != null) { datentk2.Checked = false; datentk2.CustomFormat = " "; } } catch { }
+             try { if (datentk3 != null) { datentk3.Checked = false; datentk3.CustomFormat = " "; } } catch { }
+
+             // ── dateDH khoá: ẩn ngày ──
+             try { if (dateDH != null) dateDH.CustomFormat = " "; } catch { }
+
+             // ── Reset trạng thái khác ──
+             editingIndex = -1;
+             try { ResetVisibilityToDefault(); } catch { }
          }
 
          private void LoadXinManData(string jsonFileName = "xinman.json")
@@ -2498,6 +2706,8 @@ namespace HOSONHCS
                  return "dongvan.json";
              else if (normalized.Contains("hoang su phi") || normalized.Contains("hoangSuphi") || normalized.Contains("hsp"))
                  return "hsp.json";
+             else if (normalized.Contains("bac quang") || normalized.Contains("bacquang"))
+                 return "bacquang.json";
              else if (normalized.Contains("xin man") || normalized.Contains("xinman"))
                  return "xinman.json";
 
@@ -2510,6 +2720,8 @@ namespace HOSONHCS
                  return "dongvan.json";
              else if (pgdName.IndexOf("Hoàng Su Phì", StringComparison.OrdinalIgnoreCase) >= 0)
                  return "hsp.json";
+             else if (pgdName.IndexOf("Bắc Quang", StringComparison.OrdinalIgnoreCase) >= 0)
+                 return "bacquang.json";
              else if (pgdName.IndexOf("Xín Mần", StringComparison.OrdinalIgnoreCase) >= 0)
                  return "xinman.json";
 
@@ -2579,6 +2791,54 @@ namespace HOSONHCS
              return null;
          }
 
+        private void CbTinh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suppressComboChanged) return;
+            suppressComboChanged = true;
+            try
+            {
+                cbPGD.Items.Clear();
+                cbPGD.Text = "";
+                ClearPgdDependentCombos();
+                xinmanModel = null;
+                currentTinhModel = null;
+
+                var tinh = cbTinh?.Text ?? "";
+                if (string.IsNullOrWhiteSpace(tinh)) return;
+
+                currentTinhModel = TinhHelper.LoadTinhModel(tinh);
+                if (currentTinhModel?.pgds != null)
+                    foreach (var pgd in currentTinhModel.pgds)
+                        if (!string.IsNullOrWhiteSpace(pgd.pgd))
+                            cbPGD.Items.Add(pgd.pgd);
+            }
+            finally { suppressComboChanged = false; }
+        }
+
+        private string GetTinhJsonFileName(string tinhName)
+        {
+            return TinhHelper.GetFileName(tinhName);
+        }
+
+        private string[] GetPgdItemsForTinh(string tinhName)
+        {
+            return new string[0];
+        }
+
+        private string GetTinhFromPGD(string pgdName)
+        {
+            if (string.IsNullOrWhiteSpace(pgdName)) return "";
+            // Tìm ngược từ TinhHelper cache — không hardcode tên tỉnh
+            foreach (var tinhName in TinhHelper.GetProvinceNames())
+            {
+                var model = TinhHelper.LoadTinhModel(tinhName);
+                if (model?.pgds == null) continue;
+                if (model.pgds.Any(p => string.Equals(p.pgd, pgdName.Trim(), StringComparison.OrdinalIgnoreCase)))
+                    return tinhName;
+            }
+            return "";
+        }
+
         private void CbPGD_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (suppressComboChanged) return; suppressComboChanged = true;
@@ -2587,55 +2847,48 @@ namespace HOSONHCS
                 var selected = (cbPGD.SelectedItem ?? cbPGD.Text)?.ToString() ?? "";
                 if (string.IsNullOrWhiteSpace(selected)) { ClearPgdDependentCombos(); return; }
 
-                // Lấy tên file JSON từ PGD đã chọn
-                string jsonFileName = GetJsonFileNameFromPGD(selected);
-
-                // Debug: hiển thị file nào đang được load
-                System.Diagnostics.Debug.WriteLine($"PGD selected: '{selected}' -> Loading: '{jsonFileName}'");
-
-                LoadXinManData(jsonFileName); 
-
-                if (xinmanModel == null) 
-                { 
-                    // Chỉ hiển thị lỗi nếu file không tồn tại
-                    var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
-                    if (!File.Exists(filePath))
+                // Nếu đang dùng file JSON cấp tỉnh (ví dụ: tuyenquang.json), lấy communes từ đó
+                if (currentTinhModel?.pgds != null)
+                {
+                    var pgdEntry = currentTinhModel.pgds.FirstOrDefault(p =>
+                        string.Equals(p.pgd, selected, StringComparison.OrdinalIgnoreCase));
+                    if (pgdEntry != null)
                     {
-                        MessageBox.Show($"Không tìm thấy file {jsonFileName} trong thư mục chương trình.\n\nĐường dẫn: {filePath}", 
-                                        "Thiếu file dữ liệu", 
-                                        MessageBoxButtons.OK, 
-                                        MessageBoxIcon.Warning);
+                        xinmanModel = new XinManModel { pgd = pgdEntry.pgd, communes = pgdEntry.communes ?? new List<Commune>() };
                     }
-                    ClearPgdDependentCombos(); 
-                    return; 
+                    else
+                    {
+                        xinmanModel = null;
+                        ClearPgdDependentCombos();
+                        return;
+                    }
                 }
-
-                // Debug: hiển thị PGD từ model
-                System.Diagnostics.Debug.WriteLine($"Model loaded. PGD in model: '{xinmanModel.pgd}', Communes count: {xinmanModel.communes?.Count ?? 0}");
-
-                // Bỏ qua kiểm tra matching - chấp nhận mọi dữ liệu từ file JSON
-                // (vì đã chọn đúng file rồi thông qua GetJsonFileNameFromPGD)
+                else
+                {
+                    // Tỉnh Hà Giang: dùng file JSON riêng cho từng PGD
+                    string jsonFileName = GetJsonFileNameFromPGD(selected);
+                    System.Diagnostics.Debug.WriteLine($"PGD selected: '{selected}' -> Loading: '{jsonFileName}'");
+                    LoadXinManData(jsonFileName);
+                    if (xinmanModel == null)
+                    {
+                        ClearPgdDependentCombos();
+                        return;
+                    }
+                }
 
                 cbXa.Items.Clear(); cbThon.Items.Clear(); cbHoi.Items.Clear(); cbTo.Items.Clear();
 
                 // Thêm các xã
-                foreach (var com in xinmanModel.communes) 
-                    if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name)) 
+                foreach (var com in xinmanModel.communes)
+                    if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name))
                         cbXa.Items.Add(com.name);
 
-                System.Diagnostics.Debug.WriteLine($"Added {cbXa.Items.Count} communes to cbXa");
-
-                // Thêm các hội
-                var associations = xinmanModel.communes.Where(c => c.associations != null).SelectMany(c => c.associations).Where(a => !string.IsNullOrWhiteSpace(a.name)).Select(a => a.name).Distinct(StringComparer.OrdinalIgnoreCase);
+                // Thêm các hội — bỏ qua nan
+                var associations = xinmanModel.communes.Where(c => c.associations != null).SelectMany(c => c.associations).Where(a => !string.IsNullOrWhiteSpace(a.name) && !a.name.Equals("nan", StringComparison.OrdinalIgnoreCase)).Select(a => a.name).Distinct(StringComparer.OrdinalIgnoreCase);
                 foreach (var a in associations) cbHoi.Items.Add(a);
 
-                System.Diagnostics.Debug.WriteLine($"Added {cbHoi.Items.Count} associations to cbHoi");
-
-                // Thêm các thôn từ commune level
-                var communeLevelVillages = xinmanModel.communes.Where(c => c.villages != null).SelectMany(c => c.villages).Where(v => !string.IsNullOrWhiteSpace(v.name)).Select(v => v.name).Distinct(StringComparer.OrdinalIgnoreCase);
-                foreach (var v in communeLevelVillages) if (!cbThon.Items.Contains(v)) cbThon.Items.Add(v);
-
-                System.Diagnostics.Debug.WriteLine($"Added {cbThon.Items.Count} villages to cbThon");
+                // Thêm tất cả thôn (thuộc hội và trực thuộc xã)
+                foreach (var com in xinmanModel.communes) { if (com.associations != null) foreach (var assoc in com.associations) if (assoc.villages != null) foreach (var v in assoc.villages) if (!string.IsNullOrWhiteSpace(v.name)) cbThon.Items.Add(v.name); if (com.villages != null) foreach (var v in com.villages) if (!string.IsNullOrWhiteSpace(v.name)) cbThon.Items.Add(v.name); }
 
                 ResetVisibilityToDefault();
             }
@@ -2645,22 +2898,98 @@ namespace HOSONHCS
         private void CbXa_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (suppressComboChanged) return; suppressComboChanged = true;
-            try { cbThon.Items.Clear(); cbTo.Items.Clear(); if (cbXa.SelectedIndex < 0 || xinmanModel == null) { ResetVisibilityToDefault(); return; } var xaName = cbXa.SelectedItem.ToString(); var commune = xinmanModel.communes.FirstOrDefault(c => string.Equals(c.name, xaName, StringComparison.OrdinalIgnoreCase)); if (commune != null) { if (commune.associations != null) foreach (var assoc in commune.associations) if (assoc.villages != null) foreach (var v in assoc.villages) if (!string.IsNullOrWhiteSpace(v.name) && !cbThon.Items.Contains(v.name)) cbThon.Items.Add(v.name); if (commune.villages != null) foreach (var v in commune.villages) if (!string.IsNullOrWhiteSpace(v.name) && !cbThon.Items.Contains(v.name)) cbThon.Items.Add(v.name); cbHoi.Items.Clear(); if (commune.associations != null) foreach (var a in commune.associations) if (!string.IsNullOrWhiteSpace(a.name) && !cbHoi.Items.Contains(a.name)) cbHoi.Items.Add(a.name); } ResetVisibilityToDefault(); }
+            try
+            {
+                cbHoi.Items.Clear(); cbThon.Items.Clear(); cbTo.Items.Clear();
+                if (cbXa.SelectedIndex < 0 || xinmanModel == null) { ResetVisibilityToDefault(); return; }
+                var xaName = cbXa.SelectedItem.ToString();
+                var commune = xinmanModel.communes.FirstOrDefault(c => string.Equals(c.name, xaName, StringComparison.OrdinalIgnoreCase));
+                if (commune != null)
+                {
+                    bool hasRealAssoc = false;
+                    if (commune.associations != null)
+                        foreach (var a in commune.associations)
+                            if (!string.IsNullOrWhiteSpace(a.name) && !a.name.Equals("nan", StringComparison.OrdinalIgnoreCase))
+                            { cbHoi.Items.Add(a.name); hasRealAssoc = true; }
+
+                    if (!hasRealAssoc)
+                    {
+                        if (commune.associations != null)
+                            foreach (var a in commune.associations)
+                                if (a.villages != null)
+                                    foreach (var v in a.villages)
+                                        if (!string.IsNullOrWhiteSpace(v.name)) cbThon.Items.Add(v.name);
+                        if (commune.villages != null)
+                            foreach (var v in commune.villages)
+                                if (!string.IsNullOrWhiteSpace(v.name)) cbThon.Items.Add(v.name);
+                    }
+                }
+                ResetVisibilityToDefault();
+            }
             finally { suppressComboChanged = false; }
         }
 
         private void CbThon_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (suppressComboChanged) return; suppressComboChanged = true;
-            try { cbTo.Items.Clear(); if (cbThon.SelectedIndex < 0 || xinmanModel == null) { ResetVisibilityToDefault(); return; } var thonName = cbThon.SelectedItem.ToString(); Association foundAssoc = null; Commune foundCommune = null; foreach (var com in xinmanModel.communes) { if (com.associations != null) foreach (var assoc in com.associations) if (assoc.villages != null && assoc.villages.Any(v => string.Equals(v.name, thonName, StringComparison.OrdinalIgnoreCase))) { foundAssoc = assoc; foundCommune = com; break; } if (foundAssoc != null) break; if (com.villages != null && com.villages.Any(v => string.Equals(v.name, thonName, StringComparison.OrdinalIgnoreCase))) { foundCommune = com; break; } } if (foundCommune != null) cbXa.SelectedItem = foundCommune.name; if (foundAssoc != null) { cbHoi.SelectedItem = foundAssoc.name; var village = foundAssoc.villages.FirstOrDefault(v => string.Equals(v.name, thonName, StringComparison.OrdinalIgnoreCase)); if (village != null && village.groups != null) foreach (var g in village.groups) if (!string.IsNullOrWhiteSpace(g)) cbTo.Items.Add(g); } else if (foundCommune != null) { var village = foundCommune.villages.FirstOrDefault(v => string.Equals(v.name, thonName, StringComparison.OrdinalIgnoreCase)); if (village != null && village.groups != null) foreach (var g in village.groups) if (!string.IsNullOrWhiteSpace(g)) cbTo.Items.Add(g); } ResetVisibilityToDefault(); }
+            try { cbTo.Items.Clear(); if (cbThon.SelectedIndex < 0 || xinmanModel == null) { ResetVisibilityToDefault(); return; } var thonName = cbThon.SelectedItem.ToString(); var currentHoiName = cbHoi.Text ?? ""; var currentXaName = cbXa.Text ?? ""; Village foundVillage = null; foreach (var com in xinmanModel.communes) { if (!string.IsNullOrWhiteSpace(currentXaName) && !string.Equals(com.name, currentXaName, StringComparison.OrdinalIgnoreCase)) continue; if (com.associations != null) foreach (var assoc in com.associations) { if (!string.IsNullOrWhiteSpace(currentHoiName) && !string.Equals(assoc.name, currentHoiName, StringComparison.OrdinalIgnoreCase)) continue; if (assoc.villages != null) { foundVillage = assoc.villages.FirstOrDefault(v => string.Equals(v.name, thonName, StringComparison.OrdinalIgnoreCase)); if (foundVillage != null) break; } } if (foundVillage != null) break; if (string.IsNullOrWhiteSpace(currentHoiName) && com.villages != null) { foundVillage = com.villages.FirstOrDefault(v => string.Equals(v.name, thonName, StringComparison.OrdinalIgnoreCase)); if (foundVillage != null) break; } } if (foundVillage != null && foundVillage.groups != null) foreach (var g in foundVillage.groups) if (!string.IsNullOrWhiteSpace(g)) cbTo.Items.Add(g); ResetVisibilityToDefault(); }
             finally { suppressComboChanged = false; }
         }
 
         private void CbHoi_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (suppressComboChanged) return; suppressComboChanged = true;
-            try { cbThon.Items.Clear(); cbTo.Items.Clear(); if (cbHoi.SelectedIndex < 0 || xinmanModel == null) { ResetVisibilityToDefault(); return; } var hoiName = cbHoi.SelectedItem.ToString(); var assocList = xinmanModel.communes.Where(c => c.associations != null).SelectMany(c => c.associations.Select(a => new { Commune = c, Assoc = a })).Where(x => string.Equals(x.Assoc.name, hoiName, StringComparison.OrdinalIgnoreCase)).ToList(); var villageNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase); foreach (var pair in assocList) { var assoc = pair.Assoc; if (assoc.villages != null) foreach (var v in assoc.villages) villageNames.Add(v.name); if (assoc.managedVillages != null) foreach (var name in assoc.managedVillages) villageNames.Add(name); } foreach (var vn in villageNames) cbThon.Items.Add(vn); var communesForAssoc = assocList.Select(x => x.Commune.name).Distinct(StringComparer.OrdinalIgnoreCase).ToList(); if (communesForAssoc.Count == 1) cbXa.SelectedItem = communesForAssoc[0]; else cbXa.SelectedIndex = -1; var groupSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase); foreach (var pair in assocList) foreach (var v in pair.Assoc.villages ?? Enumerable.Empty<Village>()) foreach (var g in v.groups ?? Enumerable.Empty<string>()) groupSet.Add(g); foreach (var g in groupSet) cbTo.Items.Add(g); ResetVisibilityToDefault(); }
+            try
+            {
+                cbThon.Items.Clear(); cbTo.Items.Clear();
+                if (cbHoi.SelectedIndex < 0 || xinmanModel == null) { ResetVisibilityToDefault(); return; }
+                var hoiName = cbHoi.SelectedItem.ToString();
+                // Nếu chọn nan thì bỏ qua, populate cbThon từ tất cả assoc nan của xã hiện tại
+                if (hoiName.Equals("nan", StringComparison.OrdinalIgnoreCase))
+                {
+                    PopulateThonFromNanAssoc();
+                    ResetVisibilityToDefault();
+                    return;
+                }
+                var currentXaName = cbXa.Text ?? "";
+                var assocList = xinmanModel.communes.Where(c => c.associations != null).Where(c => string.IsNullOrWhiteSpace(currentXaName) || string.Equals(c.name, currentXaName, StringComparison.OrdinalIgnoreCase)).SelectMany(c => c.associations.Select(a => new { Commune = c, Assoc = a })).Where(x => string.Equals(x.Assoc.name, hoiName, StringComparison.OrdinalIgnoreCase)).ToList();
+                foreach (var pair in assocList) { var assoc = pair.Assoc; if (assoc.villages != null) foreach (var v in assoc.villages) { if (!string.IsNullOrWhiteSpace(v.name)) cbThon.Items.Add(v.name); } if (assoc.managedVillages != null) foreach (var name in assoc.managedVillages) { if (!string.IsNullOrWhiteSpace(name)) cbThon.Items.Add(name); } }
+                if (string.IsNullOrWhiteSpace(currentXaName)) { var communesForAssoc = assocList.Select(x => x.Commune.name).Distinct(StringComparer.OrdinalIgnoreCase).ToList(); if (communesForAssoc.Count == 1) cbXa.SelectedItem = communesForAssoc[0]; }
+                ResetVisibilityToDefault();
+            }
             finally { suppressComboChanged = false; }
+        }
+
+        private void CbHoi_TextChanged(object sender, EventArgs e)
+        {
+            if (suppressComboChanged) return;
+            if (xinmanModel == null) return;
+            // cbHoi không có hội thật, user gõ ký tự bất kỳ → populate cbThon ngay
+            if (cbHoi.Items.Count == 0 && !string.IsNullOrEmpty(cbHoi.Text))
+            {
+                suppressComboChanged = true;
+                try { cbThon.Items.Clear(); cbTo.Items.Clear(); PopulateThonFromNanAssoc(); }
+                finally { suppressComboChanged = false; }
+            }
+        }
+
+        private void PopulateThonFromNanAssoc()
+        {
+            if (xinmanModel == null) return;
+            cbThon.Items.Clear(); cbTo.Items.Clear();
+            var currentXaName = cbXa.Text ?? "";
+            foreach (var com in xinmanModel.communes)
+            {
+                if (!string.IsNullOrWhiteSpace(currentXaName) && !string.Equals(com.name, currentXaName, StringComparison.OrdinalIgnoreCase)) continue;
+                if (com.associations != null)
+                    foreach (var a in com.associations)
+                        if (a.name != null && a.name.Equals("nan", StringComparison.OrdinalIgnoreCase) && a.villages != null)
+                            foreach (var v in a.villages)
+                                if (!string.IsNullOrWhiteSpace(v.name)) cbThon.Items.Add(v.name);
+                if (com.villages != null)
+                    foreach (var v in com.villages)
+                        if (!string.IsNullOrWhiteSpace(v.name)) cbThon.Items.Add(v.name);
+            }
         }
 
         // Tự động điền cbDoituong dựa trên cbChuongtrinh được chọn
@@ -2768,6 +3097,133 @@ namespace HOSONHCS
             catch { }
         }
 
+        // Áp dụng trạng thái khoá/mở khoá cho cbmucdich1 và cbmucdich2 dựa theo cbPhuongan
+        private void ApplyPhuonganState(string phuongan)
+        {
+            if (cbmucdich1 == null || cbmucdich2 == null || cbPhuongan == null) return;
+            var pa = (phuongan ?? "").TrimEnd();
+            bool isNangCap = string.Equals(pa, "Nâng cấp, sửa chữa CTNS, CTVS", StringComparison.OrdinalIgnoreCase);
+            bool isXayMoi  = string.Equals(pa, "Xây mới CTNS, CTVS", StringComparison.OrdinalIgnoreCase);
+
+            if (isNangCap || isXayMoi)
+            {
+                // cbmucdich1: tự động điền, khoá không cho người dùng tác động
+                cbmucdich1.Items.Clear();
+                cbmucdich1.Items.Add("Nâng cấp, sửa chữa CTNS          ");
+                cbmucdich1.Items.Add("Xây mới CTNS                              ");
+                cbmucdich1.DropDownStyle = ComboBoxStyle.DropDownList;
+                cbmucdich1.Enabled = false;
+
+                // cbmucdich2: tự động điền, khoá không cho người dùng tác động
+                cbmucdich2.Items.Clear();
+                cbmucdich2.Items.Add("Nâng cấp, sửa chữa CTVS          ");
+                cbmucdich2.Items.Add("Xây mới CTVS                                    ");
+                cbmucdich2.DropDownStyle = ComboBoxStyle.DropDownList;
+                cbmucdich2.Enabled = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(pa))
+            {
+                // Kiểm tra có phải item hợp lệ trong cbPhuongan không
+                bool isKnownItem = cbPhuongan.Items.Cast<object>()
+                    .Any(i => string.Equals((i ?? "").ToString().TrimEnd(), pa, StringComparison.OrdinalIgnoreCase));
+
+                if (isKnownItem)
+                {
+                    // Item đã biết: khoá cbmucdich1, hiển thị giống cbPhuongan
+                    cbmucdich1.DropDownStyle = ComboBoxStyle.DropDown;
+                    cbmucdich1.Enabled = false;
+                    cbmucdich1.Text = pa;
+
+                    // cbmucdich2: khoá, xoá nội dung
+                    cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown;
+                    cbmucdich2.Enabled = false;
+                    cbmucdich2.Text = "";
+                }
+                else
+                {
+                    // Nhập tay tự do: xoá trắng cbmucdich1/2, cho phép nhập tự do
+                    cbmucdich1.Text = "";
+                    cbmucdich2.Text = "";
+                    cbmucdich1.DropDownStyle = ComboBoxStyle.DropDown;
+                    cbmucdich1.Enabled = true;
+                    cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown;
+                    cbmucdich2.Enabled = true;
+                }
+            }
+            else
+            {
+                // cbPhuongan chưa chọn: khôi phục danh sách gốc, khoá dropdown (không cho nhập)
+                cbmucdich1.Items.Clear();
+                cbmucdich1.Items.Add("Mua trâu sinh sản");
+                cbmucdich1.Items.Add("Nuôi trâu sinh sản");
+                cbmucdich1.Items.Add("Mua bò sinh sản");
+                cbmucdich1.Items.Add("Nuôi bò sinh sản");
+                cbmucdich1.Items.Add("Mua dê sinh sản");
+                cbmucdich1.Items.Add("Nuôi dê sinh sản");
+                cbmucdich1.Items.Add("Nuôi lợn sinh sản");
+                cbmucdich1.Items.Add("Nuôi lợn");
+                cbmucdich1.Items.Add("Trồng cây quế");
+                cbmucdich1.Items.Add("Trồng cây keo");
+                cbmucdich1.Items.Add("Trồng cây cam");
+                cbmucdich1.Items.Add("Mở rộng cửa hàng tạp hoá");
+                cbmucdich1.Items.Add("Mở rộng cửa hàng ăn uống");
+                cbmucdich1.Items.Add("Mở rộng cửa hàng bán quần áo");
+                cbmucdich1.Items.Add("Trồng và chăm sóc cây cà phê");
+                cbmucdich1.Items.Add("Trồng và chăm sóc cây cao su");
+                cbmucdich1.Items.Add("Trồng cây ăn quả");
+                cbmucdich1.Items.Add("Trồng cây bời lời");
+                cbmucdich1.Items.Add("Trồng cây tiêu");
+                cbmucdich1.Items.Add("Nâng cấp, sửa chữa CTNS          ");
+                cbmucdich1.Items.Add("Xây mới CTNS                              ");
+                cbmucdich1.DropDownStyle = ComboBoxStyle.DropDownList;
+                cbmucdich1.Enabled = true;
+                cbmucdich1.Text = "";
+
+                cbmucdich2.Items.Clear();
+                cbmucdich2.Items.Add("Nâng cấp, sửa chữa CTVS          ");
+                cbmucdich2.Items.Add("Xây mới CTVS                                    ");
+                cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown;
+                cbmucdich2.Enabled = false;
+                cbmucdich2.Text = "";
+            }
+        }
+
+        private void CbPhuongan_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cbPhuongan == null) return;
+                var phuongan = cbPhuongan.Text ?? "";
+                ApplyPhuonganState(phuongan);
+
+                // Tự động điền giá trị mặc định cho cbmucdich1 và cbmucdich2
+                var pa = phuongan.TrimEnd();
+                if (string.Equals(pa, "Nâng cấp, sửa chữa CTNS, CTVS", StringComparison.OrdinalIgnoreCase))
+                {
+                    cbmucdich1.Text = "Nâng cấp, sửa chữa CTNS          ";
+                    cbmucdich2.Text = "Nâng cấp, sửa chữa CTVS          ";
+                }
+                else if (string.Equals(pa, "Xây mới CTNS, CTVS", StringComparison.OrdinalIgnoreCase))
+                {
+                    cbmucdich1.Text = "Xây mới CTNS                              ";
+                    cbmucdich2.Text = "Xây mới CTVS                                    ";
+                }
+            }
+            catch { }
+        }
+
+        private void CbPhuongan_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cbPhuongan == null || cbmucdich1 == null || cbmucdich2 == null) return;
+                // Chỉ xử lý khi đang nhập tay (không phải chọn từ danh sách)
+                if (cbPhuongan.SelectedIndex >= 0) return;
+                ApplyPhuonganState(cbPhuongan.Text ?? "");
+            }
+            catch { }
+        }
+
         private void ClearPgdDependentCombos()
         {
             cbXa.Items.Clear(); cbThon.Items.Clear(); cbHoi.Items.Clear(); cbTo.Items.Clear();
@@ -2797,6 +3253,10 @@ namespace HOSONHCS
                     MessageBox.Show("Vui lòng nhập Họ và tên để tạo khách hàng mới.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
+                // Luôn kiểm tra tất cả khách hàng (không bỏ qua ai) khi tạo MỚI
+                editingIndex = -1;
+                if (!ValidateDuplicateCccdSdt()) return;
 
                 // Tạo khách hàng mới (không dùng _fileName cũ, để hệ thống tự tạo file mới)
                 customer._fileName = null; // Force tạo file mới
@@ -2879,126 +3339,38 @@ namespace HOSONHCS
         {
             try
             {
-                if (cbpgdfix == null || cbpgdfix.SelectedItem == null)
-                    return;
+                if (cbpgdfix == null || cbpgdfix.SelectedItem == null) return;
 
                 var selected = cbpgdfix.SelectedItem.ToString();
-                if (string.IsNullOrWhiteSpace(selected))
-                    return;
+                if (string.IsNullOrWhiteSpace(selected)) return;
 
-                // Lấy tên file JSON từ PGD đã chọn
-                string jsonFileName = GetJsonFileNameFromPGD(selected);
-
-                // Debug: hiển thị file nào đang được load
-                System.Diagnostics.Debug.WriteLine($"cbpgdfix selected: '{selected}' -> Loading: '{jsonFileName}'");
-
-                // Kiểm tra file tồn tại
-                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
-                if (!File.Exists(filePath))
+                // Nếu đang có _editTinhModel (chọn từ cbTinhfix), dùng trực tiếp không cần file
+                if (_editTinhModel?.pgds != null)
                 {
-                    MessageBox.Show(
-                        $"Không tìm thấy file dữ liệu:\n{jsonFileName}\n\nĐường dẫn: {filePath}\n\nVui lòng đảm bảo file tồn tại trong thư mục chương trình.",
-                        "Thiếu file dữ liệu",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
+                    var pgdEntry = _editTinhModel.pgds.FirstOrDefault(p =>
+                        string.Equals(p.pgd, selected, StringComparison.OrdinalIgnoreCase));
 
-                // Force reload dữ liệu từ file JSON
-                LoadXinManData(jsonFileName);
-
-                if (xinmanModel == null)
-                {
-                    MessageBox.Show(
-                        $"Không thể tải dữ liệu từ {jsonFileName}.\n\nFile có thể bị lỗi định dạng JSON.",
-                        "Lỗi tải dữ liệu",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    ClearPgdDependentCombos();
-                    return;
-                }
-
-                // Set PGD vào cbPGD chính
-                suppressComboChanged = true;
-                try
-                {
-                    cbPGD.Text = selected;
-
-                    // Clear và reload tất cả combobox liên quan
-                    cbXa.Items.Clear();
-                    cbThon.Items.Clear();
-                    cbHoi.Items.Clear();
-                    cbTo.Items.Clear();
-
-                    // Thêm các xã
-                    foreach (var com in xinmanModel.communes)
-                        if (!string.IsNullOrWhiteSpace(com.name) && !cbXa.Items.Contains(com.name))
-                            cbXa.Items.Add(com.name);
-
-                    // Thêm các hội
-                    var associations = xinmanModel.communes
-                        .Where(c => c.associations != null)
-                        .SelectMany(c => c.associations)
-                        .Where(a => !string.IsNullOrWhiteSpace(a.name))
-                        .Select(a => a.name)
-                        .Distinct(StringComparer.OrdinalIgnoreCase);
-                    foreach (var a in associations)
-                        cbHoi.Items.Add(a);
-
-                    // Thêm các thôn từ commune level
-                    var communeLevelVillages = xinmanModel.communes
-                        .Where(c => c.villages != null)
-                        .SelectMany(c => c.villages)
-                        .Where(v => !string.IsNullOrWhiteSpace(v.name))
-                        .Select(v => v.name)
-                        .Distinct(StringComparer.OrdinalIgnoreCase);
-                    foreach (var v in communeLevelVillages)
-                        if (!cbThon.Items.Contains(v))
-                            cbThon.Items.Add(v);
-
-                    ResetVisibilityToDefault();
-
-                    // ========== HIỂN THỊ DỮ LIỆU LÊN DGV1 ==========
-                    // Load file JSON và hiển thị nội dung lên dgv1 (DataGridView trên tab3)
-                    try
+                    if (pgdEntry != null)
                     {
-                        if (dgv1 != null && xinManEditor != null)
-                        {
-                            // Gọi XinManEditor để load và hiển thị file JSON lên dgv1
-                            xinManEditor.LoadJsonFile(jsonFileName);
-                        }
+                        xinManEditor?.LoadFromPgdEntry(pgdEntry, _editTinhModel.tinh);
                     }
-                    catch (Exception dgvEx)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Error loading data to dgv1: {dgvEx.Message}");
-                        // Nếu XinManEditor không có method LoadJsonFile, thử cách khác
-                        // Có thể cần refresh dgv1 manually
-                    }
-
-                    MessageBox.Show(
-                        $"✅ Đã tải dữ liệu thành công!\n\n" +
-                        $"📄 File: {jsonFileName}\n" +
-                        $"🏛️ PGD: {xinmanModel.pgd}\n" +
-                        $"📍 Số xã: {cbXa.Items.Count}\n" +
-                        $"🏘️ Số hội: {cbHoi.Items.Count}\n" +
-                        $"🏠 Số thôn: {cbThon.Items.Count}",
-                        "✅ Tải dữ liệu thành công",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    return;
                 }
-                finally
+
+                // Fallback: thử load từ TinhHelper
+                var tinhName = cbTinhfix?.Text?.Trim() ?? "";
+                if (!string.IsNullOrWhiteSpace(tinhName))
                 {
-                    suppressComboChanged = false;
+                    _editTinhModel = TinhHelper.LoadTinhModel(tinhName);
+                    var pgdEntry = _editTinhModel?.pgds?.FirstOrDefault(p =>
+                        string.Equals(p.pgd, selected, StringComparison.OrdinalIgnoreCase));
+                    if (pgdEntry != null)
+                    {
+                        xinManEditor?.LoadFromPgdEntry(pgdEntry, tinhName);
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"❌ Lỗi khi tải dữ liệu PGD:\n\n{ex.Message}",
-                    "❌ Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            catch { }
         }
 
         // Tự động viết hoa chữ cái đầu (Title Case) cho các textbox tên (viết hoa chữ cái đầu của mỗi từ)
@@ -3101,9 +3473,11 @@ namespace HOSONHCS
 
         private bool ShouldShowFullNamsinh(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("GUQ", StringComparison.OrdinalIgnoreCase) >= 0; }
         private bool Is03DS(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return (name.IndexOf("03", StringComparison.OrdinalIgnoreCase) >= 0 && name.IndexOf("DS", StringComparison.OrdinalIgnoreCase) >= 0) || name.IndexOf("03 DS", StringComparison.OrdinalIgnoreCase) >= 0; }
+        private bool IsBia(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("BIA", StringComparison.OrdinalIgnoreCase) >= 0; }
         private bool Is01SXKD(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("01", StringComparison.OrdinalIgnoreCase) >= 0 && name.IndexOf("SXKD", StringComparison.OrdinalIgnoreCase) >= 0; }
+        private bool Is01GQVL(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("GQVL", StringComparison.OrdinalIgnoreCase) >= 0; }
 
-        // Giải quyết đường dẫn mẫu bằng cách kiểm tra nhiều vị trí và embedded resources; cache kết quả
+        // Giải quyết đường dẫn mẫu
         private string ResolveTemplatePath(string templateFileName)
         {
             if (string.IsNullOrWhiteSpace(templateFileName)) throw new FileNotFoundException("Template name is empty.");
@@ -3451,9 +3825,17 @@ namespace HOSONHCS
                 }
             }
             catch { }
+
+            // Tính lại thời hạn CCCD khi ngày cấp thay đổi (vì nhóm tuổi dựa trên ngày cấp)
+            try
+            {
+                if (dateNgaysinh != null && dateNgaysinh.CustomFormat != " ")
+                    DateNgaysinh_ValueChanged(dateNgaysinh, EventArgs.Empty);
+            }
+            catch { }
         }
 
-        // Xác thực tất cả các DateTimePicker để ngăn ngày tương lai
+        // Xác thực tất cả các DateTimePicker để ngăn ngày tương lai (dùng cho các picker không có checkbox)
         private void DatePicker_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -3467,6 +3849,134 @@ namespace HOSONHCS
                     picker.Value = DateTime.Today;
                     MessageBox.Show("Ngày không được lớn hơn ngày hiện tại.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+            }
+            catch { }
+        }
+
+        // Validate DateTimePicker có ShowCheckBox=true: chỉ check sau khi rời ô và đã được tích chọn
+        private void DatePickerChecked_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                var picker = sender as DateTimePicker;
+                if (picker == null) return;
+
+                // Bỏ qua nếu ô chưa được tích chọn
+                if (!picker.Checked) return;
+
+                // Chỉ validate khi đã nhập đủ ngày/tháng/năm (năm >= 1900)
+                if (picker.Value.Year < 1900) return;
+
+                if (picker.Value.Date > DateTime.Today)
+                {
+                    picker.Value = DateTime.Today;
+                    MessageBox.Show("Ngày không được lớn hơn ngày hiện tại.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Khi user click vào DateTimePicker đang trống → hiện ngày để nhập
+        /// </summary>
+        private void DatePicker_Enter(object sender, EventArgs e)
+        {
+            try
+            {
+                var picker = sender as DateTimePicker;
+                if (picker == null) return;
+                if (picker.CustomFormat == " ")
+                {
+                    picker.Format = DateTimePickerFormat.Custom;
+                    picker.CustomFormat = "dd/MM/yyyy";
+                    picker.Value = DateTime.Today;
+                }
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Khi datentk tick checkbox → hiện ngày; bỏ tick → ẩn ngày
+        /// </summary>
+        private void DateNtk_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var picker = sender as DateTimePicker;
+                if (picker == null) return;
+                picker.Format = DateTimePickerFormat.Custom;
+                picker.CustomFormat = picker.Checked ? "dd/MM/yyyy" : " ";
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Tính ngày hết hạn CCCD dựa trên tuổi HÀNH CHÍNH (năm cấp − năm sinh) tại thời điểm cấp.
+        /// - Tuổi cấp &lt; 25: hết hạn khi đủ 25 tuổi
+        /// - Tuổi cấp 25–39: hết hạn khi đủ 40 tuổi
+        /// - Tuổi cấp 40–59: hết hạn khi đủ 60 tuổi
+        /// - Tuổi cấp ≥ 60: không thời hạn → trả về DateTime.MinValue
+        /// </summary>
+        private DateTime CalcThoiHanCCCD(DateTime ngaysinh, DateTime ngaycap = default(DateTime))
+        {
+            if (ngaysinh == DateTime.MinValue) return DateTime.MinValue;
+            // Dùng ngày cấp để xác định nhóm tuổi; nếu chưa có thì dùng ngày hiện tại
+            var refDate = (ngaycap != default(DateTime) && ngaycap != DateTime.MinValue)
+                          ? ngaycap.Date : DateTime.Today;
+
+            // Tuổi hành chính VN = năm cấp − năm sinh (không điều chỉnh theo tháng/ngày sinh)
+            int ageAtIssue = refDate.Year - ngaysinh.Year;
+
+            // Chọn mốc kế tiếp: 25, 40, 60
+            int[] milestones = { 25, 40, 60 };
+            foreach (var m in milestones)
+            {
+                if (ageAtIssue < m)
+                {
+                    // Hết hạn đúng ngày tháng sinh, năm = năm sinh + mốc
+                    int targetYear = ngaysinh.Year + m;
+                    int day = ngaysinh.Day;
+                    int month = ngaysinh.Month;
+                    // Xử lý 29/02 trên năm không nhuận
+                    if (month == 2 && day == 29 && !DateTime.IsLeapYear(targetYear))
+                        day = 28;
+                    return new DateTime(targetYear, month, day);
+                }
+            }
+            // Từ 60 tuổi trở lên → không thời hạn
+            return DateTime.MinValue;
+        }
+
+        /// <summary>
+        /// Khi thay đổi ngày sinh → tự động tính và hiển thị thời hạn CCCD.
+        /// </summary>
+        private void DateNgaysinh_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dateNgaysinh == null || datendhcccd == null) return;
+                if (dateNgaysinh.CustomFormat == " ") return;
+
+                var ngaysinh = dateNgaysinh.Value.Date;
+                // Lấy ngày cấp hiện tại (nếu đã nhập) để tính đúng nhóm tuổi
+                var ngaycap = (dateNgaycapCCCD != null && dateNgaycapCCCD.CustomFormat != " ")
+                              ? dateNgaycapCCCD.Value.Date : DateTime.Today;
+                var thoihan = CalcThoiHanCCCD(ngaysinh, ngaycap);
+
+                datendhcccd.Format = DateTimePickerFormat.Custom;
+                if (thoihan == DateTime.MinValue)
+                {
+                    // Từ 60 tuổi trở lên: không thời hạn — ẩn picker, hiển thị text
+                    datendhcccd.CustomFormat = "'không thời hạn'";
+                    datendhcccd.Value = new DateTime(ngaysinh.Year + 60, ngaysinh.Month,
+                        (ngaysinh.Month == 2 && ngaysinh.Day == 29 && !DateTime.IsLeapYear(ngaysinh.Year + 60)) ? 28 : ngaysinh.Day);
+                }
+                else
+                {
+                    datendhcccd.CustomFormat = "dd/MM/yyyy";
+                    datendhcccd.Value = thoihan;
+                }
+                datendhcccd.Enabled = false; // khoá, chỉ đọc
             }
             catch { }
         }
@@ -3711,6 +4221,7 @@ namespace HOSONHCS
         {
             // Kiểm tra đầy đủ thông tin trước khi xuất
             if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
 
             try
             {
@@ -3857,9 +4368,167 @@ namespace HOSONHCS
             }
         }
 
+        // ============================================
+        // CHUYỂN ĐỔI DOCX → PDF (dùng Word Interop)
+        // ============================================
+
+        /// <summary>
+        /// Chuyển 1 file .docx → .pdf dùng instance Word đang mở sẵn.
+        /// Xóa file .docx sau khi chuyển thành công.
+        /// </summary>
+        private string ConvertDocxToPdf(Word.Application wordApp, string docxPath)
+        {
+            string pdfPath = Path.ChangeExtension(docxPath, ".pdf");
+            Word.Document doc = null;
+            try
+            {
+                doc = wordApp.Documents.Open(docxPath);
+                doc.ExportAsFixedFormat(pdfPath, Word.WdExportFormat.wdExportFormatPDF);
+                return File.Exists(pdfPath) ? pdfPath : null;
+            }
+            finally
+            {
+                try { doc?.Close(false); } catch { }
+                try { if (doc != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(doc); } catch { }
+                doc = null;
+            }
+        }
+
+        /// <summary>
+        /// Chuyển nhiều file .docx → .pdf, dùng chung 1 instance Word để tiết kiệm thời gian.
+        /// Trả về danh sách đường dẫn .pdf đã tạo.
+        /// </summary>
+        private List<string> ConvertDocxListToPdf(List<string> docxPaths)
+        {
+            var pdfPaths = new List<string>();
+            if (docxPaths == null || docxPaths.Count == 0) return pdfPaths;
+
+            Word.Application wordApp = null;
+            try
+            {
+                wordApp = new Word.Application { Visible = false };
+                foreach (var docxPath in docxPaths)
+                {
+                    try
+                    {
+                        var pdf = ConvertDocxToPdf(wordApp, docxPath);
+                        if (!string.IsNullOrEmpty(pdf)) pdfPaths.Add(pdf);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Lỗi chuyển {Path.GetFileName(docxPath)} → PDF: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Không thể chuyển sang PDF.\n\nLỗi: {ex.Message}\n\nVui lòng đảm bảo Microsoft Word đã được cài đặt.",
+                    "Lỗi xuất PDF", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Quit Word trước — giải phóng lock hoàn toàn
+                try { wordApp?.Quit(false); } catch { }
+                try { if (wordApp != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(wordApp); } catch { }
+                wordApp = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                // Xóa tất cả file .docx SAU KHI Word đã tắt hẳn
+                foreach (var docxPath in docxPaths)
+                    try { if (File.Exists(docxPath)) File.Delete(docxPath); } catch { }
+            }
+            return pdfPaths;
+        }
+
         private void toolTip1_Popup(object sender, PopupEventArgs e)
         {
 
+        }
+
+        // ============================================
+        // TỰ ĐỘNG TÍNH NGÀY ĐẾN HẠN TỪ NGÀY GIẢI NGÂN + THỜI HẠN VAY
+        // ============================================
+
+        private bool _suppressDenHanCalc = false;
+
+        /// <summary>
+        /// dateDH bị khoá hoàn toàn — handler này không làm gì
+        /// </summary>
+        private void dateDH_ValueChanged(object sender, EventArgs e) { }
+
+        /// <summary>
+        /// Khi dateGn tick/bỏ tick hoặc ngày thay đổi → tính lại ngày đến hạn
+        /// </summary>
+        private void dateGn_ValueChanged(object sender, EventArgs e)
+        {
+            if (_suppressDenHanCalc) return;
+            try
+            {
+                if (dateGn?.Checked == true)
+                {
+                    CalculateNgayDenHan();
+                }
+                else
+                {
+                    // Bỏ tick → ẩn ngày đến hạn
+                    if (dateDH != null)
+                        dateDH.CustomFormat = "          ";
+                }
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Khi thời hạn vay thay đổi → cập nhật MaxDate của dateGn và tính lại
+        /// </summary>
+        private void CbThoihanvay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int months = ParseThoiHanThang(cbThoihanvay?.Text);
+                if (months > 0 && dateGn != null)
+                    dateGn.MaxDate = DateTime.Today.AddMonths(months);
+            }
+            catch { }
+            CalculateNgayDenHan();
+        }
+
+        /// <summary>
+        /// Tính ngày đến hạn = ngày giải ngân + số tháng thời hạn vay.
+        /// Chỉ tính khi dateGn đang được tick.
+        /// </summary>
+        private void CalculateNgayDenHan()
+        {
+            if (_suppressDenHanCalc) return;
+            try
+            {
+                if (dateGn?.Checked != true) return;
+                if (dateDH == null) return;
+
+                int months = ParseThoiHanThang(cbThoihanvay?.Text);
+                if (months <= 0) return;
+
+                var denHan = dateGn.Value.AddMonths(months);
+
+                _suppressDenHanCalc = true;
+                dateDH.CustomFormat = "dd/MM/yyyy";
+                dateDH.Value = denHan;
+            }
+            catch { }
+            finally { _suppressDenHanCalc = false; }
+        }
+
+        /// <summary>
+        /// Trích xuất số tháng từ chuỗi thời hạn vay (vd: "60 tháng" → 60, "12" → 12)
+        /// </summary>
+        private int ParseThoiHanThang(string thoihanvay)
+        {
+            if (string.IsNullOrWhiteSpace(thoihanvay)) return 0;
+            var match = Regex.Match(thoihanvay, @"\d+");
+            if (match.Success && int.TryParse(match.Value, out int months))
+                return months;
+            return 0;
         }
 
         // ============================================
@@ -4154,114 +4823,69 @@ namespace HOSONHCS
         {
             try
             {
-                // TEMPORARY: Kiểm tra KHÔNG im lặng để thấy lỗi
-                var updateInfo = await AutoUpdater.CheckForUpdateAsync(silent: false);
+                var updateInfo = await AutoUpdater.CheckForUpdateAsync(silent: true);
 
                 if (updateInfo != null)
                 {
-                    // Có bản cập nhật mới - BẮT BUỘC cập nhật
-                    var result = MessageBox.Show(
-                        $"🆕 CÓ PHIÊN BẢN MỚI!\n\n" +
-                        $"Phiên bản hiện tại: {AutoUpdater.CurrentVersion}\n" +
-                        $"Phiên bản mới: {updateInfo.Version}\n\n" +
-                        $"📝 Nội dung cập nhật:\n{updateInfo.Changelog}\n\n" +
-                        $"⚠️ BẮT BUỘC cập nhật để tiếp tục sử dụng app.\n\n" +
-                        $"Bấm OK để cập nhật ngay!",
-                        "🆕 Cập nhật bắt buộc",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
+                    bool updated = await AutoUpdater.ShowUpdateDialogAsync(updateInfo);
 
-                    // Hiển thị dialog cập nhật - TỰ ĐỘNG TẢI VÀ CÀI ĐẶT
-                    await AutoUpdater.ShowUpdateDialogAsync(updateInfo);
-
-                    // Sau khi cập nhật xong, app sẽ tự động khởi động lại
-                    // Nếu người dùng hủy cập nhật -> ĐÓNG APP
-                    MessageBox.Show(
-                        "⚠️ Bạn phải cập nhật để tiếp tục sử dụng app.\n\n" +
-                        "App sẽ đóng ngay bây giờ.",
-                        "⚠️ Cảnh báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                    );
-
-                    Application.Exit();
+                    if (!updated)
+                    {
+                        Application.Exit();
+                    }
                 }
                 else
                 {
-                    // Không có cập nhật - tiếp tục bình thường (im lặng)
                     System.Diagnostics.Debug.WriteLine("✅ Không có cập nhật mới hoặc chưa có release.");
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                // HIỆN LỖI ĐỂ DEBUG
-                MessageBox.Show(
-                    $"❌ Lỗi khi kiểm tra cập nhật:\n\n{ex.Message}\n\n" +
-                    "App sẽ tiếp tục chạy với phiên bản hiện tại.",
-                    "❌ Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                // Im lặng nếu có lỗi — app tiếp tục chạy bình thường
             }
         }
 
         /// <summary>
-        /// Xử lý khi bấm nút "Cập nhật" (btnUpdate)
+        /// Ghi đè thông tin khách hàng đang được gọi lên (btnUpdate)
         /// </summary>
-        private async void BtnUpdate_Click(object sender, EventArgs e)
+        private void BtnUpdate_Click(object sender, EventArgs e)
         {
             try
             {
-                // Kiểm tra cập nhật (có hiện thông báo)
-                var updateInfo = await AutoUpdater.CheckForUpdateAsync(silent: false);
-
-                if (updateInfo != null)
+                if (editingIndex < 0 || customers == null || editingIndex >= customers.Count)
                 {
-                    // Có bản cập nhật mới - tải file exe về với tên tạm
-                    string exeUrl = updateInfo.DownloadUrl;
-                    string exeName = Path.GetFileName(Application.ExecutablePath);
-                    string exeDir = AppDomain.CurrentDomain.BaseDirectory;
-                    string tempExe = Path.Combine(exeDir, exeName + ".update.tmp");
-                    string batchFile = Path.Combine(exeDir, "update.bat");
-
-                    using (var client = new System.Net.WebClient())
-                    {
-                        client.DownloadFile(exeUrl, tempExe);
-                    }
-
-                    // Tạo file batch để thay thế exe và khởi động lại
-
-                    string batchContent =
-                        "@echo off\r\n"
-                        + "timeout /t 2 >nul\r\n"
-                        + $"taskkill /f /im \"{exeName}\" >nul 2>&1\r\n"
-                        + "ping 127.0.0.1 -n 2 >nul\r\n"
-                        + $"move /y \"{exeName}.update.tmp\" \"{exeName}\"\r\n"
-                        + $"start \"\" \"{exeName}\"\r\n"
-                        + "del \"%~f0\"\r\n";
-                    File.WriteAllText(batchFile, batchContent, Encoding.Default);
-
-                    // Thông báo và chạy batch, sau đó thoát app
-                    MessageBox.Show("Ứng dụng sẽ tự động cập nhật và khởi động lại.", "Cập nhật", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Chạy batch file ẩn hoàn toàn
-                    var startInfo = new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = batchFile,
-                        WorkingDirectory = exeDir,
-                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
-                        CreateNoWindow = true,  // Ẩn hoàn toàn cửa sổ console
-                        UseShellExecute = false  // Không dùng shell để tránh hiện cửa sổ
-                    };
-                    System.Diagnostics.Process.Start(startInfo);
-                    Application.Exit();
+                    MessageBox.Show("Vui lòng chọn một khách hàng từ danh sách trước khi cập nhật.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                var customer = ReadForm();
+                if (string.IsNullOrWhiteSpace(customer.Hoten))
+                {
+                    MessageBox.Show("Vui lòng nhập Họ và tên.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Giữ nguyên tên file JSON cũ để ghi đè đúng khách
+                customer._fileName = customers[editingIndex]._fileName;
+
+                SaveCustomerToFile(customer);
+                customers[editingIndex] = customer;
+                BindGrid();
+
+                MessageBox.Show($"✅ Đã cập nhật thông tin khách hàng '{customer.Hoten}' thành công.", "Cập nhật", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi kiểm tra/tải cập nhật:\n\n{ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Lỗi khi cập nhật khách hàng:\n\n{ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Xoá toàn bộ dữ liệu trên form để nhập lại (btnClear)
+        /// </summary>
+        private void BtnClear_Click(object sender, EventArgs e)
+        {
+            ClearForm();
         }
 
         private void btnLuubangke_Click_1(object sender, EventArgs e)
@@ -4273,7 +4897,48 @@ namespace HOSONHCS
         {
 
         }
-     
+
+        // ============================================
+        // CBTINHFIX → CBPGDFIX → DGV1
+        // ============================================
+
+        private void CbTinhfix_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                _editTinhModel = null;
+                if (cbpgdfix != null) cbpgdfix.Items.Clear();
+
+                string tinh = cbTinhfix?.Text?.Trim() ?? "";
+                if (string.IsNullOrWhiteSpace(tinh)) return;
+
+                _editTinhModel = TinhHelper.LoadTinhModel(tinh);
+                if (_editTinhModel?.pgds == null) return;
+
+                foreach (var pgd in _editTinhModel.pgds)
+                    if (!string.IsNullOrWhiteSpace(pgd.pgd))
+                        cbpgdfix.Items.Add(pgd.pgd);
+
+                if (cbpgdfix.Items.Count > 0) cbpgdfix.SelectedIndex = 0;
+            }
+            catch { }
+        }
+
+        private void CbpgdfixEditor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_editTinhModel?.pgds == null || cbpgdfix == null || xinManEditor == null) return;
+                if (string.IsNullOrWhiteSpace(cbpgdfix.Text)) return;
+
+                var pgdEntry = _editTinhModel.pgds.FirstOrDefault(p =>
+                    string.Equals(p.pgd, cbpgdfix.Text.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                if (pgdEntry != null)
+                    xinManEditor.LoadFromPgdEntry(pgdEntry, _editTinhModel.tinh);
+            }
+            catch { }
+        }
     }
 
     #region Models
@@ -4310,8 +4975,12 @@ namespace HOSONHCS
     public string Doituong2 { get; set; }
     public DateTime Ngaylaphs { get; set; }
     public DateTime Ngaydenhan { get; set; }
+    public DateTime Ngaygiaingaan { get; set; }
     public DateTime Thoihancccd { get; set; }
+    /// <summary>"không thời hạn" nếu > 60 tuổi, ngày dd/MM/yyyy nếu còn hạn. Tính từ Ngaysinh.</summary>
+    public string ThoihancccdText { get; set; }
     public string PGD { get; set; }
+    public string Tinh { get; set; }
 
     public string Dantoc { get; set; }
     public string Sdt = "";
@@ -4339,6 +5008,8 @@ internal class XinManModel { public string pgd { get; set; } public List<Commune
 internal class Commune { public string name { get; set; } public List<Association> associations { get; set; } = new List<Association>(); public List<Village> villages { get; set; } = new List<Village>(); }
 internal class Association { public string name { get; set; } public string code { get; set; } public List<Village> villages { get; set; } = new List<Village>(); public List<string> managedVillages { get; set; } = new List<string>(); }
 internal class Village { public string name { get; set; } public List<string> groups { get; set; } = new List<string>(); }
+internal class TinhPgdEntry { public string pgd { get; set; } public List<Commune> communes { get; set; } = new List<Commune>(); }
+internal class TinhModel { public string tinh { get; set; } public List<TinhPgdEntry> pgds { get; set; } = new List<TinhPgdEntry>(); }
 
 #endregion
 }
