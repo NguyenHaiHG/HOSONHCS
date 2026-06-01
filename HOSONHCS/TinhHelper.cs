@@ -59,8 +59,9 @@ namespace HOSONHCS
             var result = new Dictionary<string, TinhModel>(StringComparer.OrdinalIgnoreCase);
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
-            // 1. Doc toanquoc — uu tien tu .enc (da ma hoa), fallback .json
-            var json = ToanQuocEncryptor.GetJson();
+            // 1. Doc toanquoc.json
+            var jsonPath = Path.Combine(baseDir, TOAN_QUOC_FILE);
+            var json = File.Exists(jsonPath) ? File.ReadAllText(jsonPath, Encoding.UTF8) : null;
             if (!string.IsNullOrEmpty(json))
             {
                 try

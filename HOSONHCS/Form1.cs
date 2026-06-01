@@ -81,6 +81,7 @@ namespace HOSONHCS
             "Nuôi lợn",
             "Trồng cây quế",
             "Trồng cây keo",
+            "Trồng cây mỡ",
             "Trồng cây cam",
             "Mở rộng cửa hàng tạp hoá",
             "Mở rộng cửa hàng ăn uống",
@@ -110,6 +111,7 @@ namespace HOSONHCS
             try { btnGUQ.Click += BtnGUQ_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btn01TGTV.Click += Btn01tgtv_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btnBia.Click += BtnBia_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
+            try { btnDn.Click += BtnDn_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btnall.Click += Btnall_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
 
             // Các nút tạo khách hàng mới và đăng xuất
@@ -126,26 +128,29 @@ namespace HOSONHCS
             // ========== NÚT CẬP NHẬT VÀ XOÁ FORM ==========
             try { btnUpdate.Click += BtnUpdate_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btnClear.Click += BtnClear_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
+            try { btnLoaddata.Click += btnLoaddata_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
 
             // ComboBox Fix PGD - cho phép chọn nhanh và reload dữ liệu PGD
             try { cbpgdfix.SelectedIndexChanged += CbPgdFix_SelectedIndexChanged; } catch { /* bỏ qua nếu control không tồn tại */ }
 
             // ========== TỰ ĐỘNG VIẾT HOA CHỮ CÁI ĐẦU CHO Ô NHẬP TÊN ==========
-            // Các ô nhập tên (txtHoten, txtntk1/2/3): tự động viết hoa chữ cái đầu mỗi từ (Title Case)
+            // Các ô nhập tên (txtHoten, txtntk1/2/3/4): tự động viết hoa chữ cái đầu mỗi từ (Title Case)
             try { txtHoten.TextChanged += TxtName_TextChanged; txtHoten.Leave += TxtName_Leave; } catch { }
             try { txtntk1.TextChanged += TxtName_TextChanged; txtntk1.Leave += TxtName_Leave; } catch { }
             try { txtntk2.TextChanged += TxtName_TextChanged; txtntk2.Leave += TxtName_Leave; } catch { }
             try { txtntk3.TextChanged += TxtName_TextChanged; txtntk3.Leave += TxtName_Leave; } catch { }
+            try { txtntk4.TextChanged += TxtName_TextChanged; txtntk4.Leave += TxtName_Leave; } catch { }
 
             // ========== DATEPICKER NGÀY SINH NGƯỜI THỪA KẾ (NTK) ==========
-            // datentk1/2/3 là DateTimePicker, KHÔNG CẦN KeyPress/TextChanged events
+            // datentk1/2/3/4 là DateTimePicker, KHÔNG CẦN KeyPress/TextChanged events
             // DateTimePicker tự động xử lý nhập liệu, chỉ cần set MaxDate và ShowCheckBox
             // ========== VALIDATION SỐ CCCD ==========
-            // Các ô nhập CCCD (txtSocccd, txtcccd1/2/3): chỉ cho phép nhập số, đúng 12 chữ số
+            // Các ô nhập CCCD (txtSocccd, txtcccd1/2/3/4): chỉ cho phép nhập số, đúng 12 chữ số
             try { txtSocccd.KeyPress += TxtDigitsOnly_KeyPress; txtSocccd.TextChanged += TxtCccd_TextChanged; txtSocccd.Leave += TxtCccd_Leave; txtSocccd.MaxLength = 12; } catch { }
             try { txtcccd1.KeyPress += TxtDigitsOnly_KeyPress; txtcccd1.TextChanged += TxtCccd_TextChanged; txtcccd1.Leave += TxtCccd_Leave; txtcccd1.MaxLength = 12; } catch { }
             try { txtcccd2.KeyPress += TxtDigitsOnly_KeyPress; txtcccd2.TextChanged += TxtCccd_TextChanged; txtcccd2.Leave += TxtCccd_Leave; txtcccd2.MaxLength = 12; } catch { }
             try { txtcccd3.KeyPress += TxtDigitsOnly_KeyPress; txtcccd3.TextChanged += TxtCccd_TextChanged; txtcccd3.Leave += TxtCccd_Leave; txtcccd3.MaxLength = 12; } catch { }
+            try { txtcccd4.KeyPress += TxtDigitsOnly_KeyPress; txtcccd4.TextChanged += TxtCccd_TextChanged; txtcccd4.Leave += TxtCccd_Leave; txtcccd4.MaxLength = 12; } catch { }
 
             // ========== SỐ ĐIỆN THOẠI ==========
             // txtSdt: chỉ cho phép nhập số, tự động format với dấu chấm (0812.801.886)
@@ -210,7 +215,7 @@ namespace HOSONHCS
                     datendhcccd.Leave += DateThoihanCCCD_ValueChanged;
                 }
                 // ========== DATEPICKER NGÀY SINH NTK: VALIDATE KHI RỜI Ô ==========
-                // datentk1/2/3 có ShowCheckBox=true, chỉ validate sau khi nhập xong (Leave)
+                // datentk1/2/3/4 có ShowCheckBox=true, chỉ validate sau khi nhập xong (Leave)
                 // Không dùng MaxDate để tránh reset ngay khi đang gõ
                 if (datentk1 != null)
                 {
@@ -229,6 +234,12 @@ namespace HOSONHCS
                     datentk3.MaxDate = DateTime.MaxValue;
                     datentk3.Leave += DatePickerChecked_Leave;
                     datentk3.ValueChanged += DateNtk_ValueChanged;
+                }
+                if (datentk4 != null)
+                {
+                    datentk4.MaxDate = DateTime.MaxValue;
+                    datentk4.Leave += DatePickerChecked_Leave;
+                    datentk4.ValueChanged += DateNtk_ValueChanged;
                 }
             } catch { }
 
@@ -249,27 +260,37 @@ namespace HOSONHCS
             // ========== TỰ ĐỘNG ĐIỀU KHIỂN CBMUCDICH1/2 DỰA TRÊN CBPHUONGAN ==========
             try { cbPhuongan.SelectedIndexChanged += CbPhuongan_SelectedIndexChanged; } catch { }
             try { cbPhuongan.TextChanged += CbPhuongan_TextChanged; } catch { }
-            // cbmucdich2 mặc định bị khoá, chỉ mở khi cbPhuongan chọn CTNS, CTVS
-            try { if (cbmucdich2 != null) cbmucdich2.Enabled = false; } catch { }
+            // cbmucdich2: luôn mở, cho phép nhập tay kèm danh sách
+            try { if (cbmucdich2 != null) { cbmucdich2.Enabled = true; cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown; } } catch { }
 
             // ========== FORMAT SỐ TIỀN TỰ ĐỘNG ==========
-            // cbSotien/cbSotien1/cbSotien2: chỉ cho nhập số, tự động format với dấu '.' ngăn cách hàng nghìn
+            // cbSotien/cbSotien1/cbSotien2/cbSotien3: chỉ cho nhập số, tự động format với dấu '.' ngăn cách hàng nghìn
             try { cbSotien.KeyPress += CbMoney_KeyPress; cbSotien.TextChanged += CbMoney_TextChanged; } catch { }
             try { cbSotien1.KeyPress += CbMoney_KeyPress; cbSotien1.TextChanged += CbMoney_TextChanged; } catch { }
             try { cbSotien2.KeyPress += CbMoney_KeyPress; cbSotien2.TextChanged += CbMoney_TextChanged; } catch { }
+            try { cbSotien3.KeyPress += CbMoney_KeyPress; cbSotien3.TextChanged += CbMoney_TextChanged; } catch { }
+            // Kiểm tra tổng cbSotien1+2+3 = cbSotien
+            try { cbSotien.TextChanged  += CbSotienSum_Changed; } catch { }
+            try { cbSotien1.TextChanged += CbSotienSum_Changed; } catch { }
+            try { cbSotien2.TextChanged += CbSotienSum_Changed; } catch { }
+            try { cbSotien3.TextChanged += CbSotienSum_Changed; } catch { }
+            // Module Cấp nước sạch: chia đôi số tiền khi rời/chọn cbSotien
+            try { cbSotien.Leave += CbSotien_CapNuocSach_Leave; } catch { }
+            try { cbSotien.SelectedIndexChanged += CbSotien_CapNuocSach_SelectedIndexChanged; } catch { }
 
             // ========== HIỂN THỊ CHECKBOX CHO CÁC TRƯỜNG NGÀY OPTIONAL ==========
             // Các DateTimePicker có ShowCheckBox = true để user có thể bỏ chọn (không bắt buộc nhập)
             // Mặc định unchecked = không có giá trị
             try 
             {
-                // dateLaphs: BẮT BUỘC - BỎ checkbox, bắt đầu trống
+                // dateLaphs: có checkbox - tick để chọn ngày lập hồ sơ
                 if (dateLaphs != null)
                 {
-                    dateLaphs.ShowCheckBox = false;
+                    dateLaphs.ShowCheckBox = true;
+                    dateLaphs.Checked = false;
                     dateLaphs.Format = DateTimePickerFormat.Custom;
                     dateLaphs.CustomFormat = " ";
-                    dateLaphs.Enter += DatePicker_Enter;
+                    dateLaphs.ValueChanged += DateLaphs_CheckedChanged;
                 }
 
                 if (dateDH != null) 
@@ -308,6 +329,11 @@ namespace HOSONHCS
                 { 
                     datentk3.ShowCheckBox = true; 
                     datentk3.Checked = false;  // Ngày sinh NTK 3: optional
+                }
+                if (datentk4 != null) 
+                { 
+                    datentk4.ShowCheckBox = true; 
+                    datentk4.Checked = false;  // Ngày sinh NTK 4: optional
                 }
             } catch { }
 
@@ -471,19 +497,31 @@ namespace HOSONHCS
                 dgv.DataSource = null;
                 dgv.DataSource = customers;
 
-                // Đặt tất cả cột tự động tạo thành readonly; chọn theo dòng
+                // Ẩn tất cả cột, chỉ hiện 5 cột cần thiết
                 foreach (DataGridViewColumn col in dgv.Columns)
                 {
                     col.ReadOnly = true;
+                    col.Visible = false;
                 }
 
-                // Tùy chọn chỉ hiển thị các cột bạn muốn. Đảm bảo Họ tên hiển thị đầu tiên
-                if (dgv.Columns["Hoten"] != null)
+                // Cấu hình 5 cột hiển thị: tên, xã, thôn, chương trình, CCCD
+                var visibleCols = new[]
                 {
-                    dgv.Columns["Hoten"].DisplayIndex = 1;
-                    dgv.Columns["Hoten"].HeaderText = "Họ và tên";
+                    new { Name = "Hoten",        Header = "Họ và tên",        Width = 180, Index = 0 },
+                    new { Name = "Xa",           Header = "Xã",               Width = 110, Index = 1 },
+                    new { Name = "Thon",         Header = "Thôn",             Width = 100, Index = 2 },
+                    new { Name = "Chuongtrinh",  Header = "Chương trình vay", Width = 130, Index = 3 },
+                    new { Name = "Socccd",       Header = "Căn cước",         Width = 120, Index = 4 },
+                };
+
+                foreach (var c in visibleCols)
+                {
+                    if (dgv.Columns[c.Name] == null) continue;
+                    dgv.Columns[c.Name].Visible      = true;
+                    dgv.Columns[c.Name].HeaderText   = c.Header;
+                    dgv.Columns[c.Name].Width        = c.Width;
+                    dgv.Columns[c.Name].DisplayIndex = c.Index;
                 }
-                if (dgv.Columns["_fileName"] != null) dgv.Columns["_fileName"].Visible = false;
             }
             catch { }
         }
@@ -615,39 +653,14 @@ namespace HOSONHCS
             var root = Path.Combine(desktopRoot, "Hồ sơ NHCS");
             if (!Directory.Exists(root)) Directory.CreateDirectory(root);
 
-            var safeName = MakeFileSystemSafe(c.Hoten);
-            var dateSuffix = DateTime.Now.ToString("MM-yyyy");
-            var folder = Path.Combine(root, safeName + "_" + dateSuffix);
+            // Folder đặt tên theo họ tên tổ trưởng + ngày tháng năm
+            var totruong = (!string.IsNullOrWhiteSpace(c.Totruong) ? c.Totruong : c.Hoten).Trim();
+            var safeTotruong = MakeFileSystemSafe(totruong);
+            var dateSuffix = DateTime.Now.ToString("dd-MM-yyyy");
+            var folder = Path.Combine(root, safeTotruong + "_" + dateSuffix);
 
-            // Nếu folder đã tồn tại, sử dụng nó (cho cùng khách hàng trong cùng tháng)
-            // Chỉ thêm hậu tố số nếu có NHIỀU khách hàng cùng tên trong cùng tháng
-            if (!Directory.Exists(folder))
-            {
-                // Folder chưa tồn tại, tạo mới
-                return folder;
-            }
-            else
-            {
-                // Folder tồn tại - kiểm tra xem nó có thuộc về khách hàng này không bằng cách so sánh _fileName
-                // Nếu khách hàng có _fileName và folder khớp tồn tại, dùng folder đó
-                if (!string.IsNullOrEmpty(c._fileName))
-                {
-                    // Khách hàng đã tồn tại trong database - dùng folder hiện có
-                    return folder;
-                }
-                else
-                {
-                    // Khách hàng mới cùng tên - cần thêm hậu tố
-                    var baseFolder = folder;
-                    int i = 1;
-                    while (Directory.Exists(folder))
-                    {
-                        folder = baseFolder + "_" + i;
-                        i++;
-                    }
-                    return folder;
-                }
-            }
+            // Tất cả khách hàng cùng tổ trưởng trong cùng ngày dùng chung folder
+            return folder;
         }
 
         private List<string> CreateProfileFromTemplate(Customer c, bool include03)
@@ -680,10 +693,28 @@ namespace HOSONHCS
                         tempFilesToDelete.Add(templatePath);
 
                     var shortName = Path.GetFileNameWithoutExtension(templateName).Replace(" ", "_");
-                    // Bỏ timestamp để ghi đè file cũ thay vì tạo file mới
-                    var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + ".docx");
+                    var dateName = DateTime.Now.ToString("dd-MM-yyyy");
+                    var baseName = MakeFileSystemSafe(c.Hoten) + "_" + dateName + "_" + shortName + ".docx";
 
-                    // Ghi đè nếu file đã tồn tại
+                    bool is01Template = templateName == "01 GQVL.docx" || templateName == "01 SXKD.docx" || templateName == "01 HN.docx";
+                    string destDoc;
+                    if (is01Template)
+                    {
+                        // Chỉ cho phép tối đa 2 hồ sơ cùng tên cho mẫu 01 trong cùng 1 thư mục
+                        var existingCount = Directory.GetFiles(destFolder, "*_" + shortName + "*.docx").Length;
+                        if (existingCount >= 2) continue;
+                        destDoc = UniqueFilePath(Path.Combine(destFolder, baseName));
+                    }
+                    else
+                    {
+                        // Ghi đè: xóa file cũ cùng loại trước khi tạo mới
+                        foreach (var oldFile in Directory.GetFiles(destFolder, "*_" + shortName + "*.docx"))
+                        {
+                            try { File.Delete(oldFile); } catch { }
+                        }
+                        destDoc = Path.Combine(destFolder, baseName);
+                    }
+
                     File.Copy(templatePath, destDoc, true);
 
                     if (!IsDocxFile(destDoc))
@@ -711,7 +742,7 @@ namespace HOSONHCS
                 foreach (var f in tempFilesToDelete) { try { if (File.Exists(f)) File.Delete(f); } catch { } }
             }
 
-            return ConvertDocxListToPdf(createdFiles);
+            return createdFiles;
         }
 
         private void ReplacePlaceholdersInWord(string docPath, Customer c)
@@ -746,17 +777,20 @@ namespace HOSONHCS
                 { "{{sotien}}", c.Sotien },
                 { "{{sotien1}}", c.Sotien1 },
                 { "{{sotien2}}", c.Sotien2 },
+                { "{{sotien3}}", c.Sotien3 ?? "" },
                 { "{{sotientong}}", c.Sotientong },
                 { "{{sotienchu}}", string.IsNullOrEmpty(c.Sotienchu) ? "" : char.ToUpper(c.Sotienchu[0]) + c.Sotienchu.Substring(1) },
                 { "{{soluong1}}", c.Soluong1 ?? "" },
                 { "{{soluong2}}", string.IsNullOrWhiteSpace(c.Soluong2) ? "" : c.Soluong2 },
+                { "{{soluong3}}", c.Soluong3 ?? "" },
                 // Ưu tiên trường Mucdich nhập tự do; nếu trống, dùng Doituong (combo) làm dự phòng
                 { "{{mucdich1}}", !string.IsNullOrWhiteSpace(c.Mucdich1) ? c.Mucdich1 : (c.Doituong1 ?? "") },
                 { "{{mucdich2}}", !string.IsNullOrWhiteSpace(c.Mucdich2) ? c.Mucdich2 : (c.Doituong2 ?? "") },
+                { "{{mucdich3}}", !string.IsNullOrWhiteSpace(c.Mucdich3) ? c.Mucdich3 : "" },
                 { "{{doituong1}}", c.Doituong1 ?? "" },
                 { "{{doituong2}}", c.Doituong2 ?? "" },
                 { "{{doituong}}", !string.IsNullOrWhiteSpace(c.Doituong1) ? c.Doituong1 : (c.Doituong2 ?? "") },
-                { "{{ngaylaphs}}", FormatDateToNgayThangNam(c.Ngaylaphs) },
+                { "{{ngaylaphs}}", NgayLaphsFormatter.GetNgaylaphsValue(docPath, c.Ngaylaphs, CountNguoiThuaKe(c)) },
                 { "{{ngaysinh}}", c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.ToString("dd/MM/yyyy") },
                 { "{{ngay}}", c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.Day.ToString() },
                 { "{{thang}}", c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.Month.ToString() },
@@ -772,18 +806,23 @@ namespace HOSONHCS
                 { "{{ntk1}}", c.Ntk1 ?? "" },
                 { "{{ntk2}}", c.Ntk2 ?? "" },
                 { "{{ntk3}}", c.Ntk3 ?? "" },
+                { "{{ntk4}}", c.Ntk4 ?? "" },
                 { "{{cccdntk1}}", c.CccdNtk1 ?? "" },
                 { "{{cccdntk2}}", c.CccdNtk2 ?? "" },
                 { "{{cccdntk3}}", c.CccdNtk3 ?? "" },
+                { "{{cccdntk4}}", c.CccdNtk4 ?? "" },
                 { "{{qh1}}", c.Qh1 ?? "" },
                 { "{{qh2}}", c.Qh2 ?? "" },
                 { "{{qh3}}", c.Qh3 ?? "" },
+                { "{{qh4}}", c.Qh4 ?? "" },
                 { "{{namsinh1}}", FormatNamsinhStringForDoc(c.Namsinh1, docPath) },
                 { "{{namsinh2}}", FormatNamsinhStringForDoc(c.Namsinh2, docPath) },
                 { "{{namsinh3}}", FormatNamsinhStringForDoc(c.Namsinh3, docPath) },
+                { "{{namsinh4}}", FormatNamsinhStringForDoc(c.Namsinh4, docPath) },
                 { "{{namsinh1_year}}", ExtractYearString(c.Namsinh1) ?? "" },
                 { "{{namsinh2_year}}", ExtractYearString(c.Namsinh2) ?? "" },
                 { "{{namsinh3_year}}", ExtractYearString(c.Namsinh3) ?? "" },
+                { "{{namsinh4_year}}", ExtractYearString(c.Namsinh4) ?? "" },
                 { "{{namsinh}}", ShouldShowFullNamsinh(docPath) ? (c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.ToString("dd/MM/yyyy")) : (c.Ngaysinh == DateTime.MinValue ? "" : c.Ngaysinh.Year.ToString()) },
              };
 
@@ -846,21 +885,16 @@ namespace HOSONHCS
                 System.Diagnostics.Debug.WriteLine($"ERROR in 01 GQVL chiphi/thunhap: {ex.Message}");
             }
 
-            // Đối với mẫu BIA: nếu không có người thừa kế → hiển thị {{ngaylaphs}} dạng trống chờ ký
-            try
-            {
-                if (IsBia(docPath) && CountNguoiThuaKe(c) == 0)
-                {
-                    replacements["{{ngaylaphs}}"] = "Ngày ..... Tháng ..... Năm .....";
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"ERROR in BIA ngaylaphs override: {ex.Message}");
-            }
-
             try { ReplacePlaceholdersUsingOpenXml(docPath, replacements, c); }
             catch (Exception ex) { MessageBox.Show("Error replacing placeholders (OpenXML): " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+
+            // Mẫu 01 HN: căn giữa paragraph chứa ngaylaphs khi bỏ tick
+            try
+            {
+                if (Is01HN(docPath) && c.Ngaylaphs == DateTime.MinValue)
+                    CenterParagraphContaining(docPath, NgayLaphsFormatter.PlaceholderNgayThangNam);
+            }
+            catch { }
          }
 
         // Thử tính toán `Sotienchu` từ giá trị số `Sotien` (hoặc `Sotientong`) khi tạo mẫu
@@ -870,9 +904,7 @@ namespace HOSONHCS
             {
                 if (c == null) return;
                 // Chỉ áp dụng cho mẫu 01 (embedded hoặc tên file chứa '01')
-                var name = Path.GetFileName(docPath) ?? "";
-                if (name.IndexOf("01", StringComparison.OrdinalIgnoreCase) < 0 && !string.Equals(name, EmbeddedTemplateFileName, StringComparison.OrdinalIgnoreCase))
-                    return;
+                // Áp dụng cho mọi mẫu có {{sotienchu}} — không giới hạn theo tên file
 
                 var source = !string.IsNullOrWhiteSpace(c.Sotien) ? c.Sotien : (!string.IsNullOrWhiteSpace(c.Sotientong) ? c.Sotientong : "");
                 if (string.IsNullOrWhiteSpace(source)) return;
@@ -913,6 +945,7 @@ namespace HOSONHCS
             if (!string.IsNullOrWhiteSpace(c.Ntk1)) count++;
             if (!string.IsNullOrWhiteSpace(c.Ntk2)) count++;
             if (!string.IsNullOrWhiteSpace(c.Ntk3)) count++;
+            if (!string.IsNullOrWhiteSpace(c.Ntk4)) count++;
 
             return count;
         }
@@ -1144,10 +1177,16 @@ namespace HOSONHCS
                 }
 
                 var shortName = Path.GetFileNameWithoutExtension(templateFileName).Replace(" ", "_");
-                // Bỏ timestamp để ghi đè file cũ thay vì tạo file mới
-                var destDoc = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + shortName + ".docx");
+                var dateName = DateTime.Now.ToString("dd-MM-yyyy");
+                var basePath = Path.Combine(destFolder, MakeFileSystemSafe(c.Hoten) + "_" + dateName + "_" + shortName + ".docx");
+                // GUQ, 01TGTV, BIA: ghi đè (1 khách 1 file duy nhất)
+                // Các mẫu còn lại (03 DS...): thêm _2, _3... không xóa file cũ
+                bool isOverwriteTemplate =
+                    templateFileName.Equals("GUQ.docx",    StringComparison.OrdinalIgnoreCase) ||
+                    templateFileName.Equals("01TGTV.docx", StringComparison.OrdinalIgnoreCase) ||
+                    templateFileName.Equals("BIA.docx",    StringComparison.OrdinalIgnoreCase);
+                var destDoc = isOverwriteTemplate ? basePath : UniqueFilePath(basePath);
 
-                // Ghi đè nếu file đã tồn tại
                 File.Copy(templatePath, destDoc, true);
 
                 if (!IsDocxFile(destDoc))
@@ -1157,8 +1196,7 @@ namespace HOSONHCS
 
                 ReplacePlaceholdersInWord(destDoc, c);
 
-                var pdfPaths = ConvertDocxListToPdf(new List<string> { destDoc });
-                return pdfPaths.Count > 0 ? pdfPaths[0] : null;
+                return destDoc;
             }
             catch (Exception ex)
             {
@@ -1167,6 +1205,19 @@ namespace HOSONHCS
         }
 
         // Phân tích chuỗi số thuần túy với dấu chấm/phẩy đã bị xóa trong caller; wrapper giữ lại cho rõ ràng
+        private static string UniqueFilePath(string path)
+        {
+            if (!File.Exists(path)) return path;
+            var dir = Path.GetDirectoryName(path);
+            var nameNoExt = Path.GetFileNameWithoutExtension(path);
+            var ext = Path.GetExtension(path);
+            int i = 2;
+            string candidate;
+            do { candidate = Path.Combine(dir, $"{nameNoExt}_{i}{ext}"); i++; }
+            while (File.Exists(candidate));
+            return candidate;
+        }
+
         private long ParseMoneyStringToLong(string s)
         {
             if (string.IsNullOrWhiteSpace(s)) return 0;
@@ -1471,11 +1522,13 @@ namespace HOSONHCS
                                     bool hasNtk1 = rowText.IndexOf("{{ntk1}}", StringComparison.OrdinalIgnoreCase) >= 0;
                                     bool hasNtk2 = rowText.IndexOf("{{ntk2}}", StringComparison.OrdinalIgnoreCase) >= 0;
                                     bool hasNtk3 = rowText.IndexOf("{{ntk3}}", StringComparison.OrdinalIgnoreCase) >= 0;
+                                    bool hasNtk4 = rowText.IndexOf("{{ntk4}}", StringComparison.OrdinalIgnoreCase) >= 0;
 
                                     // Nếu dòng có placeholder NTK nhưng không có dữ liệu, xóa các placeholder địa chỉ chỉ TRONG DÒNG NÀY
                                     if ((hasNtk1 && string.IsNullOrWhiteSpace(c.Ntk1)) ||
                                         (hasNtk2 && string.IsNullOrWhiteSpace(c.Ntk2)) ||
-                                        (hasNtk3 && string.IsNullOrWhiteSpace(c.Ntk3)))
+                                        (hasNtk3 && string.IsNullOrWhiteSpace(c.Ntk3)) ||
+                                        (hasNtk4 && string.IsNullOrWhiteSpace(c.Ntk4)))
                                     {
                                         // Xóa địa chỉ trong dòng NTK rỗng này
                                         foreach (var text in row.Descendants<Text>())
@@ -1677,115 +1730,80 @@ namespace HOSONHCS
         }
 
         // Thử tìm và thay thế các placeholder bị tách qua nhiều Text node (runs)
+        // Làm việc theo từng paragraph để tránh vượt ranh giới ô bảng
         private void TryReplacePlaceholdersAcrossRuns(OpenXmlPart part, Dictionary<string, string> replacements)
         {
             if (part == null || replacements == null || replacements.Count == 0) return;
             try
             {
-                var texts = part.RootElement.Descendants<Text>().ToList();
-                if (texts.Count == 0) return;
+                // Lấy tất cả paragraph trong part (bao gồm cả trong bảng)
+                var paragraphs = part.RootElement.Descendants<Paragraph>().ToList();
 
-                foreach (var kv in replacements)
+                foreach (var para in paragraphs)
                 {
-                    var rawKey = kv.Key ?? string.Empty;
-                    var replacement = kv.Value ?? string.Empty;
-                    if (string.IsNullOrEmpty(rawKey)) continue;
-
-                    // Chuẩn hóa token key: nếu key giống như "{{name}}" thì trích xuất token bên trong "name"
-                    string token = rawKey;
-                    var m = Regex.Match(rawKey, "^\\s*\\{\\{\\s*(.*?)\\s*\\}\\}\\s*$");
-                    if (m.Success && m.Groups.Count > 1) token = m.Groups[1].Value;
-                    if (string.IsNullOrEmpty(token)) continue;
-
-                    // Xây dựng regex để tìm placeholder cho phép khoảng trắng tùy chọn bên trong dấu ngoặc nhọn
-                    var pattern = "\\{\\{\\s*" + Regex.Escape(token) + "\\s*\\}\\}";
-
-                    int i = 0;
-                    while (i < texts.Count)
+                    foreach (var kv in replacements)
                     {
-                        var sb = new StringBuilder();
-                        int j = i;
-                        // Xây dựng lên đến một cửa sổ hợp lý
-                        while (j < texts.Count && sb.Length < token.Length + 1024 && (j - i) < 200)
+                        var rawKey = kv.Key ?? string.Empty;
+                        var replacement = kv.Value ?? string.Empty;
+                        if (string.IsNullOrEmpty(rawKey)) continue;
+
+                        string token = rawKey;
+                        var m = Regex.Match(rawKey, "^\\s*\\{\\{\\s*(.*?)\\s*\\}\\}\\s*$");
+                        if (m.Success && m.Groups.Count > 1) token = m.Groups[1].Value;
+                        if (string.IsNullOrEmpty(token)) continue;
+
+                        var pattern = "\\{\\{\\s*" + Regex.Escape(token) + "\\s*\\}\\}";
+
+                        // Lặp đến khi không còn match trong paragraph này
+                        bool found = true;
+                        while (found)
                         {
-                            sb.Append(texts[j].Text ?? string.Empty);
-                            j++;
-                        }
+                            found = false;
+                            var texts = para.Descendants<Text>().ToList();
+                            if (texts.Count == 0) break;
 
-                        if (sb.Length == 0) { i++; continue; }
-                        var combined = sb.ToString();
+                            var combined = string.Concat(texts.Select(t => t.Text ?? string.Empty));
+                            if (string.IsNullOrEmpty(combined)) break;
 
-                        var match = Regex.Match(combined, pattern, RegexOptions.IgnoreCase);
-                        if (!match.Success)
-                        {
-                            i++;
-                            continue;
-                        }
+                            var match = Regex.Match(combined, pattern, RegexOptions.IgnoreCase);
+                            if (!match.Success) break;
 
-                        int pos = match.Index;
-                        int matchLen = match.Length;
+                            int pos = match.Index;
+                            int matchLen = match.Length;
 
-                        int remaining = pos;
-                        int startNode = i; int startOffset = 0;
-                        for (int k = i; k < j; k++)
-                        {
-                            var tlen = (texts[k].Text ?? string.Empty).Length;
-                            if (remaining <= tlen)
+                            // Tìm startNode và startOffset
+                            int remaining = pos;
+                            int startNode = 0, startOffset = 0;
+                            for (int k = 0; k < texts.Count; k++)
                             {
-                                startNode = k;
-                                startOffset = remaining;
-                                break;
-                            }
-                            remaining -= tlen;
-                        }
-
-                        int endPos = pos + matchLen;
-                        remaining = endPos;
-                        int endNode = i; int endOffset = 0;
-                        for (int k = i; k < j; k++)
-                        {
-                            var tlen = (texts[k].Text ?? string.Empty).Length;
-                            if (remaining <= tlen)
-                            {
-                                endNode = k;
-                                endOffset = remaining;
-                                break;
-                            }
-                            remaining -= tlen;
-                        }
-
-                        try
-                        {
-                            var startText = texts[startNode].Text ?? string.Empty;
-                            var endText = texts[endNode].Text ?? string.Empty;
-
-                            var prefix = startText.Substring(0, startOffset);
-                            var suffix = endText.Substring(endOffset);
-
-                            // Đảm bảo không vô tình nối nội dung lân cận mà không có khoảng trắng.
-                            // Nếu prefix kết thúc bằng không-khoảng-trắng và replacement bắt đầu bằng không-khoảng-trắng, thêm khoảng trắng.
-                            var finalReplacement = replacement ?? string.Empty;
-                            if (!string.IsNullOrEmpty(prefix) && !char.IsWhiteSpace(prefix[prefix.Length - 1]) && finalReplacement.Length > 0 && !char.IsWhiteSpace(finalReplacement[0]))
-                                finalReplacement = " " + finalReplacement;
-
-                            // Nếu replacement kết thúc bằng không-khoảng-trắng và suffix bắt đầu bằng không-khoảng-trắng, chèn khoảng trắng sau replacement
-                            if (finalReplacement.Length > 0 && !char.IsWhiteSpace(finalReplacement[finalReplacement.Length - 1]) && !string.IsNullOrEmpty(suffix) && !char.IsWhiteSpace(suffix[0]))
-                                finalReplacement = finalReplacement + " ";
-
-                            texts[startNode].Text = prefix + finalReplacement + suffix;
-
-                            for (int k = startNode + 1; k <= endNode; k++)
-                            {
-                                texts[k].Text = string.Empty;
+                                var tlen = (texts[k].Text ?? string.Empty).Length;
+                                if (remaining <= tlen) { startNode = k; startOffset = remaining; break; }
+                                remaining -= tlen;
                             }
 
-                            // Làm mới collection texts và tiếp tục sau node đã thay thế
-                            texts = part.RootElement.Descendants<Text>().ToList();
-                            i = Math.Min(texts.Count, startNode + 1);
-                        }
-                        catch
-                        {
-                            i++;
+                            // Tìm endNode và endOffset
+                            remaining = pos + matchLen;
+                            int endNode = 0, endOffset = 0;
+                            for (int k = 0; k < texts.Count; k++)
+                            {
+                                var tlen = (texts[k].Text ?? string.Empty).Length;
+                                if (remaining <= tlen) { endNode = k; endOffset = remaining; break; }
+                                remaining -= tlen;
+                            }
+
+                            try
+                            {
+                                var prefix = (texts[startNode].Text ?? string.Empty).Substring(0, startOffset);
+                                var suffix = (texts[endNode].Text ?? string.Empty).Substring(endOffset);
+
+                                // Gán replacement vào startNode, xóa các node còn lại
+                                texts[startNode].Text = prefix + replacement + suffix;
+                                for (int k = startNode + 1; k <= endNode; k++)
+                                    texts[k].Text = string.Empty;
+
+                                found = true;
+                            }
+                            catch { break; }
                         }
                     }
                 }
@@ -1837,6 +1855,10 @@ namespace HOSONHCS
             try { cbTinhfix.SelectedIndexChanged += CbTinhfix_SelectedIndexChanged; } catch { }
             // Đăng ký sự kiện cbpgdfix → load dữ liệu PGD lên dgv1
             try { cbpgdfix.SelectedIndexChanged += CbpgdfixEditor_SelectedIndexChanged; } catch { }
+            // Đăng ký sự kiện cbpgdfix → populate cbXafix
+            try { cbpgdfix.SelectedIndexChanged += CbXafix_PopulateFromPgd; } catch { }
+            // Đăng ký sự kiện cbXafix → lọc dgv1 theo xã được chọn
+            try { cbXafix.SelectedIndexChanged += CbXafix_SelectedIndexChanged; } catch { }
         }
 
          // -------------------------
@@ -2137,6 +2159,42 @@ namespace HOSONHCS
              }
          }
 
+         private async void BtnDn_Click(object sender, EventArgs e)
+         {
+            if (!ValidateRequiredFields()) return;
+            if (!ValidateDuplicateCccdSdt()) return;
+            try
+            {
+                var customer = ReadForm();
+                string existingFile = null;
+                if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
+                {
+                    try { existingFile = customers[editingIndex]._fileName; } catch { existingFile = null; }
+                }
+
+                if (!string.IsNullOrEmpty(existingFile)) customer._fileName = existingFile;
+
+                SaveCustomerToFile(customer);
+                UpsertCustomerInList(customer);
+
+                var createdFile = await Task.Run(() =>
+                {
+                    return ExportSpecificTemplate(customer, "GNCK.docx");
+                });
+
+                BindGrid();
+                ClearForm();
+                MessageBox.Show("✅ Xuất giấy đề nghị giải ngân thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (!string.IsNullOrEmpty(createdFile))
+                    OpenFile(createdFile);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ Lỗi khi xuất giấy nhận cam kết: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+         }
+
          private void BtnDelete_Click(object sender, EventArgs e)
          {
              if (dgv == null || dgv.SelectedRows.Count == 0)
@@ -2195,18 +2253,20 @@ namespace HOSONHCS
 
          private Customer ReadForm()
          {
-             string ntk1 = "", ntk2 = "", ntk3 = "";
-             string cccdntk1 = "", cccdntk2 = "", cccdntk3 = "";
-             string namsinh1 = "", namsinh2 = "", namsinh3 = "";
-             string qh1 = "", qh2 = "", qh3 = "";
+             string ntk1 = "", ntk2 = "", ntk3 = "", ntk4 = "";
+             string cccdntk1 = "", cccdntk2 = "", cccdntk3 = "", cccdntk4 = "";
+             string namsinh1 = "", namsinh2 = "", namsinh3 = "", namsinh4 = "";
+             string qh1 = "", qh2 = "", qh3 = "", qh4 = "";
 
              try { if (txtntk1 != null) ntk1 = txtntk1.Text.Trim(); } catch { }
              try { if (txtntk2 != null) ntk2 = txtntk2.Text.Trim(); } catch { }
              try { if (txtntk3 != null) ntk3 = txtntk3.Text.Trim(); } catch { }
+             try { if (txtntk4 != null) ntk4 = txtntk4.Text.Trim(); } catch { }
 
              try { if (txtcccd1 != null) cccdntk1 = txtcccd1.Text.Trim(); } catch { }
              try { if (txtcccd2 != null) cccdntk2 = txtcccd2.Text.Trim(); } catch { }
              try { if (txtcccd3 != null) cccdntk3 = txtcccd3.Text.Trim(); } catch { }
+             try { if (txtcccd4 != null) cccdntk4 = txtcccd4.Text.Trim(); } catch { }
 
              // Đọc ngày sinh NTK từ DateTimePicker (nếu được checked)
              // Lưu thành string dd/MM/yyyy để dễ lưu JSON và sửa sau này
@@ -2240,10 +2300,21 @@ namespace HOSONHCS
                          namsinh3 = "";
                  }
              } catch { }
+             try 
+             { 
+                 if (datentk4 != null) 
+                 {
+                     if (datentk4.Checked)
+                         namsinh4 = datentk4.Value.ToString("dd/MM/yyyy");
+                     else
+                         namsinh4 = "";
+                 }
+             } catch { }
 
              try { if (cbqh1 != null) qh1 = cbqh1.Text.Trim(); } catch { }
              try { if (cbqh2 != null) qh2 = cbqh2.Text.Trim(); } catch { }
              try { if (cbqh3 != null) qh3 = cbqh3.Text.Trim(); } catch { }
+             try { if (cbqh4 != null) qh4 = cbqh4.Text.Trim(); } catch { }
 
              // Xác thực các ngày không được trong tương lai
              DateTime ngaycap = dateNgaycapCCCD.Value.Date;
@@ -2256,8 +2327,9 @@ namespace HOSONHCS
                  if (ngaysinh > DateTime.Today) ngaysinh = DateTime.Today;
              }
 
-             DateTime ngaylaphs = dateLaphs.Value.Date;
-             if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
+             DateTime ngaylaphs = (dateLaphs != null && dateLaphs.Checked)
+                 ? dateLaphs.Value.Date
+                 : DateTime.MinValue;
 
              DateTime ngaydenhan = DateTime.MinValue;
              DateTime ngaygiaingaan = DateTime.MinValue;
@@ -2311,12 +2383,15 @@ namespace HOSONHCS
                  Sotien = cbSotien.Text,
                  Sotien1 = cbSotien1.Text,
                  Sotien2 = cbSotien2.Text,
+                 Sotien3 = (cbSotien3 != null ? cbSotien3.Text : ""),
                  Soluong1 = (cbDoituong1 != null ? cbDoituong1.Text : ""),
                  Soluong2 = (cbDoituong2 != null ? cbDoituong2.Text : ""),
+                 Soluong3 = (cbDoituong3 != null ? cbDoituong3.Text : ""),
                  Sotientong = "",
                  Sotienchu = "",
                  Mucdich1 = (cbmucdich1 != null ? cbmucdich1.Text : ""),
                  Mucdich2 = (cbmucdich2 != null ? cbmucdich2.Text : ""),
+                 Mucdich3 = (cbmucdich3 != null ? cbmucdich3.Text : ""),
                  Doituong1 = (cbDoituong != null ? cbDoituong.Text : ""),
                  Doituong2 = "",
                  Ngaylaphs = ngaylaphs,
@@ -2327,10 +2402,10 @@ namespace HOSONHCS
                  Dantoc = (cbDantoc != null ? cbDantoc.Text : ""),
                  Sdt = (txtSdt != null ? txtSdt.Text : ""),  // Lưu với format có dấu chấm (0812.801.886)
                  Nhankhau = (txtNhankhau != null ? txtNhankhau.Text.Trim() : ""),
-                 Ntk1 = ToTitleCase(ntk1), Ntk2 = ToTitleCase(ntk2), Ntk3 = ToTitleCase(ntk3),
-                 CccdNtk1 = cccdntk1, CccdNtk2 = cccdntk2, CccdNtk3 = cccdntk3,
-                 Namsinh1 = namsinh1, Namsinh2 = namsinh2, Namsinh3 = namsinh3,
-                 Qh1 = qh1, Qh2 = qh2, Qh3 = qh3
+                 Ntk1 = ToTitleCase(ntk1), Ntk2 = ToTitleCase(ntk2), Ntk3 = ToTitleCase(ntk3), Ntk4 = ToTitleCase(ntk4),
+                 CccdNtk1 = cccdntk1, CccdNtk2 = cccdntk2, CccdNtk3 = cccdntk3, CccdNtk4 = cccdntk4,
+                 Namsinh1 = namsinh1, Namsinh2 = namsinh2, Namsinh3 = namsinh3, Namsinh4 = namsinh4,
+                 Qh1 = qh1, Qh2 = qh2, Qh3 = qh3, Qh4 = qh4
              };
          }
 
@@ -2429,6 +2504,7 @@ namespace HOSONHCS
              try { if (cbVtc != null) cbVtc.Text = c.Vtc ?? ""; } catch { }
              try { if (cbPhuongan != null) cbPhuongan.Text = c.Phuongan ?? ""; } catch { }
              try { ApplyPhuonganState(c.Phuongan ?? ""); } catch { }
+             try { ApplyCapNuocSach_Phuongan(c.Phuongan ?? ""); } catch { }
              cbThoihanvay.Text = c.Thoihanvay ?? "";
              try { if (cbPhanky != null) cbPhanky.Text = c.Phanky ?? ""; } catch { }
 
@@ -2438,8 +2514,9 @@ namespace HOSONHCS
              cbSotien2.Text = c.Sotien2 ?? "";
 
              // Mục đích và Đối tượng
-             try { if (cbmucdich1 != null) cbmucdich1.Text = c.Mucdich1 ?? ""; } catch { }
-             try { if (cbmucdich2 != null) cbmucdich2.Text = c.Mucdich2 ?? ""; } catch { }
+             // Ghi đè sau ApplyPhuonganState/ApplyCapNuocSach_Phuongan để khôi phục giá trị đã lưu
+             try { if (cbmucdich1 != null) { cbmucdich1.DropDownStyle = ComboBoxStyle.DropDown; cbmucdich1.Text = c.Mucdich1 ?? ""; } } catch { }
+             try { if (cbmucdich2 != null) { cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown; cbmucdich2.Text = c.Mucdich2 ?? ""; } } catch { }
              try { if (cbDoituong != null) cbDoituong.Text = c.Doituong1 ?? ""; } catch { }
              try { if (cbDoituong1 != null) cbDoituong1.Text = c.Soluong1 ?? ""; } catch { }
              try { if (cbDoituong2 != null) cbDoituong2.Text = c.Soluong2 ?? ""; } catch { }
@@ -2447,11 +2524,19 @@ namespace HOSONHCS
              // dateLaphs
              try
              {
-                 var ngaylaphs = c.Ngaylaphs == DateTime.MinValue ? DateTime.Today : c.Ngaylaphs;
-                 if (ngaylaphs > DateTime.Today) ngaylaphs = DateTime.Today;
-                 dateLaphs.Format = DateTimePickerFormat.Custom;
-                 dateLaphs.CustomFormat = "dd/MM/yyyy";
-                 dateLaphs.Value = ngaylaphs;
+                 if (c.Ngaylaphs != DateTime.MinValue)
+                 {
+                     dateLaphs.Checked = true;
+                     dateLaphs.Format = DateTimePickerFormat.Custom;
+                     dateLaphs.CustomFormat = "dd/MM/yyyy";
+                     dateLaphs.Value = c.Ngaylaphs;
+                 }
+                 else
+                 {
+                     dateLaphs.Checked = false;
+                     dateLaphs.Format = DateTimePickerFormat.Custom;
+                     dateLaphs.CustomFormat = " ";
+                 }
              } catch { }
              try 
              { 
@@ -2514,10 +2599,12 @@ namespace HOSONHCS
              try { if (txtntk1 != null) txtntk1.Text = c.Ntk1 ?? ""; } catch { }
              try { if (txtntk2 != null) txtntk2.Text = c.Ntk2 ?? ""; } catch { }
              try { if (txtntk3 != null) txtntk3.Text = c.Ntk3 ?? ""; } catch { }
+             try { if (txtntk4 != null) txtntk4.Text = c.Ntk4 ?? ""; } catch { }
 
              try { if (txtcccd1 != null) txtcccd1.Text = c.CccdNtk1 ?? ""; } catch { }
              try { if (txtcccd2 != null) txtcccd2.Text = c.CccdNtk2 ?? ""; } catch { }
              try { if (txtcccd3 != null) txtcccd3.Text = c.CccdNtk3 ?? ""; } catch { }
+             try { if (txtcccd4 != null) txtcccd4.Text = c.CccdNtk4 ?? ""; } catch { }
 
              // ========== NGÀY SINH NGƯỜI THỪA KẾ (NTK) - DATEPICKER ==========
              try 
@@ -2604,10 +2691,39 @@ namespace HOSONHCS
                      }
                  }
              } catch { }
+             try 
+             { 
+                 if (datentk4 != null) 
+                 {
+                     datentk4.Format = DateTimePickerFormat.Custom;
+                     datentk4.ShowCheckBox = true;
+                     if (string.IsNullOrWhiteSpace(c.Namsinh4))
+                     {
+                         datentk4.Checked = false;
+                         datentk4.CustomFormat = " ";
+                     }
+                     else
+                     {
+                         DateTime parsedDate = ParseDateTextOrFallback(c.Namsinh4);
+                         if (parsedDate != DateTime.MinValue)
+                         {
+                             datentk4.CustomFormat = "dd/MM/yyyy";
+                             datentk4.Checked = true;
+                             datentk4.Value = parsedDate;
+                         }
+                         else
+                         {
+                             datentk4.Checked = false;
+                             datentk4.CustomFormat = " ";
+                         }
+                     }
+                 }
+             } catch { }
 
              try { if (cbqh1 != null) cbqh1.Text = c.Qh1 ?? ""; } catch { }
              try { if (cbqh2 != null) cbqh2.Text = c.Qh2 ?? ""; } catch { }
              try { if (cbqh3 != null) cbqh3.Text = c.Qh3 ?? ""; } catch { }
+             try { if (cbqh4 != null) cbqh4.Text = c.Qh4 ?? ""; } catch { }
          }
 
          private void ClearForm()
@@ -2635,6 +2751,7 @@ namespace HOSONHCS
              try { if (cbDantoc != null) cbDantoc.SelectedIndex = -1; } catch { }
              try { if (cbDoituong1 != null) cbDoituong1.Text = ""; } catch { }
              try { if (cbDoituong2 != null) cbDoituong2.Text = ""; } catch { }
+             ResetCapNuocSach();
 
              // ── TextBox phụ ──
              try { if (txtSdt != null) txtSdt.Text = ""; } catch { }
@@ -2642,17 +2759,20 @@ namespace HOSONHCS
              try { if (txtntk1 != null) txtntk1.Text = ""; } catch { }
              try { if (txtntk2 != null) txtntk2.Text = ""; } catch { }
              try { if (txtntk3 != null) txtntk3.Text = ""; } catch { }
+             try { if (txtntk4 != null) txtntk4.Text = ""; } catch { }
              try { if (txtcccd1 != null) txtcccd1.Text = ""; } catch { }
              try { if (txtcccd2 != null) txtcccd2.Text = ""; } catch { }
              try { if (txtcccd3 != null) txtcccd3.Text = ""; } catch { }
+             try { if (txtcccd4 != null) txtcccd4.Text = ""; } catch { }
              try { if (cbqh1 != null) cbqh1.Text = ""; } catch { }
              try { if (cbqh2 != null) cbqh2.Text = ""; } catch { }
              try { if (cbqh3 != null) cbqh3.Text = ""; } catch { }
+             try { if (cbqh4 != null) cbqh4.Text = ""; } catch { }
 
              // ── DateTimePicker không checkbox: ẩn ngày bằng CustomFormat trống ──
              try { dateNgaycapCCCD.Format = DateTimePickerFormat.Custom; dateNgaycapCCCD.CustomFormat = " "; } catch { }
              try { if (dateNgaysinh != null) { dateNgaysinh.Format = DateTimePickerFormat.Custom; dateNgaysinh.CustomFormat = " "; } } catch { }
-             try { dateLaphs.Format = DateTimePickerFormat.Custom; dateLaphs.CustomFormat = " "; } catch { }
+             try { dateLaphs.Checked = false; dateLaphs.Format = DateTimePickerFormat.Custom; dateLaphs.CustomFormat = " "; } catch { }
              try { if (datendhcccd != null) { datendhcccd.Format = DateTimePickerFormat.Custom; datendhcccd.CustomFormat = " "; datendhcccd.Enabled = false; } } catch { }
 
              // ── DateTimePicker có checkbox: bỏ tick và ẩn ngày ──
@@ -2660,6 +2780,7 @@ namespace HOSONHCS
              try { if (datentk1 != null) { datentk1.Checked = false; datentk1.CustomFormat = " "; } } catch { }
              try { if (datentk2 != null) { datentk2.Checked = false; datentk2.CustomFormat = " "; } } catch { }
              try { if (datentk3 != null) { datentk3.Checked = false; datentk3.CustomFormat = " "; } } catch { }
+             try { if (datentk4 != null) { datentk4.Checked = false; datentk4.CustomFormat = " "; } } catch { }
 
              // ── dateDH khoá: ẩn ngày ──
              try { if (dateDH != null) dateDH.CustomFormat = " "; } catch { }
@@ -3002,6 +3123,9 @@ namespace HOSONHCS
                 var chuongtrinh = (cbChuongtrinh.Text ?? "").Trim();
                 if (string.IsNullOrWhiteSpace(chuongtrinh)) return;
 
+                // Reset module Cấp nước sạch trước khi áp rule mới
+                ResetCapNuocSach();
+
                 // Chuẩn hóa để so sánh (loại bỏ dấu)
                 string Normalize(string s)
                 {
@@ -3059,14 +3183,15 @@ namespace HOSONHCS
                     return;
                 }
 
-                // 5. Cấp nước sạch và vệ sinh môi trường nông thôn → Hộ GĐ vùng NT
+                // 5. Cấp nước sạch và vệ sinh môi trường nông thôn → HGĐ cư trú tại VNT
                 if (normalized.Contains("cap nuoc sach") ||
                     normalized.Contains("ve sinh moi truong") ||
                     (normalized.Contains("nuoc sach") && normalized.Contains("nong thon")))
                 {
-                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;  // Reset về mặc định
+                    cbDoituong.DropDownStyle = ComboBoxStyle.DropDown;
                     cbDoituong.Enabled = false;
                     cbDoituong.Text = "HGĐ cư trú tại VNT";
+                    ApplyCapNuocSach_Doituong();
                     return;
                 }
 
@@ -3114,12 +3239,12 @@ namespace HOSONHCS
                 cbmucdich1.DropDownStyle = ComboBoxStyle.DropDownList;
                 cbmucdich1.Enabled = false;
 
-                // cbmucdich2: tự động điền, khoá không cho người dùng tác động
+                // cbmucdich2: tự động điền, cho phép nhập tay kèm danh sách
                 cbmucdich2.Items.Clear();
                 cbmucdich2.Items.Add("Nâng cấp, sửa chữa CTVS          ");
                 cbmucdich2.Items.Add("Xây mới CTVS                                    ");
-                cbmucdich2.DropDownStyle = ComboBoxStyle.DropDownList;
-                cbmucdich2.Enabled = false;
+                cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown;
+                cbmucdich2.Enabled = true;
             }
             else if (!string.IsNullOrWhiteSpace(pa))
             {
@@ -3134,9 +3259,9 @@ namespace HOSONHCS
                     cbmucdich1.Enabled = false;
                     cbmucdich1.Text = pa;
 
-                    // cbmucdich2: khoá, xoá nội dung
+                    // cbmucdich2: cho phép nhập tự do
                     cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown;
-                    cbmucdich2.Enabled = false;
+                    cbmucdich2.Enabled = true;
                     cbmucdich2.Text = "";
                 }
                 else
@@ -3164,6 +3289,7 @@ namespace HOSONHCS
                 cbmucdich1.Items.Add("Nuôi lợn");
                 cbmucdich1.Items.Add("Trồng cây quế");
                 cbmucdich1.Items.Add("Trồng cây keo");
+                cbmucdich1.Items.Add("Trồng cây mỡ");
                 cbmucdich1.Items.Add("Trồng cây cam");
                 cbmucdich1.Items.Add("Mở rộng cửa hàng tạp hoá");
                 cbmucdich1.Items.Add("Mở rộng cửa hàng ăn uống");
@@ -3183,7 +3309,7 @@ namespace HOSONHCS
                 cbmucdich2.Items.Add("Nâng cấp, sửa chữa CTVS          ");
                 cbmucdich2.Items.Add("Xây mới CTVS                                    ");
                 cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown;
-                cbmucdich2.Enabled = false;
+                cbmucdich2.Enabled = true;
                 cbmucdich2.Text = "";
             }
         }
@@ -3208,6 +3334,8 @@ namespace HOSONHCS
                     cbmucdich1.Text = "Xây mới CTNS                              ";
                     cbmucdich2.Text = "Xây mới CTVS                                    ";
                 }
+                // Module Cấp nước sạch: ghi đè cbmucdich1/2 với giá trị chính xác (không trailing spaces)
+                ApplyCapNuocSach_Phuongan(phuongan);
             }
             catch { }
         }
@@ -3476,6 +3604,45 @@ namespace HOSONHCS
         private bool IsBia(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("BIA", StringComparison.OrdinalIgnoreCase) >= 0; }
         private bool Is01SXKD(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("01", StringComparison.OrdinalIgnoreCase) >= 0 && name.IndexOf("SXKD", StringComparison.OrdinalIgnoreCase) >= 0; }
         private bool Is01GQVL(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("GQVL", StringComparison.OrdinalIgnoreCase) >= 0; }
+        private bool Is01HN(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("01", StringComparison.OrdinalIgnoreCase) >= 0 && name.IndexOf("HN", StringComparison.OrdinalIgnoreCase) >= 0; }
+        private bool IsGUQ(string docPath) { if (string.IsNullOrWhiteSpace(docPath)) return false; var name = Path.GetFileName(docPath) ?? ""; return name.IndexOf("GUQ", StringComparison.OrdinalIgnoreCase) >= 0; }
+        private bool HasNguoiUyQuyen(Customer customer) { return !string.IsNullOrWhiteSpace(customer?.Ntk1) || !string.IsNullOrWhiteSpace(customer?.Ntk2) || !string.IsNullOrWhiteSpace(customer?.Ntk3) || !string.IsNullOrWhiteSpace(customer?.Ntk4); }
+
+        /// <summary>
+        /// Căn giữa paragraph chứa chuỗi <paramref name="marker"/> trong file docx.
+        /// </summary>
+        private void CenterParagraphContaining(string docPath, string marker)
+        {
+            if (string.IsNullOrWhiteSpace(docPath) || !File.Exists(docPath)) return;
+            using (var wordDoc = WordprocessingDocument.Open(docPath, true))
+            {
+                var mainPart = wordDoc.MainDocumentPart;
+                if (mainPart == null) return;
+
+                var allParts = new List<OpenXmlPart> { mainPart };
+                allParts.AddRange(mainPart.HeaderParts);
+                allParts.AddRange(mainPart.FooterParts);
+
+                foreach (var part in allParts)
+                {
+                    bool changed = false;
+                    foreach (var para in part.RootElement.Descendants<Paragraph>())
+                    {
+                        var paraText = string.Concat(para.Descendants<Text>().Select(t => t.Text ?? ""));
+                        if (paraText.IndexOf(marker, StringComparison.OrdinalIgnoreCase) < 0) continue;
+
+                        var pPr = para.GetFirstChild<ParagraphProperties>();
+                        if (pPr == null) { pPr = new ParagraphProperties(); para.InsertAt(pPr, 0); }
+                        var jc = pPr.GetFirstChild<Justification>();
+                        if (jc == null) { jc = new Justification(); pPr.Append(jc); }
+                        jc.Val = JustificationValues.Center;
+                        changed = true;
+                    }
+                    if (changed) part.RootElement.Save();
+                }
+                mainPart.Document.Save();
+            }
+        }
 
         // Giải quyết đường dẫn mẫu
         private string ResolveTemplatePath(string templateFileName)
@@ -3896,6 +4063,22 @@ namespace HOSONHCS
         }
 
         /// <summary>
+        /// Khi dateLaphs tick checkbox → hiện ngày lập hồ sơ; bỏ tick → ẩn ngày
+        /// </summary>
+        private void DateLaphs_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dateLaphs == null) return;
+                dateLaphs.Format = DateTimePickerFormat.Custom;
+                dateLaphs.CustomFormat = dateLaphs.Checked ? "dd/MM/yyyy" : " ";
+                if (dateLaphs.Checked && dateLaphs.Value.Year < 1900)
+                    dateLaphs.Value = DateTime.Today;
+            }
+            catch { }
+        }
+
+        /// <summary>
         /// Khi datentk tick checkbox → hiện ngày; bỏ tick → ẩn ngày
         /// </summary>
         private void DateNtk_ValueChanged(object sender, EventArgs e)
@@ -3916,6 +4099,8 @@ namespace HOSONHCS
         /// - Tuổi cấp 25–39: hết hạn khi đủ 40 tuổi
         /// - Tuổi cấp 40–59: hết hạn khi đủ 60 tuổi
         /// - Tuổi cấp ≥ 60: không thời hạn → trả về DateTime.MinValue
+        /// Nếu mốc tính được cách ngày cấp dưới 2 năm → nhảy sang mốc kế tiếp
+        /// (Bộ Công an không cấp CCCD có thời hạn còn lại dưới 2 năm kể từ ngày cấp).
         /// </summary>
         private DateTime CalcThoiHanCCCD(DateTime ngaysinh, DateTime ngaycap = default(DateTime))
         {
@@ -3940,10 +4125,17 @@ namespace HOSONHCS
                     // Xử lý 29/02 trên năm không nhuận
                     if (month == 2 && day == 29 && !DateTime.IsLeapYear(targetYear))
                         day = 28;
-                    return new DateTime(targetYear, month, day);
+                    var expiryDate = new DateTime(targetYear, month, day);
+
+                    // Nếu mốc cách ngày cấp dưới 2 năm → nhảy sang mốc kế tiếp
+                    // (Bộ Công an không cấp CCCD có thời hạn còn lại dưới 2 năm)
+                    if ((expiryDate - refDate).TotalDays < 730)
+                        continue;
+
+                    return expiryDate;
                 }
             }
-            // Từ 60 tuổi trở lên → không thời hạn
+            // Từ 60 tuổi trở lên (hoặc không còn mốc nào đủ xa) → không thời hạn
             return DateTime.MinValue;
         }
 
@@ -4067,6 +4259,30 @@ namespace HOSONHCS
             catch { }
         }
 
+        // Kiểm tra tổng cbSotien1 + cbSotien2 + cbSotien3 == cbSotien
+        private void CbSotienSum_Changed(object sender, EventArgs e)
+        {
+            if (suppressMoneyChange) return;
+            try
+            {
+                long total = ParseMoneyStringToLong(cbSotien.Text);
+                long s1    = ParseMoneyStringToLong(cbSotien1.Text);
+                long s2    = ParseMoneyStringToLong(cbSotien2.Text);
+                long s3    = (cbSotien3 != null ? ParseMoneyStringToLong(cbSotien3.Text) : 0);
+                bool anyDetail = s1 > 0 || s2 > 0 || s3 > 0;
+                bool match  = anyDetail && (s1 + s2 + s3 == total);
+                var okColor   = System.Drawing.Color.FromArgb(198, 239, 206);  // xanh nhạt
+                var errColor  = System.Drawing.Color.FromArgb(255, 199, 206);  // đỏ nhạt
+                var defColor  = System.Drawing.SystemColors.Window;
+                var detailColor = anyDetail ? (match ? okColor : errColor) : defColor;
+                cbSotien1.BackColor = detailColor;
+                cbSotien2.BackColor = detailColor;
+                if (cbSotien3 != null) cbSotien3.BackColor = detailColor;
+                cbSotien.BackColor  = anyDetail ? (match ? okColor : errColor) : defColor;
+            }
+            catch { }
+        }
+
         // Tính toán Sotientong và Sotienchu nếu có thể
         private void UpdateComputedFields(Customer c)
         {
@@ -4101,16 +4317,6 @@ namespace HOSONHCS
             catch { }
         }
 
-        /// <summary>
-        /// Format DateTime thành chuỗi "Ngày...tháng...năm..."
-        /// Ví dụ: 15/03/2024 → "Ngày 15 tháng 03 năm 2024"
-        /// </summary>
-        private string FormatDateToNgayThangNam(DateTime date)
-        {
-            if (date == DateTime.MinValue) return "";
-            return $"Ngày {date.Day:D2} tháng {date.Month:D2} năm {date.Year}";
-        }
-
         private IEnumerable<string> GetTemplateNamesForCustomer(Customer c, bool include03)
         {
             var list = new List<string>();
@@ -4136,10 +4342,19 @@ namespace HOSONHCS
             {
                 list.Add("01 HN.docx");
             }
-            if (include03) list.Add("03 DS.docx");
+            if (include03) list.Add(Get03DSTemplateName(c));
             // Lưu ý: GUQ chỉ nên được xuất khi người dùng bấm btnGUQ rõ ràng
             return list;
          }
+
+        // Chọn template 03 DS phù hợp theo chương trình để tạo file khác nội dung, khác tên
+        private string Get03DSTemplateName(Customer c)
+        {
+            var ct = (c?.Chuongtrinh ?? string.Empty).Trim();
+            if (IsSxkdChuongtrinh(ct)) return "03 DS SXKD.docx";
+            if (IsGqvlChuongtrinh(ct)) return "03 DS GQVL.docx";
+            return "03 DS.docx";
+        }
 
         // Phát hiện các biến thể phổ biến chỉ ra chương trình GQVL
         private bool IsGqvlChuongtrinh(string chuongtrinh)
@@ -4245,64 +4460,50 @@ namespace HOSONHCS
                 {
                     try
                     {
-                        // 1. Tạo mẫu 01/TD (01 HN, 01 SXKD, hoặc 01 GQVL)
                         var files01 = CreateProfileFromTemplate(customer, include03: false);
                         if (files01 != null) allCreatedFiles.AddRange(files01);
                     }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 01: {ex.Message}");
-                    }
+                    catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 01: {ex.Message}"); }
 
                     try
                     {
-                        // 2. Tạo mẫu 03 DS
                         var file03 = ExportSpecificTemplate(customer, "03 DS.docx");
                         if (!string.IsNullOrEmpty(file03)) allCreatedFiles.Add(file03);
                     }
-                    catch (Exception ex)
+                    catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 03: {ex.Message}"); }
+
+                    if (HasNguoiUyQuyen(customer))
                     {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 03: {ex.Message}");
+                        try
+                        {
+                            var fileGUQ = ExportSpecificTemplate(customer, "GUQ.docx");
+                            if (!string.IsNullOrEmpty(fileGUQ)) allCreatedFiles.Add(fileGUQ);
+                        }
+                        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu GUQ: {ex.Message}"); }
                     }
 
                     try
                     {
-                        // 3. Tạo mẫu GUQ
-                        var fileGUQ = ExportSpecificTemplate(customer, "GUQ.docx");
-                        if (!string.IsNullOrEmpty(fileGUQ)) allCreatedFiles.Add(fileGUQ);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu GUQ: {ex.Message}");
-                    }
-
-                    try
-                    {
-                        // 4. Tạo mẫu 01TGTV
                         var file01TGTV = ExportSpecificTemplate(customer, "01TGTV.docx");
                         if (!string.IsNullOrEmpty(file01TGTV)) allCreatedFiles.Add(file01TGTV);
                     }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 01TGTV: {ex.Message}");
-                    }
+                    catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 01TGTV: {ex.Message}"); }
 
                     try
                     {
-                        // 5. Tạo mẫu BIA
                         var fileBIA = ExportSpecificTemplate(customer, "BIA.docx");
                         if (!string.IsNullOrEmpty(fileBIA)) allCreatedFiles.Add(fileBIA);
                     }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo bìa hồ sơ: {ex.Message}");
-                    }
+                    catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Lỗi tạo bìa hồ sơ: {ex.Message}"); }
                 });
 
                 BindGrid();
                 ClearForm();
 
                 // Hiển thị thông báo
+                var guqLine = HasNguoiUyQuyen(customer)
+                    ? "- Mẫu GUQ\n"
+                    : "- Mẫu GUQ (bỏ qua - không có người uỷ quyền)\n";
                 MessageBox.Show(
                     $"✅ Đã tạo toàn bộ hồ sơ thành công!\n\n" +
                     $"📄 Khách hàng: {customer.Hoten}\n" +
@@ -4311,7 +4512,7 @@ namespace HOSONHCS
                     $"- Bìa hồ sơ (BIA)\n" +
                     $"- Mẫu 01 (TD/SXKD/GQVL)\n" +
                     $"- Mẫu 03 DS\n" +
-                    $"- Mẫu GUQ\n" +
+                    guqLine +
                     $"- Mẫu 01TGTV",
                     "✅ Tạo toàn bộ hồ sơ",
                     MessageBoxButtons.OK,
@@ -4368,78 +4569,7 @@ namespace HOSONHCS
             }
         }
 
-        // ============================================
-        // CHUYỂN ĐỔI DOCX → PDF (dùng Word Interop)
-        // ============================================
 
-        /// <summary>
-        /// Chuyển 1 file .docx → .pdf dùng instance Word đang mở sẵn.
-        /// Xóa file .docx sau khi chuyển thành công.
-        /// </summary>
-        private string ConvertDocxToPdf(Word.Application wordApp, string docxPath)
-        {
-            string pdfPath = Path.ChangeExtension(docxPath, ".pdf");
-            Word.Document doc = null;
-            try
-            {
-                doc = wordApp.Documents.Open(docxPath);
-                doc.ExportAsFixedFormat(pdfPath, Word.WdExportFormat.wdExportFormatPDF);
-                return File.Exists(pdfPath) ? pdfPath : null;
-            }
-            finally
-            {
-                try { doc?.Close(false); } catch { }
-                try { if (doc != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(doc); } catch { }
-                doc = null;
-            }
-        }
-
-        /// <summary>
-        /// Chuyển nhiều file .docx → .pdf, dùng chung 1 instance Word để tiết kiệm thời gian.
-        /// Trả về danh sách đường dẫn .pdf đã tạo.
-        /// </summary>
-        private List<string> ConvertDocxListToPdf(List<string> docxPaths)
-        {
-            var pdfPaths = new List<string>();
-            if (docxPaths == null || docxPaths.Count == 0) return pdfPaths;
-
-            Word.Application wordApp = null;
-            try
-            {
-                wordApp = new Word.Application { Visible = false };
-                foreach (var docxPath in docxPaths)
-                {
-                    try
-                    {
-                        var pdf = ConvertDocxToPdf(wordApp, docxPath);
-                        if (!string.IsNullOrEmpty(pdf)) pdfPaths.Add(pdf);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi chuyển {Path.GetFileName(docxPath)} → PDF: {ex.Message}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Không thể chuyển sang PDF.\n\nLỗi: {ex.Message}\n\nVui lòng đảm bảo Microsoft Word đã được cài đặt.",
-                    "Lỗi xuất PDF", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                // Quit Word trước — giải phóng lock hoàn toàn
-                try { wordApp?.Quit(false); } catch { }
-                try { if (wordApp != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(wordApp); } catch { }
-                wordApp = null;
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                // Xóa tất cả file .docx SAU KHI Word đã tắt hẳn
-                foreach (var docxPath in docxPaths)
-                    try { if (File.Exists(docxPath)) File.Delete(docxPath); } catch { }
-            }
-            return pdfPaths;
-        }
 
         private void toolTip1_Popup(object sender, PopupEventArgs e)
         {
@@ -4908,6 +5038,7 @@ namespace HOSONHCS
             {
                 _editTinhModel = null;
                 if (cbpgdfix != null) cbpgdfix.Items.Clear();
+                if (cbXafix != null) cbXafix.Items.Clear();
 
                 string tinh = cbTinhfix?.Text?.Trim() ?? "";
                 if (string.IsNullOrWhiteSpace(tinh)) return;
@@ -4920,6 +5051,39 @@ namespace HOSONHCS
                         cbpgdfix.Items.Add(pgd.pgd);
 
                 if (cbpgdfix.Items.Count > 0) cbpgdfix.SelectedIndex = 0;
+            }
+            catch { }
+        }
+
+        private void CbXafix_PopulateFromPgd(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cbXafix == null) return;
+                cbXafix.Items.Clear();
+                xinManEditor?.FilterByCommune("");
+
+                if (_editTinhModel?.pgds == null || cbpgdfix == null) return;
+                if (string.IsNullOrWhiteSpace(cbpgdfix.Text)) return;
+
+                var pgdEntry = _editTinhModel.pgds.FirstOrDefault(p =>
+                    string.Equals(p.pgd, cbpgdfix.Text.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                if (pgdEntry?.communes == null) return;
+
+                foreach (var commune in pgdEntry.communes)
+                    if (!string.IsNullOrWhiteSpace(commune.name))
+                        cbXafix.Items.Add(commune.name);
+            }
+            catch { }
+        }
+
+        private void CbXafix_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var xa = cbXafix?.Text?.Trim() ?? "";
+                xinManEditor?.FilterByCommune(xa);
             }
             catch { }
         }
@@ -4939,6 +5103,79 @@ namespace HOSONHCS
             }
             catch { }
         }
+
+        // Thứ tự Tab theo luồng nhập liệu thực tế
+        private static readonly string[] _inputTabOrder = new[]
+        {
+            "txtHoten",
+            "dateNgaysinh", "cbGioitinh", "cbDantoc",
+            "txtSocccd", "dateNgaycapCCCD",
+            "txtSdt", "txtNhankhau", "cbNhandang",
+            "cbTinh", "cbPGD", "cbXa", "cbThon", "cbHoi", "cbTo",
+            "cbChuongtrinh", "cbVtc", "cbPhuongan",
+            "cbmucdich1", "cbmucdich2", "cbDoituong1", "cbDoituong2",
+            "cbThoihanvay", "cbPhanky",
+            "cbSotien", "cbSotien1", "cbSotien2",
+            "dateLaphs", "dateGn",
+            "txtntk1", "datentk1", "txtcccd1", "cbqh1",
+            "txtntk2", "datentk2", "txtcccd2", "cbqh2",
+            "txtntk3", "datentk3", "txtcccd3", "cbqh3"
+        };
+
+        private List<System.Windows.Forms.Control> GetInputTabOrder()
+        {
+            var list = new List<System.Windows.Forms.Control>();
+            foreach (var name in _inputTabOrder)
+            {
+                var found = this.Controls.Find(name, true);
+                if (found.Length > 0 && found[0].Enabled && found[0].Visible)
+                    list.Add(found[0]);
+            }
+            return list;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Tab || keyData == (Keys.Tab | Keys.Shift))
+            {
+                var active = ActiveControl;
+
+                if (active is DataGridView)
+                    return base.ProcessCmdKey(ref msg, keyData);
+                if (active is RichTextBox rtb && rtb.AcceptsTab)
+                    return base.ProcessCmdKey(ref msg, keyData);
+                if (active is TextBox tb && tb.AcceptsTab && tb.Multiline)
+                    return base.ProcessCmdKey(ref msg, keyData);
+
+                var controls = GetInputTabOrder();
+                int idx = controls.IndexOf(active);
+                if (idx >= 0)
+                {
+                    bool fwd = keyData == Keys.Tab;
+                    int next = fwd ? (idx + 1) % controls.Count : (idx - 1 + controls.Count) % controls.Count;
+                    controls[next].Focus();
+                    return true;
+                }
+
+                SelectNextControl(active, keyData == Keys.Tab, true, true, true);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void btnall_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbThoihanvay_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label87_Click(object sender, EventArgs e)
+        {
+                    }
     }
 
     #region Models
@@ -4965,12 +5202,15 @@ namespace HOSONHCS
     public string Sotien { get; set; }
     public string Sotien1 { get; set; }
     public string Sotien2 { get; set; }
+    public string Sotien3 { get; set; }
     public string Soluong1 { get; set; }
     public string Soluong2 { get; set; }
+    public string Soluong3 { get; set; }
     public string Sotientong { get; set; }
     public string Sotienchu { get; set; }
     public string Mucdich1 { get; set; }
     public string Mucdich2 { get; set; }
+    public string Mucdich3 { get; set; }
     public string Doituong1 { get; set; }
     public string Doituong2 { get; set; }
     public DateTime Ngaylaphs { get; set; }
@@ -4989,16 +5229,20 @@ namespace HOSONHCS
     public string Ntk1 = "";
     public string Ntk2 = "";
     public string Ntk3 = "";
+    public string Ntk4 = "";
     public string CccdNtk1 = "";
     public string CccdNtk2 = "";
     public string CccdNtk3 = "";
+    public string CccdNtk4 = "";
     public string Namsinh1 = "";
     public string Namsinh2 = "";
     public string Namsinh3 = "";
+    public string Namsinh4 = "";
 
     public string Qh1 = "";
     public string Qh2 = "";
     public string Qh3 = "";
+    public string Qh4 = "";
 
     [JsonIgnore]
     public string _fileName { get; set; }

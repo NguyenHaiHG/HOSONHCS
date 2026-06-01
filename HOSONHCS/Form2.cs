@@ -138,6 +138,12 @@ namespace HOSONHCS
             // Đăng ký sự kiện cho cbctr - Cập nhật danh sách đối tượng khi chọn chương trình
             try { cbctr.SelectedIndexChanged += Cbctr_SelectedIndexChanged; } catch { }
 
+            // Đăng ký sự kiện txtkh1~5: tự điền cbdt khi có tên khách
+            DangKySuKien_DoiTuong();
+
+            // Khoá cbdt1~5 ngay từ đầu, không cho chọn thủ công
+            KhoaTatCaDoiTuong();
+
             // Đăng ký sự kiện cho cbTotruong - Tự động chọn thôn khi chọn tổ trưởng
             try { cbTotruong.SelectedIndexChanged += CbTotruong_SelectedIndexChanged; } catch { }
 
@@ -776,12 +782,8 @@ namespace HOSONHCS
                 doc.MainDocumentPart.Document.Save();
             }
 
-            // -------- CHUYỂN SANG PDF VÀ MỞ FILE --------
-            string pdfOutput = ConvertDocxToPdf(output);
-            if (!string.IsNullOrEmpty(pdfOutput))
-                System.Diagnostics.Process.Start(pdfOutput);
-            else
-                System.Diagnostics.Process.Start(output); // fallback nếu lỗi PDF
+            // Mở file Word vừa tạo
+            System.Diagnostics.Process.Start(output);
         }
 
         // ============================================
@@ -1678,62 +1680,7 @@ namespace HOSONHCS
         /// </summary>
         private void Cbctr_SelectedIndexChanged(object sender, EventArgs e)
         {
-            try
-            {
-                if (cbctr == null) return;
-
-                string selectedChuongTrinh = cbctr.Text?.Trim() ?? "";
-                if (string.IsNullOrWhiteSpace(selectedChuongTrinh))
-                {
-                    // Nếu không chọn chương trình, reset cbdt1-5 về rỗng
-                    ResetDoiTuongComboBoxes();
-                    return;
-                }
-
-                // Xác định danh sách đối tượng dựa trên chương trình
-                List<string> doiTuongList = new List<string>();
-
-                // So sánh không phân biệt hoa thường và bỏ qua khoảng trắng
-                if (selectedChuongTrinh.IndexOf("Hộ nghèo", StringComparison.OrdinalIgnoreCase) >= 0 &&
-                    selectedChuongTrinh.IndexOf("cận", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    selectedChuongTrinh.IndexOf("thoát", StringComparison.OrdinalIgnoreCase) < 0)
-                {
-                    // 1. Hộ nghèo
-                    doiTuongList.Add("Hộ nghèo");
-                }
-                else if (selectedChuongTrinh.IndexOf("cận nghèo", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    // 2. Hộ cận nghèo
-                    doiTuongList.Add("Hộ cận nghèo");
-                }
-                else if (selectedChuongTrinh.IndexOf("thoát nghèo", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    // 3. Hộ mới thoát nghèo
-                    doiTuongList.Add("Hộ mới thoát nghèo");
-                }
-                else if (selectedChuongTrinh.IndexOf("Sản xuất kinh doanh", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                         selectedChuongTrinh.IndexOf("SXKD", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    // 4. Hộ gia đình Sản xuất kinh doanh tại vùng khó khăn
-                    doiTuongList.Add("Hộ GĐ SXKD VKK");
-                }
-                else if (selectedChuongTrinh.IndexOf("việc làm", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    // 5. Hỗ trợ tạo việc làm duy trì và mở rộng việc làm
-                    doiTuongList.Add("Người lao động");
-                    doiTuongList.Add("NLĐ là người DTTS");
-                }
-                else if (selectedChuongTrinh.IndexOf("nước sạch", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                         selectedChuongTrinh.IndexOf("vệ sinh môi trường", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    // 6. Cấp nước sạch và vệ sinh môi trường nông thôn
-                    doiTuongList.Add("HGĐ cư trú tại VNT");
-                }
-
-                // Cập nhật cbdt1-5 với danh sách mới
-                UpdateDoiTuongComboBoxes(doiTuongList);
-            }
-            catch { }
+            XuLyChonChuongTrinh_DoiTuongVaMucDich();
         }
 
         /// <summary>
@@ -1830,11 +1777,11 @@ namespace HOSONHCS
         {
             try
             {
-                if (cbdt1 != null) { cbdt1.Items.Clear(); cbdt1.Text = ""; }
-                if (cbdt2 != null) { cbdt2.Items.Clear(); cbdt2.Text = ""; }
-                if (cbdt3 != null) { cbdt3.Items.Clear(); cbdt3.Text = ""; }
-                if (cbdt4 != null) { cbdt4.Items.Clear(); cbdt4.Text = ""; }
-                if (cbdt5 != null) { cbdt5.Items.Clear(); cbdt5.Text = ""; }
+                if (cbdt1 != null) { cbdt1.Items.Clear(); cbdt1.SelectedIndex = -1; }
+                if (cbdt2 != null) { cbdt2.Items.Clear(); cbdt2.SelectedIndex = -1; }
+                if (cbdt3 != null) { cbdt3.Items.Clear(); cbdt3.SelectedIndex = -1; }
+                if (cbdt4 != null) { cbdt4.Items.Clear(); cbdt4.SelectedIndex = -1; }
+                if (cbdt5 != null) { cbdt5.Items.Clear(); cbdt5.SelectedIndex = -1; }
             }
             catch { }
         }
@@ -2396,44 +2343,7 @@ namespace HOSONHCS
         // =====================================================================
         private void ApplyForm2Style() { /* giữ nguyên giao diện gốc */ }
 
-        // ============================================
-        // CHUYỂN ĐỔI DOCX → PDF (dùng Word Interop)
-        // ============================================
 
-        /// <summary>
-        /// Chuyển file .docx → .pdf và xóa file .docx gốc.
-        /// Yêu cầu Microsoft Word đã cài đặt trên máy.
-        /// </summary>
-        private string ConvertDocxToPdf(string docxPath)
-        {
-            string pdfPath = Path.ChangeExtension(docxPath, ".pdf");
-            Word.Application wordApp = null;
-            Word.Document doc = null;
-            try
-            {
-                wordApp = new Word.Application { Visible = false };
-                doc = wordApp.Documents.Open(docxPath);
-                doc.ExportAsFixedFormat(pdfPath, Word.WdExportFormat.wdExportFormatPDF);
-                return File.Exists(pdfPath) ? pdfPath : null;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Lỗi chuyển PDF: {ex.Message}");
-                return null;
-            }
-            finally
-            {
-                try { doc?.Close(false); } catch { }
-                try { if (doc != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(doc); } catch { }
-                doc = null;
-                try { wordApp?.Quit(false); } catch { }
-                try { if (wordApp != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(wordApp); } catch { }
-                wordApp = null;
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                try { if (File.Exists(docxPath)) File.Delete(docxPath); } catch { }
-            }
-        }
     }
 
     // ============================================

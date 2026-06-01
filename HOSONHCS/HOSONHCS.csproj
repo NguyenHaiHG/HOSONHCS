@@ -93,11 +93,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppSecrets.cs" />
     <Compile Include="AutoUpdater.cs" />
     <Compile Include="BangKeData.cs" />
     <Compile Include="BangKeTien.cs" />
     <Compile Include="ChatMessage.cs" />
+    <Compile Include="Form1.CapNuocSach.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.Chatbot.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +118,9 @@
     <Compile Include="Form1.GhiChu.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form1.LoadData.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.UIStyle.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +133,12 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form2.LogicChuongTrinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.LogicDoiTuong.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="HolidayNotice.cs" />
     <Compile Include="HolidayNoticeChecker.cs" />
     <Compile Include="HolidayNoticeForm.cs">
@@ -135,11 +146,11 @@
     </Compile>
     <Compile Include="KnowledgeItem.cs" />
     <Compile Include="KnowledgeSeed.cs" />
+    <Compile Include="NgayLaphsFormatter.cs" />
     <Compile Include="NoteItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TinhHelper.cs" />
-    <Compile Include="ToanQuocEncryptor.cs" />
     <Compile Include="ToData.cs" />
     <Compile Include="UIStyler.cs" />
     <Compile Include="XinManEditor.cs" />
@@ -163,6 +174,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="01 HN.docx" />
     <EmbeddedResource Include="03 DS.docx" />
@@ -181,10 +193,14 @@
     <None Include="CODE_ANALYSIS_REPORT.md" />
     <None Include="DOCS\DATA_STRUCTURE.md" />
     <None Include="DOCS\FUNCTIONS_ALGORITHMS.md" />
+    <None Include="DOCS\toanquoc.json" />
     <None Include="DUAL_MARQUEE.md" />
     <None Include="FIX_CBMUCDICH_NO_TITLECASE.md" />
     <None Include="FIX_DATEDH_DATELAPHS_FORMAT.md" />
     <None Include="FIX_HGD_CU_TRU_TAI_VNT.md" />
+    <EmbeddedResource Include="GNCK.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="HOSONHCS_TemporaryKey.pfx" />
     <None Include="HUONG_DAN_AUTO_UPDATE.md" />
     <None Include="HUONG_DAN_CHINH_SUA_TO.md" />
@@ -206,13 +222,12 @@
     </Compile>
     <Content Include="Modern app icon with.ico" />
     <None Include="REPORT_DATEDH_DATELAPHS.md" />
-    <None Include="toanquoc.json" />
-    <None Include="UI_BORDERLESS_UPDATE.md" />
-    <None Include="VIET_HOA_COMPLETE.md" />
-    <Content Include="toanquoc.enc">
+    <Content Include="toanquoc.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="_encrypt_build.ps1" />
+    <None Include="UI_BORDERLESS_UPDATE.md" />
+    <None Include="VIET_HOA_COMPLETE.md" />
+    <None Include="Resources\ok hơn.jpeg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -130,14 +130,6 @@ namespace HOSONHCS
                 int i = 1;
                 while (File.Exists(path))
                 {
-                    var existing = File.ReadAllText(path, Encoding.UTF8);
-                    try
-                    {
-                        var ec = JsonConvert.DeserializeObject<Customer>(existing);
-                        if (ec != null && string.Equals(MakeFileSystemSafe(ec.Hoten), MakeFileSystemSafe(c.Hoten), StringComparison.OrdinalIgnoreCase))
-                            break;
-                    }
-                    catch { }
                     file = $"{baseName}_{i}.json";
                     path = Path.Combine(folder, file);
                     i++;
@@ -198,18 +190,20 @@ namespace HOSONHCS
 
         private Customer ReadForm()
         {
-             string ntk1 = "", ntk2 = "", ntk3 = "";
-             string cccdntk1 = "", cccdntk2 = "", cccdntk3 = "";
-             string namsinh1 = "", namsinh2 = "", namsinh3 = "";
-             string qh1 = "", qh2 = "", qh3 = "";
+             string ntk1 = "", ntk2 = "", ntk3 = "", ntk4 = "";
+             string cccdntk1 = "", cccdntk2 = "", cccdntk3 = "", cccdntk4 = "";
+             string namsinh1 = "", namsinh2 = "", namsinh3 = "", namsinh4 = "";
+             string qh1 = "", qh2 = "", qh3 = "", qh4 = "";
 
              try { if (txtntk1 != null) ntk1 = txtntk1.Text.Trim(); } catch { }
              try { if (txtntk2 != null) ntk2 = txtntk2.Text.Trim(); } catch { }
              try { if (txtntk3 != null) ntk3 = txtntk3.Text.Trim(); } catch { }
+             try { if (txtntk4 != null) ntk4 = txtntk4.Text.Trim(); } catch { }
 
              try { if (txtcccd1 != null) cccdntk1 = txtcccd1.Text.Trim(); } catch { }
              try { if (txtcccd2 != null) cccdntk2 = txtcccd2.Text.Trim(); } catch { }
              try { if (txtcccd3 != null) cccdntk3 = txtcccd3.Text.Trim(); } catch { }
+             try { if (txtcccd4 != null) cccdntk4 = txtcccd4.Text.Trim(); } catch { }
 
              try 
              { 
@@ -241,10 +235,21 @@ namespace HOSONHCS
                          namsinh3 = "";
                  }
              } catch { }
+             try 
+             { 
+                 if (datentk4 != null) 
+                 {
+                     if (datentk4.Checked)
+                         namsinh4 = datentk4.Value.ToString("dd/MM/yyyy");
+                     else
+                         namsinh4 = "";
+                 }
+             } catch { }
 
              try { if (cbqh1 != null) qh1 = cbqh1.Text.Trim(); } catch { }
              try { if (cbqh2 != null) qh2 = cbqh2.Text.Trim(); } catch { }
              try { if (cbqh3 != null) qh3 = cbqh3.Text.Trim(); } catch { }
+             try { if (cbqh4 != null) qh4 = cbqh4.Text.Trim(); } catch { }
 
              DateTime ngaycap = dateNgaycapCCCD.Value.Date;
              if (ngaycap > DateTime.Today) ngaycap = DateTime.Today;
@@ -314,10 +319,10 @@ namespace HOSONHCS
                  Dantoc = (cbDantoc != null ? cbDantoc.Text : ""),
                  Sdt = (txtSdt != null ? txtSdt.Text : ""),
                  Nhankhau = (txtNhankhau != null ? txtNhankhau.Text.Trim() : ""),
-                 Ntk1 = ToTitleCase(ntk1), Ntk2 = ToTitleCase(ntk2), Ntk3 = ToTitleCase(ntk3),
-                 CccdNtk1 = cccdntk1, CccdNtk2 = cccdntk2, CccdNtk3 = cccdntk3,
-                 Namsinh1 = namsinh1, Namsinh2 = namsinh2, Namsinh3 = namsinh3,
-                 Qh1 = qh1, Qh2 = qh2, Qh3 = qh3
+                 Ntk1 = ToTitleCase(ntk1), Ntk2 = ToTitleCase(ntk2), Ntk3 = ToTitleCase(ntk3), Ntk4 = ToTitleCase(ntk4),
+                 CccdNtk1 = cccdntk1, CccdNtk2 = cccdntk2, CccdNtk3 = cccdntk3, CccdNtk4 = cccdntk4,
+                 Namsinh1 = namsinh1, Namsinh2 = namsinh2, Namsinh3 = namsinh3, Namsinh4 = namsinh4,
+                 Qh1 = qh1, Qh2 = qh2, Qh3 = qh3, Qh4 = qh4
              };
         }
 
@@ -421,6 +426,8 @@ namespace HOSONHCS
              cbChuongtrinh.Text = c.Chuongtrinh ?? "";
              try { if (cbVtc != null) cbVtc.Text = c.Vtc ?? ""; } catch { }
              try { if (cbPhuongan != null) cbPhuongan.Text = c.Phuongan ?? ""; } catch { }
+             try { ApplyPhuonganState(c.Phuongan ?? ""); } catch { }
+             try { ApplyCapNuocSach_Phuongan(c.Phuongan ?? ""); } catch { }
              cbThoihanvay.Text = c.Thoihanvay ?? "";
              try { if (cbPhanky != null) cbPhanky.Text = c.Phanky ?? ""; } catch { }
 
@@ -428,8 +435,9 @@ namespace HOSONHCS
              cbSotien1.Text = c.Sotien1 ?? "";
              cbSotien2.Text = c.Sotien2 ?? "";
 
-             try { if (cbmucdich1 != null) cbmucdich1.Text = c.Mucdich1 ?? ""; } catch { }
-             try { if (cbmucdich2 != null) cbmucdich2.Text = c.Mucdich2 ?? ""; } catch { }
+             // Ghi đè sau Apply... để khôi phục giá trị đã lưu
+             try { if (cbmucdich1 != null) { cbmucdich1.DropDownStyle = ComboBoxStyle.DropDown; cbmucdich1.Text = c.Mucdich1 ?? ""; } } catch { }
+             try { if (cbmucdich2 != null) { cbmucdich2.DropDownStyle = ComboBoxStyle.DropDown; cbmucdich2.Text = c.Mucdich2 ?? ""; } } catch { }
              try { if (cbDoituong != null) cbDoituong.Text = c.Doituong1 ?? ""; } catch { }
              try { if (cbDoituong1 != null) cbDoituong1.Text = c.Soluong1 ?? ""; } catch { }
              try { if (cbDoituong2 != null) cbDoituong2.Text = c.Soluong2 ?? ""; } catch { }
@@ -480,10 +488,12 @@ namespace HOSONHCS
              try { if (txtntk1 != null) txtntk1.Text = c.Ntk1 ?? ""; } catch { }
              try { if (txtntk2 != null) txtntk2.Text = c.Ntk2 ?? ""; } catch { }
              try { if (txtntk3 != null) txtntk3.Text = c.Ntk3 ?? ""; } catch { }
+             try { if (txtntk4 != null) txtntk4.Text = c.Ntk4 ?? ""; } catch { }
 
              try { if (txtcccd1 != null) txtcccd1.Text = c.CccdNtk1 ?? ""; } catch { }
              try { if (txtcccd2 != null) txtcccd2.Text = c.CccdNtk2 ?? ""; } catch { }
              try { if (txtcccd3 != null) txtcccd3.Text = c.CccdNtk3 ?? ""; } catch { }
+             try { if (txtcccd4 != null) txtcccd4.Text = c.CccdNtk4 ?? ""; } catch { }
 
              try 
              { 
@@ -557,10 +567,35 @@ namespace HOSONHCS
                      }
                  }
              } catch { }
+             try 
+             { 
+                 if (datentk4 != null) 
+                 {
+                     datentk4.ShowCheckBox = true;
+                     if (string.IsNullOrWhiteSpace(c.Namsinh4))
+                     {
+                         datentk4.Checked = false;
+                     }
+                     else
+                     {
+                         DateTime parsedDate = ParseDateTextOrFallback(c.Namsinh4);
+                         if (parsedDate != DateTime.MinValue)
+                         {
+                             datentk4.Checked = true;
+                             datentk4.Value = parsedDate;
+                         }
+                         else
+                         {
+                             datentk4.Checked = false;
+                         }
+                     }
+                 }
+             } catch { }
 
              try { if (cbqh1 != null) cbqh1.Text = c.Qh1 ?? ""; } catch { }
              try { if (cbqh2 != null) cbqh2.Text = c.Qh2 ?? ""; } catch { }
              try { if (cbqh3 != null) cbqh3.Text = c.Qh3 ?? ""; } catch { }
+             try { if (cbqh4 != null) cbqh4.Text = c.Qh4 ?? ""; } catch { }
         }
 
         private void ClearForm()
@@ -581,16 +616,20 @@ namespace HOSONHCS
              try { if (datentk1 != null) datentk1.Checked = false; } catch { }
              try { if (datentk2 != null) datentk2.Checked = false; } catch { }
              try { if (datentk3 != null) datentk3.Checked = false; } catch { }
+             try { if (datentk4 != null) datentk4.Checked = false; } catch { }
 
              try { if (txtntk1 != null) txtntk1.Text = ""; } catch { }
              try { if (txtntk2 != null) txtntk2.Text = ""; } catch { }
              try { if (txtntk3 != null) txtntk3.Text = ""; } catch { }
+             try { if (txtntk4 != null) txtntk4.Text = ""; } catch { }
              try { if (txtcccd1 != null) txtcccd1.Text = ""; } catch { }
              try { if (txtcccd2 != null) txtcccd2.Text = ""; } catch { }
              try { if (txtcccd3 != null) txtcccd3.Text = ""; } catch { }
+             try { if (txtcccd4 != null) txtcccd4.Text = ""; } catch { }
              try { if (cbqh1 != null) cbqh1.Text = ""; } catch { }
              try { if (cbqh2 != null) cbqh2.Text = ""; } catch { }
              try { if (cbqh3 != null) cbqh3.Text = ""; } catch { }
+             try { if (cbqh4 != null) cbqh4.Text = ""; } catch { }
 
              try { if (txtSdt != null) txtSdt.Text = ""; } catch { }
              try { if (txtNhankhau != null) txtNhankhau.Text = ""; } catch { }

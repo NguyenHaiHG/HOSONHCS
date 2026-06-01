@@ -30,6 +30,9 @@ namespace HOSONHCS
         private const string validUser = "haihg";
         private const string validPass = "Haihg23";
 
+        // Trạng thái đăng nhập
+        public bool IsLoggedIn { get; private set; } = false;
+
         // Trạng thái tìm kiếm
         private List<int> searchMatches = new List<int>();
         private int currentMatchIndex = -1;
@@ -325,10 +328,10 @@ namespace HOSONHCS
 
                 newModel.communes = communes.Values.ToList();
 
-                // Lưu vào đúng nơi: toanquoc.enc nếu đang chỉnh sửa từ đó, còn lại xinman.json
+                // Lưu vào đúng nơi: toanquoc.json nếu đang chỉnh sửa từ đó, còn lại xinman.json
                 if (!string.IsNullOrEmpty(_tinhName) && !string.IsNullOrEmpty(_pgdName))
                 {
-                    SaveToToanQuocEnc(newModel);
+                    SaveToToanQuocJson(newModel);
                 }
                 else
                 {
@@ -348,17 +351,18 @@ namespace HOSONHCS
             }
         }
 
-        private void SaveToToanQuocEnc(XinManModel newModel)
+        private void SaveToToanQuocJson(XinManModel newModel)
         {
             try
             {
-                var json = ToanQuocEncryptor.GetJson();
-                if (string.IsNullOrEmpty(json))
+                var jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "toanquoc.json");
+                if (!File.Exists(jsonPath))
                 {
-                    MessageBox.Show("Không đọc được toanquoc.enc.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Không đọc được toanquoc.json.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
+                var json = File.ReadAllText(jsonPath, System.Text.Encoding.UTF8);
                 var arr = JArray.Parse(json);
 
                 // Tìm tỉnh khớp
@@ -369,7 +373,7 @@ namespace HOSONHCS
 
                 if (tinhObj == null)
                 {
-                    MessageBox.Show($"Không tìm thấy tỉnh '{_tinhName}' trong toanquoc.enc.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Không tìm thấy tỉnh '{_tinhName}' trong toanquoc.json.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -395,18 +399,18 @@ namespace HOSONHCS
                 // Ghi lại communes của PGD này
                 pgdObj["communes"] = JArray.FromObject(newModel.communes ?? new List<Commune>());
 
-                // Mã hóa và lưu
-                ToanQuocEncryptor.SaveJson(arr.ToString(Formatting.None));
+                // Lưu thẳng ra toanquoc.json
+                File.WriteAllText(jsonPath, arr.ToString(Formatting.None), System.Text.Encoding.UTF8);
                 TinhHelper.RefreshCache();
 
-                MessageBox.Show($"Đã lưu PGD '{_pgdName}' vào toanquoc.enc thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Đã lưu PGD '{_pgdName}' vào toanquoc.json thành công.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Reload lại để UI phản ánh đúng
                 PopulateGridFromModel();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi lưu toanquoc.enc: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi lưu toanquoc.json: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -425,6 +429,7 @@ namespace HOSONHCS
         {
             try
             {
+                IsLoggedIn = enabled;
                 if (dgv == null) return;
                 dgv.ReadOnly = !enabled;
                 if (btnSave != null) btnSave.Enabled = enabled;
@@ -477,7 +482,19 @@ namespace HOSONHCS
             PopulateGridFromModel();
         }
 
-        // Method public để load file JSON khác (vixuyen.json, hsp.json, dongvan.json) và hiển thị lên dgv1
+        internal void FilterByCommune(string communeName)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(communeName))
+                    source.Filter = "";
+                else
+                    source.Filter = $"Commune = '{communeName.Replace("'", "''")}'";
+            }
+            catch { }
+        }
+
+        // Method public để load file JSON khác
         public void LoadJsonFile(string jsonFileName)
         {
             try

@@ -31,12 +31,15 @@ namespace HOSONHCS
         public string Sotien { get; set; }
         public string Sotien1 { get; set; }
         public string Sotien2 { get; set; }
+        public string Sotien3 { get; set; }
         public string Sotientong { get; set; }
         public string Sotienchu { get; set; }
         public string Soluong1 { get; set; }
         public string Soluong2 { get; set; }
+        public string Soluong3 { get; set; }
         public string Mucdich1 { get; set; }
         public string Mucdich2 { get; set; }
+        public string Mucdich3 { get; set; }
         public string Doituong1 { get; set; }
         public string Doituong2 { get; set; }
         public DateTime Ngaylaphs { get; set; }
@@ -46,15 +49,19 @@ namespace HOSONHCS
         public string Ntk1 { get; set; }
         public string Ntk2 { get; set; }
         public string Ntk3 { get; set; }
+        public string Ntk4 { get; set; }
         public string CccdNtk1 { get; set; }
         public string CccdNtk2 { get; set; }
         public string CccdNtk3 { get; set; }
+        public string CccdNtk4 { get; set; }
         public string Namsinh1 { get; set; }
         public string Namsinh2 { get; set; }
         public string Namsinh3 { get; set; }
+        public string Namsinh4 { get; set; }
         public string Qh1 { get; set; }
         public string Qh2 { get; set; }
         public string Qh3 { get; set; }
+        public string Qh4 { get; set; }
 
         // internal: filename used to persist
         public string _fileName { get; set; }

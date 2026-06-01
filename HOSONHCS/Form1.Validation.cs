@@ -32,7 +32,6 @@ namespace HOSONHCS
             if (string.IsNullOrWhiteSpace(cbDantoc?.Text)) missingFields.Add("Dân tộc");
             if (string.IsNullOrWhiteSpace(cbGioitinh?.Text)) missingFields.Add("Giới tính");
             if (string.IsNullOrWhiteSpace(cbDoituong?.Text)) missingFields.Add("Đối tượng");
-            if (string.IsNullOrWhiteSpace(txtSdt?.Text)) missingFields.Add("Số điện thoại");
             if (string.IsNullOrWhiteSpace(txtNhankhau?.Text)) missingFields.Add("Nhân khẩu");
 
             // Kiểm tra các DateTimePicker bắt buộc
@@ -78,24 +77,33 @@ namespace HOSONHCS
             }
             catch { }
 
-            // Kiểm tra tổng cbSotien1 + cbSotien2 phải bằng cbSotien
+            // Kiểm tra tổng cbSotien1 + cbSotien2 + cbSotien3 phải bằng cbSotien
             try
             {
                 long sotienTotal = ParseMoneyStringToLong(cbSotien?.Text ?? "");
                 long sotien1Val  = ParseMoneyStringToLong(cbSotien1?.Text ?? "");
                 long sotien2Val  = ParseMoneyStringToLong(cbSotien2?.Text ?? "");
+                long sotien3Val  = ParseMoneyStringToLong(cbSotien3?.Text ?? "");
+                long detailSum   = sotien1Val + sotien2Val + sotien3Val;
 
-                if (sotienTotal > 0 && (sotien1Val + sotien2Val) != sotienTotal)
+                if (sotienTotal > 0 && detailSum != sotienTotal)
                 {
                     string fmt(long v) => string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:N0}", v).Replace(",", ".");
-                    MessageBox.Show(
-                        $"⚠️ Tổng số tiền theo mục đích không khớp với số tiền vay!\n\n" +
-                        $"  Số tiền vay:      {fmt(sotienTotal)} đ\n" +
-                        $"  Thành tiền 1:       {fmt(sotien1Val)} đ\n" +
-                        $"  Thành tiền 2:       {fmt(sotien2Val)} đ\n" +
-                        $"  Tổng mục đích:    {fmt(sotien1Val + sotien2Val)} đ\n\n" +
-                        $"Yêu cầu: Số tiền vay = Thành tiền 1 + Thành tiền 2",
-                        "⚠️ Lỗi số tiền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    var sb = new System.Text.StringBuilder();
+                    sb.AppendLine("⚠️ Tổng số tiền theo mục đích không khớp với số tiền vay!\n");
+                    sb.AppendLine($"  Số tiền vay:      {fmt(sotienTotal)} đ");
+                    sb.AppendLine($"  Thành tiền 1:     {fmt(sotien1Val)} đ");
+                    if (sotien2Val > 0) sb.AppendLine($"  Thành tiền 2:     {fmt(sotien2Val)} đ");
+                    if (sotien3Val > 0) sb.AppendLine($"  Thành tiền 3:     {fmt(sotien3Val)} đ");
+                    sb.AppendLine($"  Tổng mục đích:    {fmt(detailSum)} đ");
+                    sb.AppendLine();
+                    if (sotien3Val > 0)
+                        sb.Append("Yêu cầu: Số tiền vay = Thành tiền 1 + Thành tiền 2 + Thành tiền 3");
+                    else if (sotien2Val > 0)
+                        sb.Append("Yêu cầu: Số tiền vay = Thành tiền 1 + Thành tiền 2");
+                    else
+                        sb.Append("Yêu cầu: Số tiền vay = Thành tiền 1");
+                    MessageBox.Show(sb.ToString(), "⚠️ Lỗi số tiền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
             }
@@ -190,96 +198,30 @@ namespace HOSONHCS
 
             if (customers == null || customers.Count == 0) return true;
 
-            // Chuẩn hoá SDT: chỉ giữ chữ số để so sánh bất kể format (có/không có dấu chấm)
-            string inputSdtDigits = DigitsOnly(inputSdt);
+            string inputHoten = "";
+            try { inputHoten = txtHoten?.Text.Trim() ?? ""; } catch { }
 
-            for (int i = 0; i < customers.Count; i++)
+            // --- Kiểm tra tối đa 2 hồ sơ cùng họ tên + CCCD chính ---
+            // Mỗi người (cùng tên + cùng CCCD) được tạo tối đa 2 hồ sơ
+            if (!string.IsNullOrWhiteSpace(inputCccd) && !string.IsNullOrWhiteSpace(inputHoten))
             {
-                // Bỏ qua khách hàng đang sửa
-                if (editingIndex >= 0 && i == editingIndex) continue;
-
-                var c = customers[i];
-
-                // Tập hợp tất cả CCCD của khách hàng đã có (chính + người thừa kế)
-                var existingCccds = new List<string>();
-                if (!string.IsNullOrWhiteSpace(c.Socccd))    existingCccds.Add(c.Socccd.Trim());
-                if (!string.IsNullOrWhiteSpace(c.CccdNtk1))  existingCccds.Add(c.CccdNtk1.Trim());
-                if (!string.IsNullOrWhiteSpace(c.CccdNtk2))  existingCccds.Add(c.CccdNtk2.Trim());
-                if (!string.IsNullOrWhiteSpace(c.CccdNtk3))  existingCccds.Add(c.CccdNtk3.Trim());
-
-                // --- Kiểm tra CCCD chính ---
-                if (!string.IsNullOrWhiteSpace(inputCccd) &&
-                    existingCccds.Exists(ec => string.Equals(inputCccd, ec, StringComparison.OrdinalIgnoreCase)))
+                int sameCount = 0;
+                for (int i = 0; i < customers.Count; i++)
                 {
-                    MessageBox.Show(
-                        $"⚠️ Trùng số căn cước công dân!\n\n" +
-                        $"Số CCCD \"{inputCccd}\" đã tồn tại trong hệ thống:\n" +
-                        $"👤 Khách hàng: {c.Hoten}\n\n" +
-                        $"Không thể tạo hồ sơ trùng CCCD.",
-                        "Trùng CCCD",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return false;
+                    if (editingIndex >= 0 && i == editingIndex) continue;
+                    var c = customers[i];
+                    if (string.Equals((c.Hoten ?? "").Trim(), inputHoten, StringComparison.OrdinalIgnoreCase) &&
+                        string.Equals((c.Socccd ?? "").Trim(), inputCccd, StringComparison.OrdinalIgnoreCase))
+                        sameCount++;
                 }
-
-                // --- Kiểm tra CCCD người thừa kế thứ 1 ---
-                if (!string.IsNullOrWhiteSpace(inputCccd1) &&
-                    existingCccds.Exists(ec => string.Equals(inputCccd1, ec, StringComparison.OrdinalIgnoreCase)))
+                if (sameCount >= 2)
                 {
                     MessageBox.Show(
-                        $"⚠️ Trùng căn cước công dân người thừa kế thứ 1!\n\n" +
-                        $"Số CCCD \"{inputCccd1}\" đã tồn tại trong hệ thống:\n" +
-                        $"👤 Khách hàng: {c.Hoten}\n\n" +
-                        $"Không thể tạo hồ sơ trùng CCCD người thừa kế.",
-                        "Trùng CCCD người thừa kế thứ 1",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return false;
-                }
-
-                // --- Kiểm tra CCCD người thừa kế thứ 2 ---
-                if (!string.IsNullOrWhiteSpace(inputCccd2) &&
-                    existingCccds.Exists(ec => string.Equals(inputCccd2, ec, StringComparison.OrdinalIgnoreCase)))
-                {
-                    MessageBox.Show(
-                        $"⚠️ Trùng căn cước công dân người thừa kế thứ 2!\n\n" +
-                        $"Số CCCD \"{inputCccd2}\" đã tồn tại trong hệ thống:\n" +
-                        $"👤 Khách hàng: {c.Hoten}\n\n" +
-                        $"Không thể tạo hồ sơ trùng CCCD người thừa kế.",
-                        "Trùng CCCD người thừa kế thứ 2",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return false;
-                }
-
-                // --- Kiểm tra CCCD người thừa kế thứ 3 ---
-                if (!string.IsNullOrWhiteSpace(inputCccd3) &&
-                    existingCccds.Exists(ec => string.Equals(inputCccd3, ec, StringComparison.OrdinalIgnoreCase)))
-                {
-                    MessageBox.Show(
-                        $"⚠️ Trùng căn cước công dân người thừa kế thứ 3!\n\n" +
-                        $"Số CCCD \"{inputCccd3}\" đã tồn tại trong hệ thống:\n" +
-                        $"👤 Khách hàng: {c.Hoten}\n\n" +
-                        $"Không thể tạo hồ sơ trùng CCCD người thừa kế.",
-                        "Trùng CCCD người thừa kế thứ 3",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return false;
-                }
-
-                // --- Kiểm tra trùng số điện thoại ---
-                // Chuẩn hoá cả hai phía: chỉ lấy chữ số (tránh lệch format dấu chấm)
-                string existingSdtDigits = DigitsOnly(c.Sdt);
-                if (!string.IsNullOrWhiteSpace(inputSdtDigits) &&
-                    !string.IsNullOrWhiteSpace(existingSdtDigits) &&
-                    string.Equals(inputSdtDigits, existingSdtDigits, StringComparison.Ordinal))
-                {
-                    MessageBox.Show(
-                        $"⚠️ Trùng số điện thoại!\n\n" +
-                        $"Số điện thoại \"{inputSdt}\" đã tồn tại trong hệ thống:\n" +
-                        $"👤 Khách hàng: {c.Hoten}\n\n" +
-                        $"Không thể tạo hồ sơ trùng số điện thoại.",
-                        "Trùng số điện thoại",
+                        $"⚠️ Đã đạt giới hạn hồ sơ!\n\n" +
+                        $"👤 Khách hàng: {inputHoten}\n" +
+                        $"🪪 CCCD: {inputCccd}\n\n" +
+                        $"Mỗi người chỉ được tạo tối đa 2 hồ sơ với cùng họ tên và số CCCD.",
+                        "Giới hạn hồ sơ",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
                     return false;

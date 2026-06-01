@@ -918,7 +918,7 @@ namespace HOSONHCS
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Green;
+            this.BackColor = System.Drawing.Color.SeaGreen;
             this.Controls.Add(this.cbTinh2);
             this.Controls.Add(this.label31);
             this.Controls.Add(this.btntaoto);

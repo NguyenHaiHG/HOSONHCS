@@ -84,6 +84,14 @@ namespace HOSONHCS
              catch { return true; }
          }
 
+         private bool HasThuaKe(Customer customer)
+         {
+             return !string.IsNullOrWhiteSpace(customer.Ntk1)
+                 || !string.IsNullOrWhiteSpace(customer.Ntk2)
+                 || !string.IsNullOrWhiteSpace(customer.Ntk3)
+                 || !string.IsNullOrWhiteSpace(customer.Ntk4);
+         }
+
          private void Dgv_CellClick(object sender, DataGridViewCellEventArgs e)
          {
              if (e.RowIndex >= 0 && e.RowIndex < customers.Count)
@@ -171,7 +179,7 @@ namespace HOSONHCS
 
                  var createdFile = await Task.Run(() =>
                  {
-                     return ExportSpecificTemplate(customer, "03 DS.docx");
+                     return ExportSpecificTemplate(customer, Get03DSTemplateName(customer));
                  });
 
                  BindGrid();
@@ -191,9 +199,16 @@ namespace HOSONHCS
          {
             if (!ValidateRequiredFields()) return;
             if (!ValidateDuplicateCccdSdt()) return;
+            var customerCheck = ReadForm();
+            if (!HasThuaKe(customerCheck))
+            {
+                MessageBox.Show("⚠️ Không có thông tin người thừa kế. Vui lòng nhập thông tin người thừa kế trước khi xuất mẫu GUQ.",
+                    "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             try
             {
-                var customer = ReadForm();
+                var customer = customerCheck;
                  string existingFile = null;
                  if (customers != null && editingIndex >= 0 && editingIndex < customers.Count)
                  {
@@ -440,7 +455,7 @@ namespace HOSONHCS
 
                     try
                     {
-                        var file03 = ExportSpecificTemplate(customer, "03 DS.docx");
+                        var file03 = ExportSpecificTemplate(customer, Get03DSTemplateName(customer));
                         if (!string.IsNullOrEmpty(file03)) allCreatedFiles.Add(file03);
                     }
                     catch (Exception ex)
@@ -448,14 +463,17 @@ namespace HOSONHCS
                         System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu 03: {ex.Message}");
                     }
 
-                    try
+                    if (HasThuaKe(customer))
                     {
-                        var fileGUQ = ExportSpecificTemplate(customer, "GUQ.docx");
-                        if (!string.IsNullOrEmpty(fileGUQ)) allCreatedFiles.Add(fileGUQ);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu GUQ: {ex.Message}");
+                        try
+                        {
+                            var fileGUQ = ExportSpecificTemplate(customer, "GUQ.docx");
+                            if (!string.IsNullOrEmpty(fileGUQ)) allCreatedFiles.Add(fileGUQ);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Lỗi tạo mẫu GUQ: {ex.Message}");
+                        }
                     }
 
                     try
@@ -482,6 +500,9 @@ namespace HOSONHCS
                 BindGrid();
                 ClearForm();
 
+                var guqLine = HasThuaKe(customer)
+                    ? "- Mẫu GUQ\n"
+                    : "- Mẫu GUQ (bỏ qua - không có người thừa kế)\n";
                 MessageBox.Show(
                     $"✅ Đã tạo toàn bộ hồ sơ thành công!\n\n" +
                     $"📄 Khách hàng: {customer.Hoten}\n" +
@@ -490,7 +511,7 @@ namespace HOSONHCS
                     $"- Bìa hồ sơ (BIA)\n" +
                     $"- Mẫu 01 (TD/SXKD/GQVL)\n" +
                     $"- Mẫu 03 DS\n" +
-                    $"- Mẫu GUQ\n" +
+                    guqLine +
                     $"- Mẫu 01TGTV",
                     "✅ Tạo toàn bộ hồ sơ",
                     MessageBoxButtons.OK,
