@@ -1363,9 +1363,12 @@
     <value>72 tháng</value>
   </data>
   <data name="cbtime1.Items6" xml:space="preserve">
-    <value>108 tháng</value>
+    <value>84 tháng</value>
   </data>
   <data name="cbtime1.Items7" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime1.Items8" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime1.Location" type="System.Drawing.Point, System.Drawing">
@@ -1414,9 +1417,12 @@
     <value>72 tháng</value>
   </data>
   <data name="cbtime2.Items6" xml:space="preserve">
-    <value>108 tháng</value>
+    <value>84 tháng</value>
   </data>
   <data name="cbtime2.Items7" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime2.Items8" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime2.Location" type="System.Drawing.Point, System.Drawing">
@@ -1498,9 +1504,12 @@
     <value>72 tháng</value>
   </data>
   <data name="cbtime3.Items6" xml:space="preserve">
-    <value>108 tháng</value>
+    <value>84 tháng</value>
   </data>
   <data name="cbtime3.Items7" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime3.Items8" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime3.Location" type="System.Drawing.Point, System.Drawing">
@@ -1582,9 +1591,12 @@
     <value>72 tháng</value>
   </data>
   <data name="cbtime4.Items6" xml:space="preserve">
-    <value>108 tháng</value>
+    <value>84 tháng</value>
   </data>
   <data name="cbtime4.Items7" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime4.Items8" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime4.Location" type="System.Drawing.Point, System.Drawing">
@@ -1666,9 +1678,12 @@
     <value>72 tháng</value>
   </data>
   <data name="cbtime5.Items6" xml:space="preserve">
-    <value>108 tháng</value>
+    <value>84 tháng</value>
   </data>
   <data name="cbtime5.Items7" xml:space="preserve">
+    <value>108 tháng</value>
+  </data>
+  <data name="cbtime5.Items8" xml:space="preserve">
     <value>120 tháng</value>
   </data>
   <data name="cbtime5.Location" type="System.Drawing.Point, System.Drawing">

@@ -450,7 +450,8 @@ namespace HOSONHCS
             resources.GetString("cbtime1.Items4"),
             resources.GetString("cbtime1.Items5"),
             resources.GetString("cbtime1.Items6"),
-            resources.GetString("cbtime1.Items7")});
+            resources.GetString("cbtime1.Items7"),
+            resources.GetString("cbtime1.Items8")});
             this.cbtime1.Name = "cbtime1";
             // 
             // cbtime2
@@ -468,7 +469,8 @@ namespace HOSONHCS
             resources.GetString("cbtime2.Items4"),
             resources.GetString("cbtime2.Items5"),
             resources.GetString("cbtime2.Items6"),
-            resources.GetString("cbtime2.Items7")});
+            resources.GetString("cbtime2.Items7"),
+            resources.GetString("cbtime2.Items8")});
             this.cbtime2.Name = "cbtime2";
             // 
             // label21
@@ -493,7 +495,8 @@ namespace HOSONHCS
             resources.GetString("cbtime3.Items4"),
             resources.GetString("cbtime3.Items5"),
             resources.GetString("cbtime3.Items6"),
-            resources.GetString("cbtime3.Items7")});
+            resources.GetString("cbtime3.Items7"),
+            resources.GetString("cbtime3.Items8")});
             this.cbtime3.Name = "cbtime3";
             // 
             // label22
@@ -518,7 +521,8 @@ namespace HOSONHCS
             resources.GetString("cbtime4.Items4"),
             resources.GetString("cbtime4.Items5"),
             resources.GetString("cbtime4.Items6"),
-            resources.GetString("cbtime4.Items7")});
+            resources.GetString("cbtime4.Items7"),
+            resources.GetString("cbtime4.Items8")});
             this.cbtime4.Name = "cbtime4";
             // 
             // label23
@@ -543,7 +547,8 @@ namespace HOSONHCS
             resources.GetString("cbtime5.Items4"),
             resources.GetString("cbtime5.Items5"),
             resources.GetString("cbtime5.Items6"),
-            resources.GetString("cbtime5.Items7")});
+            resources.GetString("cbtime5.Items7"),
+            resources.GetString("cbtime5.Items8")});
             this.cbtime5.Name = "cbtime5";
             // 
             // label24
