@@ -146,6 +146,7 @@
     </Compile>
     <Compile Include="KnowledgeItem.cs" />
     <Compile Include="KnowledgeSeed.cs" />
+    <Compile Include="KyCuoiBlockProcessor.cs" />
     <Compile Include="NgayLaphsFormatter.cs" />
     <Compile Include="NoteItem.cs" />
     <Compile Include="Program.cs" />

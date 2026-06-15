@@ -1499,6 +1499,11 @@ namespace HOSONHCS
                     ProcessCCCD12Placeholder(mainPart, c.Socccd);
                 }
 
+                if (c != null)
+                {
+                    KyCuoiBlockProcessor.Apply(mainPart, c.Sotien, c.Thoihanvay, c.Phanky);
+                }
+
                 // Đối với mẫu 03 DS, KHÔNG xóa bất kỳ dòng nào, chỉ thay thế placeholder
                 // Mẫu sẽ được điền nguyên trạng mà không thay đổi cấu trúc bảng
 
