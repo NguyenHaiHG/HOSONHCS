@@ -14,6 +14,7 @@ namespace HOSONHCS
                 LoadGqvlCustomers();
                 BindGqvlGrid();
                 ConfigureGqvlControls();
+                ConfigureGqvlInputRestrictions();
 
                 btnHdGQVL.Click += BtnHdGQVL_Click;
                 btnCapnhatkh.Click += BtnCapnhatkh_Click;

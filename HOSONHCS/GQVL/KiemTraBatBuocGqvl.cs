@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using System;
 
 namespace HOSONHCS
 {
@@ -41,6 +42,9 @@ namespace HOSONHCS
             if (!KiemTraCccdGqvl.KiemTraCccd(item.Cccd, item.Ngaysinh, out cccdError))
                 missing.Add(cccdError);
 
+            if (!KhachHangTren18Tuoi(item.Ngaysinh))
+                missing.Add("Khách hàng GQVL phải trên 18 tuổi.");
+
             if (missing.Count == 0)
             {
                 message = null;
@@ -60,6 +64,12 @@ namespace HOSONHCS
         {
             if (string.IsNullOrWhiteSpace(value))
                 missing.Add(label);
+        }
+
+        private static bool KhachHangTren18Tuoi(DateTime ngaySinh)
+        {
+            if (ngaySinh == DateTime.MinValue) return false;
+            return ngaySinh.Date < DateTime.Today.AddYears(-18);
         }
     }
 }

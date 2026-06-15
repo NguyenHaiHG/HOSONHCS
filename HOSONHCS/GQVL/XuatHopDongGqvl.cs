@@ -67,6 +67,7 @@ namespace HOSONHCS
                 ReplacePlaceholdersInPart(mainPart, replacements);
                 foreach (var header in mainPart.HeaderParts) ReplacePlaceholdersInPart(header, replacements);
                 foreach (var footer in mainPart.FooterParts) ReplacePlaceholdersInPart(footer, replacements);
+                IndentThoihanVayParagraph(mainPart);
 
                 mainPart.Document.Save();
             }
@@ -362,6 +363,32 @@ namespace HOSONHCS
 
                 if (!string.Equals(text, replaced, StringComparison.Ordinal))
                     WriteParagraphTextGqvl(paragraph, replaced);
+            }
+            part.RootElement.Save();
+        }
+
+        private static void IndentThoihanVayParagraph(OpenXmlPart part)
+        {
+            foreach (var paragraph in part.RootElement.Descendants<Paragraph>())
+            {
+                string text = GetParagraphTextGqvl(paragraph);
+                if (text.IndexOf("Thời hạn cho vay", StringComparison.OrdinalIgnoreCase) < 0 &&
+                    text.IndexOf("hạn trả nợ cuối cùng", StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                SetParagraphLeft(paragraph);
+                var pPr = paragraph.GetFirstChild<ParagraphProperties>();
+                var indentation = pPr.GetFirstChild<Indentation>();
+                if (indentation == null)
+                {
+                    indentation = new Indentation();
+                    pPr.Append(indentation);
+                }
+
+                // 720 twips ~= 0.5 inch, tương đương một tab mặc định trong Word.
+                indentation.Left = "720";
             }
             part.RootElement.Save();
         }
