@@ -10,6 +10,8 @@ namespace HOSONHCS
         public string GioiTinh { get; set; }
         public string Dantoc { get; set; }
         public string Sdt { get; set; }
+        public string Stk { get; set; }
+        public string Nganhang { get; set; }
         public string Nhandang { get; set; }
         public DateTime Ngaycap { get; set; }
         public DateTime Ngaysinh { get; set; }

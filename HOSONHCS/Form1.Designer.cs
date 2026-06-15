@@ -216,12 +216,13 @@
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.richTextBox5 = new System.Windows.Forms.RichTextBox();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
             this.marqueeTimer = new System.Windows.Forms.Timer(this.components);
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtStk = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtNganhang = new System.Windows.Forms.TextBox();
             this.label87 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
@@ -252,6 +253,7 @@
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -2975,6 +2977,17 @@
             this.tabPage7.Text = "10C Mẫu";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // tabPage8
+            // 
+            this.tabPage8.BackColor = System.Drawing.Color.SeaGreen;
+            this.tabPage8.Location = new System.Drawing.Point(4, 25);
+            this.tabPage8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage8.Size = new System.Drawing.Size(1344, 819);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "GQVL";
+            // 
             // marqueeTimer
             // 
             this.marqueeTimer.Tick += new System.EventHandler(this.MarqueeTimer_Tick);
@@ -3011,15 +3024,15 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Chức năng chính:";
             // 
-            // textBox1
+            // txtStk
             // 
-            this.textBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(180, 22);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(252, 24);
-            this.textBox1.TabIndex = 118;
+            this.txtStk.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.txtStk.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtStk.Location = new System.Drawing.Point(180, 22);
+            this.txtStk.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtStk.Name = "txtStk";
+            this.txtStk.Size = new System.Drawing.Size(252, 24);
+            this.txtStk.TabIndex = 118;
             // 
             // label15
             // 
@@ -3033,15 +3046,15 @@
             this.label15.TabIndex = 117;
             this.label15.Text = "Số tài khoản:";
             // 
-            // textBox2
+            // txtNganhang
             // 
-            this.textBox2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(180, 57);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(252, 24);
-            this.textBox2.TabIndex = 145;
+            this.txtNganhang.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.txtNganhang.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNganhang.Location = new System.Drawing.Point(180, 57);
+            this.txtNganhang.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtNganhang.Name = "txtNganhang";
+            this.txtNganhang.Size = new System.Drawing.Size(252, 24);
+            this.txtNganhang.TabIndex = 145;
             // 
             // label87
             // 
@@ -3058,9 +3071,9 @@
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.label87);
-            this.groupBox7.Controls.Add(this.textBox2);
+            this.groupBox7.Controls.Add(this.txtNganhang);
             this.groupBox7.Controls.Add(this.label15);
-            this.groupBox7.Controls.Add(this.textBox1);
+            this.groupBox7.Controls.Add(this.txtStk);
             this.groupBox7.ForeColor = System.Drawing.Color.Yellow;
             this.groupBox7.Location = new System.Drawing.Point(392, 421);
             this.groupBox7.Name = "groupBox7";
@@ -3281,6 +3294,7 @@
         private System.Windows.Forms.DateTimePicker dateGn;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.TabPage tabPage8;
         private System.Windows.Forms.ComboBox cbTinh;
         private System.Windows.Forms.Label label78;
         private System.Windows.Forms.Label label79;
@@ -3302,9 +3316,9 @@
         private System.Windows.Forms.Label label85;
         private System.Windows.Forms.Label label86;
         private System.Windows.Forms.Button btnLoaddata;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtNganhang;
         private System.Windows.Forms.Label label87;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtStk;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox5;

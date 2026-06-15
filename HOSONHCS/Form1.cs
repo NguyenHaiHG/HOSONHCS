@@ -760,6 +760,8 @@ namespace HOSONHCS
                 { "{{gioitinh}}", c.GioiTinh },
                 { "{{dantoc}}", c.Dantoc },
                 { "{{sdt}}", c.Sdt ?? "" },
+                { "{{stk}}", c.Stk ?? "" },
+                { "{{nganhang}}", c.Nganhang ?? "" },
                 { "{我的}", c.Sdt },
                 { "{{nhandang}}", c.Nhandang },
                 { "{{ngaycap}}", c.Ngaycap == DateTime.MinValue ? "" : c.Ngaycap.ToString("dd/MM/yyyy") },
@@ -2401,6 +2403,8 @@ namespace HOSONHCS
                  ThoihancccdText = thoihancccdText,
                  Dantoc = (cbDantoc != null ? cbDantoc.Text : ""),
                  Sdt = (txtSdt != null ? txtSdt.Text : ""),  // Lưu với format có dấu chấm (0812.801.886)
+                 Stk = (txtStk != null ? txtStk.Text.Trim() : ""),
+                 Nganhang = (txtNganhang != null ? txtNganhang.Text.Trim() : ""),
                  Nhankhau = (txtNhankhau != null ? txtNhankhau.Text.Trim() : ""),
                  Ntk1 = ToTitleCase(ntk1), Ntk2 = ToTitleCase(ntk2), Ntk3 = ToTitleCase(ntk3), Ntk4 = ToTitleCase(ntk4),
                  CccdNtk1 = cccdntk1, CccdNtk2 = cccdntk2, CccdNtk3 = cccdntk3, CccdNtk4 = cccdntk4,
@@ -2446,6 +2450,8 @@ namespace HOSONHCS
              try { if (cbGioitinh != null) cbGioitinh.Text = c.GioiTinh ?? ""; } catch { }
              try { if (cbDantoc != null) cbDantoc.Text = c.Dantoc ?? ""; } catch { }
              try { if (txtSdt != null) txtSdt.Text = c.Sdt ?? ""; } catch { }
+             try { if (txtStk != null) txtStk.Text = c.Stk ?? ""; } catch { }
+             try { if (txtNganhang != null) txtNganhang.Text = c.Nganhang ?? ""; } catch { }
              try { if (txtNhankhau != null) txtNhankhau.Text = c.Nhankhau ?? ""; } catch { }
 
              // Thông tin vị trí (đã bật suppress để tránh các sự kiện cascading)
@@ -2755,6 +2761,8 @@ namespace HOSONHCS
 
              // ── TextBox phụ ──
              try { if (txtSdt != null) txtSdt.Text = ""; } catch { }
+             try { if (txtStk != null) txtStk.Text = ""; } catch { }
+             try { if (txtNganhang != null) txtNganhang.Text = ""; } catch { }
              try { if (txtNhankhau != null) txtNhankhau.Text = ""; } catch { }
              try { if (txtntk1 != null) txtntk1.Text = ""; } catch { }
              try { if (txtntk2 != null) txtntk2.Text = ""; } catch { }
@@ -5224,6 +5232,8 @@ namespace HOSONHCS
 
     public string Dantoc { get; set; }
     public string Sdt = "";
+    public string Stk = "";
+    public string Nganhang = "";
     public string Nhankhau = "";
 
     public string Ntk1 = "";
