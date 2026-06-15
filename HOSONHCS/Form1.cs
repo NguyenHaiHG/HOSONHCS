@@ -5184,6 +5184,11 @@ namespace HOSONHCS
         private void label87_Click(object sender, EventArgs e)
         {
                     }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     #region Models
