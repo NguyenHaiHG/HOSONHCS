@@ -130,6 +130,9 @@ namespace HOSONHCS
             try { btnClear.Click += BtnClear_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
             try { btnLoaddata.Click += btnLoaddata_Click; } catch { /* bỏ qua nếu control không tồn tại */ }
 
+            // ========== MODULE GQVL (TABPAGE8) ==========
+            try { InitializeGqvlModule(); } catch { }
+
             // ComboBox Fix PGD - cho phép chọn nhanh và reload dữ liệu PGD
             try { cbpgdfix.SelectedIndexChanged += CbPgdFix_SelectedIndexChanged; } catch { /* bỏ qua nếu control không tồn tại */ }
 
@@ -5191,6 +5194,11 @@ namespace HOSONHCS
                     }
 
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox9_Enter(object sender, EventArgs e)
         {
 
         }

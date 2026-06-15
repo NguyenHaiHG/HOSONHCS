@@ -139,6 +139,19 @@
     <Compile Include="Form2.LogicDoiTuong.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GQVL\DuLieuKhachHangGqvl.cs" />
+    <Compile Include="GQVL\KiemTraBatBuocGqvl.cs" />
+    <Compile Include="GQVL\KiemTraCccdGqvl.cs" />
+    <Compile Include="GQVL\LuuSuaKhachHangGqvl.cs" />
+    <Compile Include="GQVL\NhapXuatExcelGqvl.cs" />
+    <Compile Include="GQVL\TinhToanGqvl.cs" />
+    <Compile Include="GQVL\XoaKhachHangGqvl.cs" />
+    <Compile Include="GQVL\XuatHopDongGqvl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GQVL\XuLyTabGqvl.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="HolidayNotice.cs" />
     <Compile Include="HolidayNoticeChecker.cs" />
     <Compile Include="HolidayNoticeForm.cs">
@@ -202,6 +215,7 @@
     <EmbeddedResource Include="GNCK.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="HD.docx" />
     <None Include="HOSONHCS_TemporaryKey.pfx" />
     <None Include="HUONG_DAN_AUTO_UPDATE.md" />
     <None Include="HUONG_DAN_CHINH_SUA_TO.md" />
