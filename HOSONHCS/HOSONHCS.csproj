@@ -142,10 +142,16 @@
     <Compile Include="GQVL\DuLieuKhachHangGqvl.cs" />
     <Compile Include="GQVL\KiemTraBatBuocGqvl.cs" />
     <Compile Include="GQVL\KiemTraCccdGqvl.cs" />
-    <Compile Include="GQVL\LuuSuaKhachHangGqvl.cs" />
-    <Compile Include="GQVL\NhapXuatExcelGqvl.cs" />
+    <Compile Include="GQVL\LuuSuaKhachHangGqvl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GQVL\NhapXuatExcelGqvl.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GQVL\TinhToanGqvl.cs" />
-    <Compile Include="GQVL\XoaKhachHangGqvl.cs" />
+    <Compile Include="GQVL\XoaKhachHangGqvl.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GQVL\XuatHopDongGqvl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,33 +204,12 @@
     <EmbeddedResource Include="03 DS GROUP.docx" />
     <EmbeddedResource Include="BIA.docx" />
     <EmbeddedResource Include="01TGTV.docx" />
-    <None Include="CCCD12_GUIDE.md" />
-    <None Include="CHANGELOG_BO_CHECKBOX_DATENDHCCCD.md" />
-    <None Include="CHANGELOG_CBDOITUONG_THOIHANCCCD.md" />
-    <None Include="CHANGELOG_DATEFORMAT_SDT.md" />
-    <None Include="CHANGELOG_FORM2.md" />
-    <None Include="CHANGELOG_FORM2_COMBOBOX.md" />
-    <None Include="CODE_ANALYSIS_REPORT.md" />
-    <None Include="DOCS\DATA_STRUCTURE.md" />
-    <None Include="DOCS\FUNCTIONS_ALGORITHMS.md" />
     <None Include="DOCS\toanquoc.json" />
-    <None Include="DUAL_MARQUEE.md" />
-    <None Include="FIX_CBMUCDICH_NO_TITLECASE.md" />
-    <None Include="FIX_DATEDH_DATELAPHS_FORMAT.md" />
-    <None Include="FIX_HGD_CU_TRU_TAI_VNT.md" />
     <EmbeddedResource Include="GNCK.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="HD.docx" />
     <None Include="HOSONHCS_TemporaryKey.pfx" />
-    <None Include="HUONG_DAN_AUTO_UPDATE.md" />
-    <None Include="HUONG_DAN_CHINH_SUA_TO.md" />
-    <None Include="HUONG_DAN_CHON_CHUONG_TRINH_DOI_TUONG.md" />
-    <None Include="HUONG_DAN_LIEN_KET_THON_TOTRUONG.md" />
-    <None Include="HUONG_DAN_LUU_TRU_TO.md" />
-    <None Include="MARQUEE_FIX.md" />
-    <None Include="MARQUEE_FORM_TITLE.md" />
-    <None Include="MARQUEE_HEADER_FEATURE.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -236,12 +221,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Content Include="Modern app icon with.ico" />
-    <None Include="REPORT_DATEDH_DATELAPHS.md" />
     <Content Include="toanquoc.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="UI_BORDERLESS_UPDATE.md" />
-    <None Include="VIET_HOA_COMPLETE.md" />
     <None Include="Resources\ok hơn.jpeg" />
   </ItemGroup>
   <ItemGroup>
