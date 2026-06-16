@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using Word = Microsoft.Office.Interop.Word;
 
 namespace HOSONHCS
 {
