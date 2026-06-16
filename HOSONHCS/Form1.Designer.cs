@@ -3179,53 +3179,58 @@
             // 
             // btxXoaGQVL
             // 
-            this.btxXoaGQVL.ForeColor = System.Drawing.Color.Black;
+            this.btxXoaGQVL.BackColor = System.Drawing.Color.Maroon;
+            this.btxXoaGQVL.ForeColor = System.Drawing.Color.White;
             this.btxXoaGQVL.Location = new System.Drawing.Point(23, 222);
             this.btxXoaGQVL.Name = "btxXoaGQVL";
             this.btxXoaGQVL.Size = new System.Drawing.Size(141, 50);
             this.btxXoaGQVL.TabIndex = 4;
             this.btxXoaGQVL.Text = "XOÁ HỢP ĐỒNG";
-            this.btxXoaGQVL.UseVisualStyleBackColor = true;
+            this.btxXoaGQVL.UseVisualStyleBackColor = false;
             // 
             // btnCapnhatkh
             // 
+            this.btnCapnhatkh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.btnCapnhatkh.ForeColor = System.Drawing.Color.Black;
             this.btnCapnhatkh.Location = new System.Drawing.Point(23, 94);
             this.btnCapnhatkh.Name = "btnCapnhatkh";
             this.btnCapnhatkh.Size = new System.Drawing.Size(111, 65);
             this.btnCapnhatkh.TabIndex = 3;
             this.btnCapnhatkh.Text = "CẬP NHẬT KHÁCH HÀNG";
-            this.btnCapnhatkh.UseVisualStyleBackColor = true;
+            this.btnCapnhatkh.UseVisualStyleBackColor = false;
             // 
             // btnUpexcel
             // 
+            this.btnUpexcel.BackColor = System.Drawing.Color.LawnGreen;
             this.btnUpexcel.ForeColor = System.Drawing.Color.Black;
             this.btnUpexcel.Location = new System.Drawing.Point(291, 43);
             this.btnUpexcel.Name = "btnUpexcel";
             this.btnUpexcel.Size = new System.Drawing.Size(111, 45);
             this.btnUpexcel.TabIndex = 2;
             this.btnUpexcel.Text = "UPLOAD FILE EXCEL";
-            this.btnUpexcel.UseVisualStyleBackColor = true;
+            this.btnUpexcel.UseVisualStyleBackColor = false;
             // 
             // btnExcelmau
             // 
+            this.btnExcelmau.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.btnExcelmau.ForeColor = System.Drawing.Color.Black;
             this.btnExcelmau.Location = new System.Drawing.Point(158, 43);
             this.btnExcelmau.Name = "btnExcelmau";
             this.btnExcelmau.Size = new System.Drawing.Size(111, 45);
             this.btnExcelmau.TabIndex = 1;
             this.btnExcelmau.Text = "LẤY FILE EXCEL MẪU";
-            this.btnExcelmau.UseVisualStyleBackColor = true;
+            this.btnExcelmau.UseVisualStyleBackColor = false;
             // 
             // btnHdGQVL
             // 
-            this.btnHdGQVL.ForeColor = System.Drawing.Color.Black;
+            this.btnHdGQVL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnHdGQVL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.btnHdGQVL.Location = new System.Drawing.Point(23, 43);
             this.btnHdGQVL.Name = "btnHdGQVL";
             this.btnHdGQVL.Size = new System.Drawing.Size(111, 45);
             this.btnHdGQVL.TabIndex = 0;
             this.btnHdGQVL.Text = "TẠO HỢP ĐỒNG";
-            this.btnHdGQVL.UseVisualStyleBackColor = true;
+            this.btnHdGQVL.UseVisualStyleBackColor = false;
             // 
             // label88
             // 
@@ -3725,8 +3730,10 @@
             "24",
             "36",
             "48",
+            "60",
             "72",
             "84",
+            "96",
             "108",
             "120"});
             this.cbThoihanvayGQVL.Location = new System.Drawing.Point(171, 121);

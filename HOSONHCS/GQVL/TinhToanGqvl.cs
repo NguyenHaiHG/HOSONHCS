@@ -59,7 +59,7 @@ namespace HOSONHCS
             int soKy = (int)Math.Ceiling((double)thoiHan / phanKy);
             if (soKy <= 0) return string.Empty;
 
-            long soTienMoiKy = RoundUpToHundredThousand(soTien / soKy);
+            long soTienMoiKy = RoundDownToHundredThousand(soTien / soKy);
             var amounts = new List<long>();
             long totalBeforeLast = 0;
 
@@ -95,11 +95,11 @@ namespace HOSONHCS
             return sb.ToString();
         }
 
-        private static long RoundUpToHundredThousand(long value)
+        private static long RoundDownToHundredThousand(long value)
         {
             const long unit = 100000;
             if (value <= 0) return 0;
-            return ((value + unit - 1) / unit) * unit;
+            return (value / unit) * unit;
         }
 
         private static bool TryParseDecimal(string value, out decimal result)

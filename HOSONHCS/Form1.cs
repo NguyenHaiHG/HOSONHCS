@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using Word = Microsoft.Office.Interop.Word;
 
 namespace HOSONHCS
 {
@@ -419,6 +418,10 @@ namespace HOSONHCS
             // Khởi tạo hiệu ứng chạy chữ cho thanh tiêu đề Form (title bar)
             // Text "PHẦN MỀM TẠO HỒ SƠ VAY VỐN" sẽ chạy từ phải sang trái
             try { InitializeMarquee(); } catch { }
+
+            // ========== CO GIÃN / THU PHÓNG GIAO DIỆN ==========
+            // Cho phép kéo giãn app, phóng to/thu nhỏ và có thanh trượt zoom theo từng màn hình.
+            try { ResponsiveLayoutManager.Apply(this, tabControl1); } catch { }
 
             // ========== THÔNG BÁO NGÀY LỄ / SỰ KIỆN ĐẶC BIỆT ==========
             // Fetch thông báo từ GitHub và hiện popup nếu hôm nay có sự kiện
@@ -5203,85 +5206,4 @@ namespace HOSONHCS
 
         }
     }
-
-    #region Models
-
-    public class Customer
-{
-    public string Hoten { get; set; }
-    public string Socccd { get; set; }
-    public string GioiTinh { get; set; }
-    public string Nhandang { get; set; }
-    public DateTime Ngaycap { get; set; }
-    public DateTime Ngaysinh { get; set; }
-    public string Noicap { get; set; }
-    public string Xa { get; set; }
-    public string Thon { get; set; }
-    public string Hoi { get; set; }
-    public string To { get; set; }
-    public string Totruong { get; set; }
-    public string Chuongtrinh { get; set; }
-    public string Vtc { get; set; }
-    public string Phuongan { get; set; }
-    public string Thoihanvay { get; set; }
-    public string Phanky { get; set; }
-    public string Sotien { get; set; }
-    public string Sotien1 { get; set; }
-    public string Sotien2 { get; set; }
-    public string Sotien3 { get; set; }
-    public string Soluong1 { get; set; }
-    public string Soluong2 { get; set; }
-    public string Soluong3 { get; set; }
-    public string Sotientong { get; set; }
-    public string Sotienchu { get; set; }
-    public string Mucdich1 { get; set; }
-    public string Mucdich2 { get; set; }
-    public string Mucdich3 { get; set; }
-    public string Doituong1 { get; set; }
-    public string Doituong2 { get; set; }
-    public DateTime Ngaylaphs { get; set; }
-    public DateTime Ngaydenhan { get; set; }
-    public DateTime Ngaygiaingaan { get; set; }
-    public DateTime Thoihancccd { get; set; }
-    /// <summary>"không thời hạn" nếu > 60 tuổi, ngày dd/MM/yyyy nếu còn hạn. Tính từ Ngaysinh.</summary>
-    public string ThoihancccdText { get; set; }
-    public string PGD { get; set; }
-    public string Tinh { get; set; }
-
-    public string Dantoc { get; set; }
-    public string Sdt = "";
-    public string Stk = "";
-    public string Nganhang = "";
-    public string Nhankhau = "";
-
-    public string Ntk1 = "";
-    public string Ntk2 = "";
-    public string Ntk3 = "";
-    public string Ntk4 = "";
-    public string CccdNtk1 = "";
-    public string CccdNtk2 = "";
-    public string CccdNtk3 = "";
-    public string CccdNtk4 = "";
-    public string Namsinh1 = "";
-    public string Namsinh2 = "";
-    public string Namsinh3 = "";
-    public string Namsinh4 = "";
-
-    public string Qh1 = "";
-    public string Qh2 = "";
-    public string Qh3 = "";
-    public string Qh4 = "";
-
-    [JsonIgnore]
-    public string _fileName { get; set; }
-}
-
-internal class XinManModel { public string pgd { get; set; } public List<Commune> communes { get; set; } = new List<Commune>(); }
-internal class Commune { public string name { get; set; } public List<Association> associations { get; set; } = new List<Association>(); public List<Village> villages { get; set; } = new List<Village>(); }
-internal class Association { public string name { get; set; } public string code { get; set; } public List<Village> villages { get; set; } = new List<Village>(); public List<string> managedVillages { get; set; } = new List<string>(); }
-internal class Village { public string name { get; set; } public List<string> groups { get; set; } = new List<string>(); }
-internal class TinhPgdEntry { public string pgd { get; set; } public List<Commune> communes { get; set; } = new List<Commune>(); }
-internal class TinhModel { public string tinh { get; set; } public List<TinhPgdEntry> pgds { get; set; } = new List<TinhPgdEntry>(); }
-
-#endregion
 }

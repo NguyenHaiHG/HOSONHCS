@@ -371,8 +371,13 @@ namespace HOSONHCS
         {
             foreach (var paragraph in part.RootElement.Descendants<Paragraph>())
             {
+                // Không áp dụng cho các ô trong bảng, ví dụ cột "Hạn trả nợ cuối cùng"
+                // của phụ lục hợp đồng. Nếu thụt trong ô hẹp, Word sẽ làm chữ bị dồn.
+                if (paragraph.Ancestors<TableCell>().Any())
+                    continue;
+
                 string text = GetParagraphTextGqvl(paragraph);
-                if (text.IndexOf("Thời hạn cho vay", StringComparison.OrdinalIgnoreCase) < 0 &&
+                if (text.IndexOf("Thời hạn cho vay", StringComparison.OrdinalIgnoreCase) < 0 ||
                     text.IndexOf("hạn trả nợ cuối cùng", StringComparison.OrdinalIgnoreCase) < 0)
                 {
                     continue;
