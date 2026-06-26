@@ -21,6 +21,8 @@ namespace HOSONHCS
                 btxXoaGQVL.Click += BtxXoaGQVL_Click;
                 btnExcelmau.Click += BtnExcelmau_Click;
                 btnUpexcel.Click += BtnUpexcel_Click;
+                btnLmGQVL.Click += BtnLmGQVL_Click;
+                btnKhGQVL.Click += BtnKhGQVL_Click;
 
                 rdT.CheckedChanged += GqvlPaymentRadio_CheckedChanged;
                 rdC.CheckedChanged += GqvlPaymentRadio_CheckedChanged;
@@ -147,21 +149,86 @@ namespace HOSONHCS
         private void ClearGqvlForm()
         {
             txtSohd.Clear();
+            cbStGQVL.SelectedIndex = -1;
             cbStGQVL.Text = "";
             txtMdGQVL.Clear();
+            cbThoihanvayGQVL.SelectedIndex = -1;
+            cbThoihanvayGQVL.Text = "";
+            cbPhankyGQVL.SelectedIndex = -1;
+            cbPhankyGQVL.Text = "";
+            dtNgayhdGQVL.Value = DateTime.Today;
+            cbLsGQVL.SelectedIndex = -1;
             cbLsGQVL.Text = "";
+            dtNgaygnGQVL.Value = DateTime.Today;
             txtStkGQVL.Clear();
             txtDcGQVL.Clear();
+
             txtTenkhGQVL.Clear();
+            dtNamsinhkhGQVL.Value = DateTime.Today;
             txtSdtkhGQVL.Clear();
             txtCccdkhGQVL.Clear();
+            dtNgaycapGQVL.Value = DateTime.Today;
+            dtNgaydhccGQVL.Value = DateTime.Today;
+            txtNoicapGQVL.Clear();
             txtDckhGQVL.Clear();
+
+            txtTenPGD.Clear();
+            txtTenld.Clear();
+            txtSdtPGD.Clear();
+            txtDcPGD.Clear();
             txtUq.Clear();
-            cbThoihanvayGQVL.Text = "";
-            cbPhankyGQVL.Text = "";
+            dtNgayuq.Value = DateTime.Today;
+
+            rdT.Checked = true;
+            rdC.Checked = false;
+            rdO.Checked = true;
+            rdB.Checked = false;
+            rdGd.Checked = true;
+            rdPgd.Checked = false;
+
             gqvlEditingIndex = -1;
             UpdateGqvlPaymentState();
             UpdateGqvlAuthorizationState();
+            UpdateGqvlCccdInfo();
+            txtSohd.Focus();
+        }
+
+        private void BtnLmGQVL_Click(object sender, EventArgs e)
+        {
+            ClearGqvlForm();
+        }
+
+        private void BtnKhGQVL_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var item = ReadGqvlForm();
+                string message;
+                if (!KiemTraBatBuocGqvl.KiemTra(item, out message))
+                {
+                    MessageBox.Show(message, "Thiếu thông tin GQVL", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!TryValidateGqvlNewCustomer(item, -1, "Trùng khách hàng GQVL"))
+                    return;
+
+                AddGqvlCustomerAsNew(item);
+
+                string folderInfo = string.IsNullOrWhiteSpace(item._fileName)
+                    ? "Hồ sơ xuất sẽ được tạo khi bạn bấm Tạo hợp đồng."
+                    : "Hồ sơ xuất sẽ ghi đè tại:\n" + item._fileName;
+
+                MessageBox.Show(
+                    "Đã lưu khách hàng GQVL mới: " + item.Tenkh + ".\n\n" + folderInfo,
+                    "GQVL",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tạo khách hàng mới GQVL: " + ex.Message, "GQVL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnCapnhatkh_Click(object sender, EventArgs e)
@@ -174,8 +241,24 @@ namespace HOSONHCS
                 return;
             }
 
+            int skipIndex = gqvlEditingIndex >= 0 && gqvlEditingIndex < gqvlCustomers.Count
+                ? gqvlEditingIndex
+                : -1;
+            if (!TryValidateGqvlNewCustomer(item, skipIndex, "Trùng khách hàng GQVL"))
+                return;
+
             UpsertGqvlCustomer(item);
             MessageBox.Show("Đã cập nhật khách hàng GQVL.", "GQVL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private bool TryValidateGqvlNewCustomer(KhachHangGqvl item, int skipIndex, string title)
+        {
+            string duplicateMessage;
+            if (KiemTraTrungGqvl.KiemTraKhachMoi(item, gqvlCustomers, skipIndex, out duplicateMessage))
+                return true;
+
+            MessageBox.Show(duplicateMessage, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
         }
 
         private void BtnHdGQVL_Click(object sender, EventArgs e)
@@ -192,6 +275,13 @@ namespace HOSONHCS
                         MessageBox.Show(message, "Thiếu thông tin GQVL", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
+
+                    int skipIndex = gqvlEditingIndex >= 0 && gqvlEditingIndex < gqvlCustomers.Count
+                        ? gqvlEditingIndex
+                        : -1;
+                    if (!TryValidateGqvlNewCustomer(current, skipIndex, "Trùng khách hàng GQVL"))
+                        return;
+
                     UpsertGqvlCustomer(current);
                     selected.Add(current);
                 }
@@ -206,6 +296,7 @@ namespace HOSONHCS
                         return;
                     }
                     files.Add(XuatHopDongGqvl(item));
+                    SyncGqvlOutputFolder(item);
                 }
 
                 SaveGqvlCustomers();

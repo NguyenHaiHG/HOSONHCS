@@ -15,40 +15,25 @@ namespace HOSONHCS
         private string XuatHopDongGqvl(KhachHangGqvl item)
         {
             string templatePath = ResolveTemplatePath("HD.docx");
-            string outputFolder = GetGqvlOutputFolder(item);
+            string outputFolder = GetOrCreateGqvlOutputFolder(item);
             Directory.CreateDirectory(outputFolder);
 
             string outputPath = Path.Combine(outputFolder, "HD_" + MakeFileSystemSafe(item.Tenkh) + ".docx");
-            outputPath = UniqueGqvlFilePath(outputPath);
             File.Copy(templatePath, outputPath, true);
 
             DienPlaceholderGqvl(outputPath, item);
             return outputPath;
         }
 
-        private string GetGqvlOutputFolder(KhachHangGqvl item)
+        private void SyncGqvlOutputFolder(KhachHangGqvl item)
         {
-            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string root = Path.Combine(desktop, "Hồ sơ NHCS", "GQVL");
-            string folder = MakeFileSystemSafe(item.Tenkh) + "_" + DateTime.Now.ToString("dd-MM-yyyy_HHmmss");
-            return Path.Combine(root, folder);
-        }
+            if (item == null || string.IsNullOrWhiteSpace(item._fileName)) return;
 
-        private static string UniqueGqvlFilePath(string path)
-        {
-            if (!File.Exists(path)) return path;
-            string dir = Path.GetDirectoryName(path);
-            string name = Path.GetFileNameWithoutExtension(path);
-            string ext = Path.GetExtension(path);
-            int i = 2;
-            string candidate;
-            do
+            foreach (var customer in gqvlCustomers)
             {
-                candidate = Path.Combine(dir, name + "_" + i + ext);
-                i++;
+                if (!IsSameGqvlCustomer(customer, item)) continue;
+                customer._fileName = item._fileName;
             }
-            while (File.Exists(candidate));
-            return candidate;
         }
 
         private void DienPlaceholderGqvl(string docPath, KhachHangGqvl item)

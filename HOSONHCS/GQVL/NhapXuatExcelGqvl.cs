@@ -40,12 +40,27 @@ namespace HOSONHCS
                 if (ofd.ShowDialog() != DialogResult.OK) return;
 
                 var items = ReadGqvlExcel(ofd.FileName);
+                int imported = 0;
                 foreach (var item in items)
+                {
+                    string duplicateMessage;
+                    if (!KiemTraTrungGqvl.KiemTraKhachMoi(item, gqvlCustomers, -1, out duplicateMessage))
+                    {
+                        MessageBox.Show(
+                            "Dòng Excel bị bỏ qua do CCCD hoặc SĐT đã tồn tại:\n" + duplicateMessage,
+                            "GQVL",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        continue;
+                    }
+
                     gqvlCustomers.Add(item);
+                    imported++;
+                }
 
                 SaveGqvlCustomers();
                 BindGqvlGrid();
-                MessageBox.Show("Đã upload " + items.Count + " khách hàng GQVL từ Excel.", "GQVL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Đã upload " + imported + " khách hàng GQVL từ Excel.", "GQVL", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

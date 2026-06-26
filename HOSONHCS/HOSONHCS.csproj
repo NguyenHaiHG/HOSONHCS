@@ -147,6 +147,7 @@
     <Compile Include="GQVL\NhapXuatExcelGqvl.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GQVL\KiemTraTrungGqvl.cs" />
     <Compile Include="GQVL\TinhToanGqvl.cs" />
     <Compile Include="GQVL\XoaKhachHangGqvl.cs">
       <SubType>Form</SubType>

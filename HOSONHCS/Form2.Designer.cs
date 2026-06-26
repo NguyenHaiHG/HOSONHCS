@@ -991,6 +991,7 @@ namespace HOSONHCS
             this.Controls.Add(this.txtkh1);
             this.Controls.Add(this.btn03to);
             this.Controls.Add(this.label1);
+            this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ForeColor = System.Drawing.Color.Black;
             this.Name = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);

@@ -5205,5 +5205,10 @@ namespace HOSONHCS
         {
 
         }
+
+        private void dgvGQVL_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

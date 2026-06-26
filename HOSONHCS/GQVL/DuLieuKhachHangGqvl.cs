@@ -6,6 +6,7 @@ namespace HOSONHCS
     {
         public bool Chon { get; set; }
         public string Sohd { get; set; }
+        public string Tenkh { get; set; }
         public string Sotienvay { get; set; }
         public string Mucdich { get; set; }
         public DateTime Ngayhopdong { get; set; }
@@ -14,7 +15,6 @@ namespace HOSONHCS
         public string Stk { get; set; }
         public bool ChuyenKhoan { get; set; }
         public string DcPhuongAn { get; set; }
-        public string Tenkh { get; set; }
         public DateTime Ngaysinh { get; set; }
         public string SdtKh { get; set; }
         public string Cccd { get; set; }
