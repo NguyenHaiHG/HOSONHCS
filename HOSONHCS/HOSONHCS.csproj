@@ -28,6 +28,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -87,6 +89,12 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="System.Resources.Extensions">
+      <HintPath>$(PkgSystem_Resources_Extensions)\lib\net462\System.Resources.Extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="10.0.9" GeneratePathProperty="true" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoUpdater.cs" />
@@ -181,12 +189,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.dje.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+      <WithCulture>false</WithCulture>
+      <ManifestResourceName>HOSONHCS.Form2.dje</ManifestResourceName>
+      <LogicalName>HOSONHCS.Form2.dje.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.vi.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+      <WithCulture>false</WithCulture>
+      <ManifestResourceName>HOSONHCS.Form2.vi</ManifestResourceName>
+      <LogicalName>HOSONHCS.Form2.vi.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
